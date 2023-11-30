@@ -1,8 +1,12 @@
 package com.ktools;
 
+import com.ktools.common.db.DbContext;
 import com.ktools.manager.datasource.DataSourceManager;
 import com.ktools.manager.datasource.SysDataSource;
+import com.ktools.manager.task.TaskManager;
 import lombok.Getter;
+
+import java.util.Properties;
 
 /**
  * K-Tools 上下文
@@ -16,11 +20,23 @@ public class KToolsContext {
 
     private final DataSourceManager dataSourceManager;
 
+    private final DbContext dbContext;
+
+    private final Properties properties;
+
+    private final TaskManager taskManager;
+
     private KToolsContext() {
         // 初始化数据源管理器
         this.dataSourceManager = DataSourceManager.getInstance();
         // 初始化系统数据源
         SysDataSource.init();
+        // 初始化DbContext
+        this.dbContext = new DbContext();
+        // 初始化配置信息
+        this.properties = this.dbContext.loadAllProperties(this.dataSourceManager.getSystemDataSource());
+        // 初始化任务管理器
+        this.taskManager = new TaskManager();
     }
 
     public static KToolsContext getInstance() {
@@ -36,6 +52,7 @@ public class KToolsContext {
 
     public void showdown() {
         this.dataSourceManager.close();
+        this.taskManager.shutdown();
     }
 
 }

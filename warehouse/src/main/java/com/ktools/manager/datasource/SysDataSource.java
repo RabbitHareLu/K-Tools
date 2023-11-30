@@ -28,6 +28,7 @@ public class SysDataSource {
                 .outOfOrder(false)
                 .validateOnMigrate(true)
                 .load();
+
         flyway.migrate();
     }
 
