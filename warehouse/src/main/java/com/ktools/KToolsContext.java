@@ -24,9 +24,9 @@ public class KToolsContext {
     }
 
     public static KToolsContext getInstance() {
-        if (INSTANCE != null) {
+        if (INSTANCE == null) {
             synchronized (KToolsContext.class) {
-                if (INSTANCE != null) {
+                if (INSTANCE == null) {
                     INSTANCE = new KToolsContext();
                 }
             }
