@@ -1,9 +1,11 @@
 package com.ktools;
 
+import com.ktools.api.SystemApi;
 import com.ktools.common.db.DbContext;
 import com.ktools.manager.datasource.DataSourceManager;
 import com.ktools.manager.datasource.SysDataSource;
 import com.ktools.manager.task.TaskManager;
+import com.ktools.service.SystemService;
 import lombok.Getter;
 
 import java.util.Properties;
@@ -55,4 +57,10 @@ public class KToolsContext {
         this.taskManager.shutdown();
     }
 
+    public <T> T getApi(Class<T> tClass) {
+        if (tClass == SystemApi.class) {
+            return tClass.cast(new SystemService());
+        }
+        return null;
+    }
 }
