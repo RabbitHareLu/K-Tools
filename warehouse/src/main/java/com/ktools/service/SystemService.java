@@ -47,7 +47,7 @@ public class SystemService extends BaseService implements SystemApi {
     }
 
     @Override
-    public void delete(String nodeId) {
+    public void deleteNode(String nodeId) {
         TreeEntity treeEntity = this.treeMapper.selectOneById(nodeId);
         String path = treeEntity.getNodePath() + "/" + treeEntity.getId();
         // 删除当前节点
