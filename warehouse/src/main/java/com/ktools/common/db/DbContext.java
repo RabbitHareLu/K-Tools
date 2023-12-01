@@ -23,9 +23,9 @@ import java.util.stream.Stream;
  */
 public class DbContext {
 
-    private static final String PROPERTIES_TABLE = "prop";
-    private static final String PROPERTIES_KEY_COLUMN = "key";
-    private static final String PROPERTIES_VALUE_COLUMN = "value";
+    private static final String PROPERTIES_TABLE = "PROP";
+    private static final String PROPERTIES_KEY_COLUMN = "KEY";
+    private static final String PROPERTIES_VALUE_COLUMN = "VALUE";
 
     public void select(DataSource dataSource, String tableName, StreamFunction<Stream<Map<String, Object>>> streamFunction) {
         String sql = String.format("select * from %s", tableName);
@@ -43,7 +43,7 @@ public class DbContext {
     public Properties loadAllProperties(DataSource sysDataSource) {
         Properties properties = new Properties();
         select(sysDataSource, PROPERTIES_TABLE, mapStream -> {
-            mapStream.forEach(map -> properties.put(map.get(PROPERTIES_KEY_COLUMN), map.get(PROPERTIES_VALUE_COLUMN)));
+            mapStream.forEach(map -> properties.put(map.getOrDefault(PROPERTIES_KEY_COLUMN, null), map.getOrDefault(PROPERTIES_VALUE_COLUMN, null)));
         });
         return properties;
     }
