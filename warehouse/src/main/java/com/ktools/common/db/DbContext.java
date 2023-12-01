@@ -65,7 +65,7 @@ public class DbContext {
                         if (field.isAnnotationPresent(TableField.class)) {
                             TableField tableField = field.getAnnotation(TableField.class);
                             field.setAccessible(true);
-                            field.set(e, tableField.type().convertData(map.getOrDefault(tableField.value(), null)));
+                            field.set(e, tableField.type().convertData(map.getOrDefault(tableField.value().toUpperCase(), null)));
                             field.setAccessible(false);
                         }
                     }
