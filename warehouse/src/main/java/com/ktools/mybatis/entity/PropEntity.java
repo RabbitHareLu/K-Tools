@@ -1,5 +1,6 @@
 package com.ktools.mybatis.entity;
 
+import com.ktools.manager.datasource.SysDataSource;
 import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
@@ -9,7 +10,7 @@ import lombok.Data;
  * @author WCG
  */
 @Data
-@Table(value = "PROP")
+@Table(value = "PROP", dataSource = SysDataSource.DATASOURCE_NAME)
 public class PropEntity {
 
     @Id("ID")

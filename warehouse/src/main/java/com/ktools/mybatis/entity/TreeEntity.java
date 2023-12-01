@@ -1,5 +1,6 @@
 package com.ktools.mybatis.entity;
 
+import com.ktools.manager.datasource.SysDataSource;
 import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
@@ -13,7 +14,7 @@ import java.util.List;
  * @author WCG
  */
 @Data
-@Table(value = "tree")
+@Table(value = "tree", dataSource = SysDataSource.DATASOURCE_NAME)
 @NoArgsConstructor
 @AllArgsConstructor
 public class TreeEntity {

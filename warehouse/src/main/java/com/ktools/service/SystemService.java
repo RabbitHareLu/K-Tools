@@ -3,6 +3,7 @@ package com.ktools.service;
 import com.ktools.api.SystemApi;
 import com.ktools.mybatis.entity.PropEntity;
 import com.ktools.mybatis.entity.TreeEntity;
+import com.mybatisflex.core.query.QueryChain;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.update.UpdateChain;
 import com.mybatisflex.core.update.UpdateWrapper;
@@ -22,7 +23,7 @@ public class SystemService extends BaseService implements SystemApi {
 
     @Override
     public List<TreeEntity> getTree(int nodeId) {
-        List<TreeEntity> treeModelList = this.treeMapper.selectAll();
+        List<TreeEntity> treeModelList = QueryChain.of(TreeEntity.class).list();
 
         Map<Integer, List<TreeEntity>> map = treeModelList
                 .stream()
@@ -78,6 +79,8 @@ public class SystemService extends BaseService implements SystemApi {
                     .toEntity();
             this.propMapper.insert(entity);
         }
+
+
     }
 
 }

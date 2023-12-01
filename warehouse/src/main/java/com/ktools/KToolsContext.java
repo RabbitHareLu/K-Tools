@@ -1,13 +1,13 @@
 package com.ktools;
 
 import com.ktools.api.SystemApi;
-import com.ktools.manager.datasource.DataSourceManager;
 import com.ktools.manager.datasource.SysDataSource;
 import com.ktools.manager.task.TaskManager;
 import com.ktools.mybatis.MybatisContext;
 import com.ktools.service.SystemService;
 import lombok.Getter;
 
+import javax.sql.DataSource;
 import java.util.Properties;
 
 /**
@@ -20,8 +20,6 @@ public class KToolsContext {
 
     private static volatile KToolsContext INSTANCE;
 
-    private final DataSourceManager dataSourceManager;
-
     private final MybatisContext mybatisContext;
 
     private final Properties properties;
@@ -29,12 +27,12 @@ public class KToolsContext {
     private final TaskManager taskManager;
 
     private KToolsContext() {
-        // 初始化数据源管理器
-        this.dataSourceManager = DataSourceManager.getInstance();
         // 初始化系统数据源
-        SysDataSource.init();
+        DataSource dataSource = SysDataSource.init();
         // 初始化mybatis
-        this.mybatisContext = new MybatisContext(dataSourceManager.getSystemDataSource());
+        this.mybatisContext = new MybatisContext(dataSource);
+        // 像mybatis注册系统数据源
+        mybatisContext.addDataSource(SysDataSource.DATASOURCE_NAME, dataSource);
         // 初始化配置信息
         this.properties = this.mybatisContext.loadAllProperties();
         // 初始化任务管理器
@@ -53,7 +51,7 @@ public class KToolsContext {
     }
 
     public void showdown() {
-        this.dataSourceManager.close();
+        this.mybatisContext.showdown();
         this.taskManager.shutdown();
     }
 

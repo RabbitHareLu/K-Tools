@@ -21,8 +21,8 @@ public abstract class BaseService {
     public BaseService() {
         this.kToolsContext = KToolsContext.getInstance();
         this.mybatisContext = this.kToolsContext.getMybatisContext();
-        this.treeMapper = this.mybatisContext.getTreeMapper();
-        this.propMapper = this.mybatisContext.getPropMapper();
+        this.treeMapper = this.mybatisContext.getMapper(TreeMapper.class);
+        this.propMapper = this.mybatisContext.getMapper(PropMapper.class);
     }
 
 }

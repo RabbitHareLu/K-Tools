@@ -1,5 +1,6 @@
 package com.ktools.manager.datasource;
 
+import com.ktools.common.utils.DataSourceUtil;
 import org.flywaydb.core.Flyway;
 
 import javax.sql.DataSource;
@@ -16,9 +17,8 @@ public class SysDataSource {
     private static final String H2_PASSWORD = "123456";
 
 
-    public static void init() {
-        DataSourceManager dataSourceManager = DataSourceManager.getInstance();
-        DataSource dataSource = dataSourceManager.initAndGetDataSource(getDataSourceProperties());
+    public static DataSource init() {
+        DataSource dataSource = DataSourceUtil.createDataSource(getDataSourceProperties());
 
         Flyway flyway = Flyway.configure()
                 .dataSource(dataSource)
@@ -30,6 +30,8 @@ public class SysDataSource {
                 .load();
 
         flyway.migrate();
+
+        return dataSource;
     }
 
     private static DataSourceProperties getDataSourceProperties() {
