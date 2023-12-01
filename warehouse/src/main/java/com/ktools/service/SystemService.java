@@ -34,8 +34,15 @@ public class SystemService extends BaseService implements SystemApi {
     }
 
     @Override
-    public void addNode(TreeEntity treeModel) {
+    public void addNode(TreeEntity treeEntity) {
+        // 更新数据库
+        this.treeMapper.insert(treeEntity);
+    }
 
+    @Override
+    public void updateNode(TreeEntity treeEntity) {
+        // 更新数据库
+        this.treeMapper.update(treeEntity);
     }
 
     @Override

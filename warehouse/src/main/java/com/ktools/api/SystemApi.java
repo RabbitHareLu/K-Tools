@@ -11,7 +11,9 @@ public interface SystemApi {
 
     List<TreeEntity> getTree(int nodeId);
 
-    void addNode(TreeEntity treeModel);
+    void addNode(TreeEntity treeEntity);
+
+    void updateNode(TreeEntity treeEntity);
 
     void saveOrUpdateProp(String key, String value);
 
