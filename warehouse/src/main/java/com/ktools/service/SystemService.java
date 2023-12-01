@@ -3,6 +3,7 @@ package com.ktools.service;
 import com.ktools.api.SystemApi;
 import com.ktools.mybatis.entity.PropEntity;
 import com.ktools.mybatis.entity.TreeEntity;
+import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.update.UpdateChain;
 import com.mybatisflex.core.update.UpdateWrapper;
 
@@ -43,6 +44,17 @@ public class SystemService extends BaseService implements SystemApi {
     public void updateNode(TreeEntity treeEntity) {
         // 更新数据库
         this.treeMapper.update(treeEntity);
+    }
+
+    @Override
+    public void delete(String nodeId) {
+        TreeEntity treeEntity = this.treeMapper.selectOneById(nodeId);
+        String path = treeEntity.getNodePath() + "/" + treeEntity.getId();
+        // 删除当前节点
+        this.treeMapper.delete(treeEntity);
+        // 删除全部子节点
+        QueryWrapper queryWrapper = QueryWrapper.create().where(TreeEntity::getNodePath).eq(path);
+        this.treeMapper.deleteByQuery(queryWrapper);
     }
 
     @Override
