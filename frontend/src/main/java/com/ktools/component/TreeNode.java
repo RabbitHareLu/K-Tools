@@ -1,6 +1,6 @@
 package com.ktools.component;
 
-import com.ktools.model.TreeModel;
+import com.ktools.mybatis.entity.TreeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,18 +19,18 @@ import javax.swing.tree.DefaultMutableTreeNode;
 public class TreeNode extends DefaultMutableTreeNode {
 
     private ImageIcon icon;
-    private TreeModel treeModel;
+    private TreeEntity treeEntity;
 
-    public TreeNode(ImageIcon icon, TreeModel treeModel) {
-        super(treeModel.getNodeName());
+    public TreeNode(ImageIcon icon, TreeEntity treeEntity) {
+        super(treeEntity.getNodeName());
         this.icon = icon;
-        this.treeModel = treeModel;
+        this.treeEntity = treeEntity;
     }
 
     public TreeNode(ImageIcon icon, Integer id, Integer parentNodeId, String nodeName, String nodeType, String nodeComment) {
         super(nodeName);
         this.icon = icon;
-        this.treeModel = new TreeModel(id, parentNodeId, nodeName, nodeType, nodeComment, null);
+        this.treeEntity = new TreeEntity(id, parentNodeId, nodeName, nodeType, nodeComment, "0", null);
     }
 
 }

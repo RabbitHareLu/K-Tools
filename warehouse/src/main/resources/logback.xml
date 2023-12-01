@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- 级别从高到低 OFF 、 FATAL 、 ERROR 、 WARN 、 INFO 、 DEBUG 、 TRACE 、 ALL -->
+<!--scan默认值为true，表示配置文件如果发生改变，将会被重新加载-->
+<!--scanPeriod 当上述scan参数为true时，此属性才生效，设置时间间隔，用来监测配置文件是否有被修改，单位默认是毫秒，默认的时间间隔是1分钟 -->
+<!--debug 默认值为false，当此属性设置为true时，将打印出logback内部日志信息，实时查看logback内部运行状态-->
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+    <!-- 定义日志文件的存储地址，配置的./logs_ysw作为日志的输出根目录，所以LogBack自动在项目根目录下创建名叫做logs_ysw的文件夹-->
+    <!-- 使用property来定义常量，即以key-value的形式存取，需要使用${}进行取值，比如${LOG_HOME} -->
+    <property name="LOG_HOME" value="./K-Tools-Logs"/>
+
+    <!-- ConsoleAppender 控制台输出日志 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- 设置日志输出格式 %d表示日期，%-5level表示级别从左显示5个字符宽度，%thread表示线程名，%logger日志输出所在的类的全限定类名，%msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%-5level] [%thread] - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- 按照每天生成日志文件 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!-- 设置日志输出格式 %d表示日期，%-5level表示级别从左显示5个字符宽度，%thread表示线程名，%logger日志输出所在的类的全限定类名，%msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%-5level] [%thread] %logger - %msg%n</pattern>
+        </encoder>
+        <!-- TimeBasedRollingPolicy按照时间进行拆分日志文件 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 日志文件输出的文件名  -->
+            <!-- %d表示按天拆分文件，即每天新生成一个日志文件 -->
+            <FileNamePattern>${LOG_HOME}/k-tools-log~%d{yyyy-MM-dd}.log</FileNamePattern>
+            <!-- 日志文件保留天数(天) -->
+            <MaxHistory>7</MaxHistory>
+        </rollingPolicy>
+        <!-- 日志文件最大的大小 -->
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>20MB</MaxFileSize>
+        </triggeringPolicy>
+    </appender>
+
+    <logger name="com.lsl" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <!-- 日志输出级别 -->
+    <!-- 根输出级别为DEBUG，文件中将出现包含debug及以上级别的日志-->
+    <root level="INFO">
+        <!-- ref值与上面的appender标签的name相对应 -->
+        <appender-ref ref="FILE"/>
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>

@@ -3,7 +3,9 @@ package com.ktools.mybatis.entity;
 import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -12,6 +14,8 @@ import java.util.List;
  */
 @Data
 @Table(value = "tree")
+@NoArgsConstructor
+@AllArgsConstructor
 public class TreeEntity {
 
     @Id("id")

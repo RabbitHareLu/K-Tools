@@ -6,7 +6,7 @@ import com.ktools.api.SystemApi;
 import com.ktools.common.model.TreeNodeType;
 import com.ktools.common.utils.CollectionUtil;
 import com.ktools.common.utils.DialogUtil;
-import com.ktools.model.TreeModel;
+import com.ktools.mybatis.entity.TreeEntity;
 import com.ktools.style.TreeNodeRenderer;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +36,7 @@ public class Tree {
         defaultTreeModel = new DefaultTreeModel(root);
         jTree = new JTree(defaultTreeModel);
         jTree.setCellRenderer(new TreeNodeRenderer());
+//        jTree.setRootVisible(false);
     }
 
     public static Tree getInstance() {
@@ -44,16 +45,16 @@ public class Tree {
 
     public TreeNode initTree() {
         SystemApi api = KToolsContext.getInstance().getApi(SystemApi.class);
-        List<TreeModel> tree = api.getTree(0);
+        List<TreeEntity> tree = api.getTree(0);
 
         TreeNode rootNode = new TreeNode(ImageLoad.getInstance().getRootIcon(), 0, null, "ROOT", TreeNodeType.ROOT, "ROOT");
         buildTree(rootNode, tree.get(0).getChild());
         return rootNode;
     }
 
-    public void buildTree(TreeNode parentNode, List<TreeModel> children) {
+    public void buildTree(TreeNode parentNode, List<TreeEntity> children) {
         if (CollectionUtil.isNotEmpty(children)) {
-            for (TreeModel child : children) {
+            for (TreeEntity child : children) {
                 TreeNode treeNode = switch (child.getNodeType()) {
                     case TreeNodeType.FOLDER -> new TreeNode(ImageLoad.getInstance().getFolderIcon(), child);
                     case TreeNodeType.CONNECTION -> new TreeNode(ImageLoad.getInstance().getConnectionIcon(), child);
