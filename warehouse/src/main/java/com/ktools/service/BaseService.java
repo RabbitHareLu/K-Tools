@@ -1,6 +1,7 @@
 package com.ktools.service;
 
 import com.ktools.KToolsContext;
+import com.ktools.mybatis.MybatisContext;
 
 import javax.sql.DataSource;
 
@@ -11,19 +12,19 @@ public abstract class BaseService {
 
     private final KToolsContext kToolsContext;
 
-    private final DataSource sysDataSource;
+    private final MybatisContext mybatisContext;
 
     public BaseService() {
         this.kToolsContext = KToolsContext.getInstance();
-        this.sysDataSource = this.kToolsContext.getDataSourceManager().getSystemDataSource();
+        this.mybatisContext = getkToolsContext().getMybatisContext();
     }
 
     protected KToolsContext getkToolsContext() {
         return this.kToolsContext;
     }
 
-    protected DataSource getSysDataSource() {
-        return this.sysDataSource;
+    protected MybatisContext getMybatisContext() {
+        return this.mybatisContext;
     }
 
 }

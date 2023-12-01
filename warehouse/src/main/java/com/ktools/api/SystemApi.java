@@ -1,6 +1,6 @@
 package com.ktools.api;
 
-import com.ktools.model.TreeModel;
+import com.ktools.mybatis.entity.TreeEntity;
 
 import java.util.List;
 
@@ -9,6 +9,10 @@ import java.util.List;
  */
 public interface SystemApi {
 
-    List<TreeModel> getTree(int nodeId);
+    List<TreeEntity> getTree(int nodeId);
+
+    void addNode(TreeEntity treeModel);
+
+    void saveOrUpdateProp(String key, String value);
 
 }

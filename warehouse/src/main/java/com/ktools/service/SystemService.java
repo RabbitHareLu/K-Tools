@@ -1,12 +1,12 @@
 package com.ktools.service;
 
 import com.ktools.api.SystemApi;
-import com.ktools.common.db.DbContext;
-import com.ktools.model.TreeModel;
+import com.ktools.mybatis.entity.TreeEntity;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 /**
@@ -17,18 +17,36 @@ import java.util.stream.Collectors;
 public class SystemService extends BaseService implements SystemApi {
 
     @Override
-    public List<TreeModel> getTree(int nodeId) {
-        DbContext dbContext = getkToolsContext().getDbContext();
-        List<TreeModel> treeModelList = dbContext.selectAll(getSysDataSource(), TreeModel.class);
+    public List<TreeEntity> getTree(int nodeId) {
+        List<TreeEntity> treeModelList = getMybatisContext().getTreeMapper().selectAll();
 
-        Map<Integer, List<TreeModel>> map = treeModelList
+        Map<Integer, List<TreeEntity>> map = treeModelList
                 .stream()
                 .filter(node -> node.getParentNodeId() != null)
-                .collect(Collectors.groupingBy(TreeModel::getParentNodeId));
+                .collect(Collectors.groupingBy(TreeEntity::getParentNodeId));
 
         treeModelList.forEach(node -> node.setChild(map.get(node.getId())));
 
         return treeModelList.stream().filter(node -> Objects.equals(node.getId(), nodeId)).toList();
+    }
+
+    @Override
+    public void addNode(TreeEntity treeModel) {
+
+    }
+
+    @Override
+    public void saveOrUpdateProp(String key, String value) {
+        Properties properties = getkToolsContext().getProperties();
+        if (properties.contains(key)) {
+            // 更新属性
+            properties.replace(key, value);
+            // 更新数据库
+        } else {
+            // 新增属性
+            properties.put(key, value);
+            // 更新数据库
+        }
     }
 
 }
