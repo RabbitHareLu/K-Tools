@@ -1,13 +1,21 @@
 package com.ktools.component;
 
 import com.formdev.flatlaf.FlatClientProperties;
+import com.ktools.KToolsContext;
 import com.ktools.KToolsRootJFrame;
 import com.ktools.Main;
+import com.ktools.action.UpdateFontNameAction;
+import com.ktools.action.UpdateFontSizeAction;
+import com.ktools.action.UpdateFontStyleAction;
+import com.ktools.common.utils.FontUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
+import java.awt.*;
 import java.time.Year;
+import java.util.Objects;
+import java.util.Properties;
 
 /**
  * @author lsl
@@ -19,6 +27,8 @@ import java.time.Year;
 public class Menu {
 
     private static Menu INSTANCE = new Menu();
+
+    private String[] fontStyleArr = new String[]{"普通", "斜体", "粗体"};
 
     private JMenuBar jMenuBar;
 
@@ -73,13 +83,71 @@ public class Menu {
         fontMenu.add(fontNameMenu);
         fontMenu.add(fontSizeMenu);
         fontMenu.add(fontStyleMenu);
-//        initFontMenu();
+        initFontMenu();
 
         helpMenu.add(about);
 
         setNewFolderAction();
         setNewImpalaConnectionAction();
         setAboutAction();
+    }
+
+    private void initFontMenu() {
+        Properties properties = KToolsContext.getInstance().getProperties();
+        String fontName = String.valueOf(properties.get("font.name"));
+        Integer fontSize = Integer.parseInt(String.valueOf(properties.get("font.size")));
+        String fontStyle = String.valueOf(properties.get("font.style"));
+
+        String[] allFonts = FontUtil.getAllFonts();
+
+        ButtonGroup fontNameGroup = new ButtonGroup();
+        for (String fontItem : allFonts) {
+            JCheckBoxMenuItem jCheckBoxMenuItem = new JCheckBoxMenuItem(fontItem);
+            if (Objects.equals(fontName, fontItem)) {
+                jCheckBoxMenuItem.setSelected(true);
+            }
+
+            jCheckBoxMenuItem.addActionListener(new UpdateFontNameAction());
+
+            fontNameGroup.add(jCheckBoxMenuItem);
+            fontNameMenu.add(jCheckBoxMenuItem);
+        }
+
+        ButtonGroup fontSizeGroup = new ButtonGroup();
+        for (int i = 10; i <= 30; i++) {
+            JCheckBoxMenuItem jCheckBoxMenuItem = new JCheckBoxMenuItem(i + "");
+            if (Objects.equals(fontSize, i)) {
+                jCheckBoxMenuItem.setSelected(true);
+            }
+
+            jCheckBoxMenuItem.addActionListener(new UpdateFontSizeAction());
+            fontSizeGroup.add(jCheckBoxMenuItem);
+            fontSizeMenu.add(jCheckBoxMenuItem);
+        }
+
+        ButtonGroup fontStyleGroup = new ButtonGroup();
+        for (String style : fontStyleArr) {
+            JCheckBoxMenuItem jCheckBoxMenuItem = new JCheckBoxMenuItem(style);
+            if (Objects.equals(style, fontStyle)) {
+                jCheckBoxMenuItem.setSelected(true);
+            }
+
+            jCheckBoxMenuItem.addActionListener(new UpdateFontStyleAction());
+            fontStyleGroup.add(jCheckBoxMenuItem);
+            fontStyleMenu.add(jCheckBoxMenuItem);
+        }
+
+        FontUtil.updateUIFont(new Font(fontName, getFontStyle(fontStyle), fontSize));
+    }
+
+    private int getFontStyle(String fontStyle) {
+        if (Objects.equals(fontStyle, "粗体")) {
+            return Font.BOLD;
+        } else if (Objects.equals(fontStyle, "斜体")) {
+            return Font.ITALIC;
+        } else {
+            return Font.PLAIN;
+        }
     }
 
     public static Menu getInstance() {
