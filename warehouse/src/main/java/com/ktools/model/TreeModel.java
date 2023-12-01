@@ -1,5 +1,6 @@
 package com.ktools.model;
 
+import com.ktools.common.db.DataType;
 import com.ktools.common.db.TableField;
 import com.ktools.common.db.TableName;
 import lombok.Data;
@@ -13,11 +14,11 @@ import java.util.List;
 @TableName("tree")
 public class TreeModel {
 
-    @TableField("id")
-    private String id;
+    @TableField(value = "id", type = DataType.INT)
+    private Integer id;
 
-    @TableField("parent_node_id")
-    private String parentNodeId;
+    @TableField(value = "parent_node_id", type = DataType.INT)
+    private Integer parentNodeId;
 
     @TableField("node_name")
     private String nodeName;

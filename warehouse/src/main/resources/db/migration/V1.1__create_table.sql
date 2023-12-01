@@ -1,15 +1,15 @@
 create table `tree`
 (
-    `id`             varchar(36) primary key,
+    `id`             int not null primary key auto_increment,
     `node_name`      varchar(100),
     `node_type`      varchar(20),
     `node_comment`   varchar(255),
-    `parent_node_id` varchar(36)
+    `parent_node_id` int
 );
 
 create table `prop`
 (
-    `id`    varchar(36) primary key,
+    `id`    int not null primary key auto_increment,
     `key`   varchar(255),
     `value` varchar(255)
 );

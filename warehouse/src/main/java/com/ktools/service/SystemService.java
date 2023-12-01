@@ -17,11 +17,11 @@ import java.util.stream.Collectors;
 public class SystemService extends BaseService implements SystemApi {
 
     @Override
-    public List<TreeModel> getTree(String nodeId) {
+    public List<TreeModel> getTree(int nodeId) {
         DbContext dbContext = getkToolsContext().getDbContext();
         List<TreeModel> treeModelList = dbContext.selectAll(getSysDataSource(), TreeModel.class);
 
-        Map<String, List<TreeModel>> map = treeModelList
+        Map<Integer, List<TreeModel>> map = treeModelList
                 .stream()
                 .filter(node -> node.getParentNodeId() != null)
                 .collect(Collectors.groupingBy(TreeModel::getParentNodeId));

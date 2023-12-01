@@ -9,6 +9,6 @@ import java.util.List;
  */
 public interface SystemApi {
 
-    List<TreeModel> getTree(String nodeId);
+    List<TreeModel> getTree(int nodeId);
 
 }
