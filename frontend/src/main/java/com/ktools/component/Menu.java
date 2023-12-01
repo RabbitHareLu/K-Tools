@@ -62,7 +62,7 @@ public class Menu {
         fontStyleMenu = new JMenu("字体样式");
 
         newFolder = new JMenuItem("新建文件夹");
-        newFolder.setIcon(ImageLoad.getInstance().getNewFolderIcon());
+        newFolder.setIcon(UIManager.getIcon("FileChooser.newFolderIcon"));
         newImpalaConnection = new JMenuItem("新建Impala连接");
         newImpalaConnection.setIcon(ImageLoad.getInstance().getImpalaConnectionIcon());
         newSqlConsole = new JMenuItem("新建SQL查询控制台");

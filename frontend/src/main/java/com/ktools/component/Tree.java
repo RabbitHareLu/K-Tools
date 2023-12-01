@@ -1,11 +1,9 @@
 package com.ktools.component;
 
 import com.ktools.KToolsContext;
-import com.ktools.Main;
 import com.ktools.api.SystemApi;
 import com.ktools.common.model.TreeNodeType;
 import com.ktools.common.utils.CollectionUtil;
-import com.ktools.common.utils.DialogUtil;
 import com.ktools.mybatis.entity.TreeEntity;
 import com.ktools.style.TreeNodeRenderer;
 import lombok.Data;
@@ -35,8 +33,9 @@ public class Tree {
 
         defaultTreeModel = new DefaultTreeModel(root);
         jTree = new JTree(defaultTreeModel);
+        jTree.setShowsRootHandles(true);
         jTree.setCellRenderer(new TreeNodeRenderer());
-//        jTree.setRootVisible(false);
+        jTree.setRootVisible(false);
     }
 
     public static Tree getInstance() {
@@ -47,7 +46,7 @@ public class Tree {
         SystemApi api = KToolsContext.getInstance().getApi(SystemApi.class);
         List<TreeEntity> tree = api.getTree(0);
 
-        TreeNode rootNode = new TreeNode(ImageLoad.getInstance().getRootIcon(), 0, null, "ROOT", TreeNodeType.ROOT, "ROOT");
+        TreeNode rootNode = new TreeNode(0, null, "ROOT", TreeNodeType.ROOT, "ROOT");
         buildTree(rootNode, tree.get(0).getChild());
         return rootNode;
     }
@@ -55,16 +54,7 @@ public class Tree {
     public void buildTree(TreeNode parentNode, List<TreeEntity> children) {
         if (CollectionUtil.isNotEmpty(children)) {
             for (TreeEntity child : children) {
-                TreeNode treeNode = switch (child.getNodeType()) {
-                    case TreeNodeType.FOLDER -> new TreeNode(ImageLoad.getInstance().getFolderIcon(), child);
-                    case TreeNodeType.CONNECTION -> new TreeNode(ImageLoad.getInstance().getConnectionIcon(), child);
-                    case TreeNodeType.TABLE -> new TreeNode(ImageLoad.getInstance().getTableIcon(), child);
-                    case TreeNodeType.COLUMN -> new TreeNode(ImageLoad.getInstance().getColIcon(), child);
-                    default -> {
-                        DialogUtil.showErrorDialog(Main.kToolsRootJFrame, new Object[]{"Build Left Tree Error!"});
-                        throw new RuntimeException("Build Left Tree Error!");
-                    }
-                };
+                TreeNode treeNode = new TreeNode(child);
                 parentNode.add(treeNode);
                 buildTree(treeNode, child.getChild());
             }

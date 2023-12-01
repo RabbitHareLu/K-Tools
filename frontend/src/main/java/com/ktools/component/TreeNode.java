@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
@@ -18,18 +17,15 @@ import javax.swing.tree.DefaultMutableTreeNode;
 @NoArgsConstructor
 public class TreeNode extends DefaultMutableTreeNode {
 
-    private ImageIcon icon;
     private TreeEntity treeEntity;
 
-    public TreeNode(ImageIcon icon, TreeEntity treeEntity) {
+    public TreeNode(TreeEntity treeEntity) {
         super(treeEntity.getNodeName());
-        this.icon = icon;
         this.treeEntity = treeEntity;
     }
 
-    public TreeNode(ImageIcon icon, Integer id, Integer parentNodeId, String nodeName, String nodeType, String nodeComment) {
+    public TreeNode(Integer id, Integer parentNodeId, String nodeName, String nodeType, String nodeComment) {
         super(nodeName);
-        this.icon = icon;
         this.treeEntity = new TreeEntity(id, parentNodeId, nodeName, nodeType, nodeComment, "0", null);
     }
 
