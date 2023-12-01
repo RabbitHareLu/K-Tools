@@ -3,7 +3,9 @@ package com.ktools.model;
 import com.ktools.common.db.DataType;
 import com.ktools.common.db.TableField;
 import com.ktools.common.db.TableName;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -12,6 +14,8 @@ import java.util.List;
  */
 @Data
 @TableName("tree")
+@NoArgsConstructor
+@AllArgsConstructor
 public class TreeModel {
 
     @TableField(value = "id", type = DataType.INT)

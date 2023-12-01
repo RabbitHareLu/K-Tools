@@ -28,7 +28,7 @@ public class SystemService extends BaseService implements SystemApi {
 
         treeModelList.forEach(node -> node.setChild(map.get(node.getId())));
 
-        return treeModelList.stream().filter(node -> Objects.equals(node.getParentNodeId(), nodeId)).toList();
+        return treeModelList.stream().filter(node -> Objects.equals(node.getId(), nodeId)).toList();
     }
 
 }

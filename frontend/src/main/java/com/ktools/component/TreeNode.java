@@ -27,4 +27,10 @@ public class TreeNode extends DefaultMutableTreeNode {
         this.treeModel = treeModel;
     }
 
+    public TreeNode(ImageIcon icon, Integer id, Integer parentNodeId, String nodeName, String nodeType, String nodeComment) {
+        super(nodeName);
+        this.icon = icon;
+        this.treeModel = new TreeModel(id, parentNodeId, nodeName, nodeType, nodeComment, null);
+    }
+
 }

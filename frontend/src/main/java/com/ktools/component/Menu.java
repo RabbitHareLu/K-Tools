@@ -4,6 +4,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.ktools.KToolsContext;
 import com.ktools.KToolsRootJFrame;
 import com.ktools.Main;
+import com.ktools.action.NewFolderAction;
 import com.ktools.action.UpdateFontNameAction;
 import com.ktools.action.UpdateFontSizeAction;
 import com.ktools.action.UpdateFontStyleAction;
@@ -137,17 +138,7 @@ public class Menu {
             fontStyleMenu.add(jCheckBoxMenuItem);
         }
 
-        FontUtil.updateUIFont(new Font(fontName, getFontStyle(fontStyle), fontSize));
-    }
-
-    private int getFontStyle(String fontStyle) {
-        if (Objects.equals(fontStyle, "粗体")) {
-            return Font.BOLD;
-        } else if (Objects.equals(fontStyle, "斜体")) {
-            return Font.ITALIC;
-        } else {
-            return Font.PLAIN;
-        }
+        FontUtil.updateUIFont(new Font(fontName, FontUtil.getFontStyle(fontStyle), fontSize));
     }
 
     public static Menu getInstance() {
@@ -155,7 +146,7 @@ public class Menu {
     }
 
     private void setNewFolderAction() {
-//        newFolder.addActionListener(new NewFolderAction());
+        newFolder.addActionListener(new NewFolderAction());
     }
 
     private void setNewImpalaConnectionAction() {

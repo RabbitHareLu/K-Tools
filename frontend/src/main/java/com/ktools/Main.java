@@ -10,8 +10,6 @@ public class Main {
 
     public static KToolsRootJFrame kToolsRootJFrame = null;
     public static void main(String[] args) {
-        KToolsContext kToolsContext = KToolsContext.getInstance();
-
         FlatDarkLaf.setup();
         // 使用 FlatLaf 提供的组件样式
         UIManager.put("Button.arc", 50);  // 设置按钮的弧度
