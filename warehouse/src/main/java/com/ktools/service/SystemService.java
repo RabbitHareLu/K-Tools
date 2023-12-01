@@ -1,7 +1,10 @@
 package com.ktools.service;
 
 import com.ktools.api.SystemApi;
+import com.ktools.mybatis.entity.PropEntity;
 import com.ktools.mybatis.entity.TreeEntity;
+import com.mybatisflex.core.update.UpdateChain;
+import com.mybatisflex.core.update.UpdateWrapper;
 
 import java.util.List;
 import java.util.Map;
@@ -18,7 +21,7 @@ public class SystemService extends BaseService implements SystemApi {
 
     @Override
     public List<TreeEntity> getTree(int nodeId) {
-        List<TreeEntity> treeModelList = getMybatisContext().getTreeMapper().selectAll();
+        List<TreeEntity> treeModelList = this.treeMapper.selectAll();
 
         Map<Integer, List<TreeEntity>> map = treeModelList
                 .stream()
@@ -37,15 +40,24 @@ public class SystemService extends BaseService implements SystemApi {
 
     @Override
     public void saveOrUpdateProp(String key, String value) {
-        Properties properties = getkToolsContext().getProperties();
+        Properties properties = this.kToolsContext.getProperties();
         if (properties.contains(key)) {
             // 更新属性
             properties.replace(key, value);
             // 更新数据库
+            UpdateChain.of(PropEntity.class)
+                    .set(PropEntity::getValue, value)
+                    .where(PropEntity::getKey).eq(key)
+                    .update();
         } else {
             // 新增属性
             properties.put(key, value);
             // 更新数据库
+            PropEntity entity = UpdateWrapper.of(PropEntity.class)
+                    .set(PropEntity::getKey, key)
+                    .set(PropEntity::getValue, value)
+                    .toEntity();
+            this.propMapper.insert(entity);
         }
     }
 

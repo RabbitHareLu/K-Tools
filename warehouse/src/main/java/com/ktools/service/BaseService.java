@@ -2,29 +2,27 @@ package com.ktools.service;
 
 import com.ktools.KToolsContext;
 import com.ktools.mybatis.MybatisContext;
-
-import javax.sql.DataSource;
+import com.ktools.mybatis.mapper.PropMapper;
+import com.ktools.mybatis.mapper.TreeMapper;
 
 /**
  * @author WCG
  */
 public abstract class BaseService {
 
-    private final KToolsContext kToolsContext;
+    protected final KToolsContext kToolsContext;
 
-    private final MybatisContext mybatisContext;
+    protected final MybatisContext mybatisContext;
+
+    protected final TreeMapper treeMapper;
+
+    protected final PropMapper propMapper;
 
     public BaseService() {
         this.kToolsContext = KToolsContext.getInstance();
-        this.mybatisContext = getkToolsContext().getMybatisContext();
-    }
-
-    protected KToolsContext getkToolsContext() {
-        return this.kToolsContext;
-    }
-
-    protected MybatisContext getMybatisContext() {
-        return this.mybatisContext;
+        this.mybatisContext = this.kToolsContext.getMybatisContext();
+        this.treeMapper = this.mybatisContext.getTreeMapper();
+        this.propMapper = this.mybatisContext.getPropMapper();
     }
 
 }
