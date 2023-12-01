@@ -63,7 +63,7 @@ public class SystemService extends BaseService implements SystemApi {
     @Override
     public void saveOrUpdateProp(String key, String value) {
         Properties properties = this.kToolsContext.getProperties();
-        if (properties.contains(key)) {
+        if (properties.containsKey(key)) {
             // 更新属性
             properties.replace(key, value);
             // 更新数据库
