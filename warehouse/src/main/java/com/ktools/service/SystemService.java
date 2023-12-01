@@ -3,6 +3,8 @@ package com.ktools.service;
 import com.ktools.api.SystemApi;
 import com.ktools.mybatis.entity.PropEntity;
 import com.ktools.mybatis.entity.TreeEntity;
+import com.ktools.mybatis.mapper.PropMapper;
+import com.ktools.mybatis.mapper.TreeMapper;
 import com.mybatisflex.core.query.QueryChain;
 import com.mybatisflex.core.query.QueryWrapper;
 import com.mybatisflex.core.update.UpdateChain;
@@ -38,24 +40,24 @@ public class SystemService extends BaseService implements SystemApi {
     @Override
     public void addNode(TreeEntity treeEntity) {
         // 更新数据库
-        this.treeMapper.insert(treeEntity);
+        this.getMapper(TreeMapper.class).insert(treeEntity);
     }
 
     @Override
     public void updateNode(TreeEntity treeEntity) {
         // 更新数据库
-        this.treeMapper.update(treeEntity);
+        this.getMapper(TreeMapper.class).update(treeEntity);
     }
 
     @Override
     public void deleteNode(String nodeId) {
-        TreeEntity treeEntity = this.treeMapper.selectOneById(nodeId);
+        TreeEntity treeEntity = this.getMapper(TreeMapper.class).selectOneById(nodeId);
         String path = treeEntity.getNodePath() + "/" + treeEntity.getId();
         // 删除当前节点
-        this.treeMapper.delete(treeEntity);
+        this.getMapper(TreeMapper.class).delete(treeEntity);
         // 删除全部子节点
         QueryWrapper queryWrapper = QueryWrapper.create().where(TreeEntity::getNodePath).eq(path);
-        this.treeMapper.deleteByQuery(queryWrapper);
+        this.getMapper(TreeMapper.class).deleteByQuery(queryWrapper);
     }
 
     @Override
@@ -77,7 +79,7 @@ public class SystemService extends BaseService implements SystemApi {
                     .set(PropEntity::getKey, key)
                     .set(PropEntity::getValue, value)
                     .toEntity();
-            this.propMapper.insert(entity);
+            this.getMapper(PropMapper.class).insert(entity);
         }
 
 

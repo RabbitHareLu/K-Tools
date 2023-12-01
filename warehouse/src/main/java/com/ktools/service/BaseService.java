@@ -2,8 +2,6 @@ package com.ktools.service;
 
 import com.ktools.KToolsContext;
 import com.ktools.mybatis.MybatisContext;
-import com.ktools.mybatis.mapper.PropMapper;
-import com.ktools.mybatis.mapper.TreeMapper;
 
 /**
  * @author WCG
@@ -14,15 +12,13 @@ public abstract class BaseService {
 
     protected final MybatisContext mybatisContext;
 
-    protected final TreeMapper treeMapper;
-
-    protected final PropMapper propMapper;
-
     public BaseService() {
         this.kToolsContext = KToolsContext.getInstance();
         this.mybatisContext = this.kToolsContext.getMybatisContext();
-        this.treeMapper = this.mybatisContext.getMapper(TreeMapper.class);
-        this.propMapper = this.mybatisContext.getMapper(PropMapper.class);
+    }
+
+    protected <T> T getMapper(Class<T> tClass) {
+        return this.mybatisContext.getMapper(tClass);
     }
 
 }
