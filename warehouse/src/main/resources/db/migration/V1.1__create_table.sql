@@ -1,15 +1,15 @@
-create table `tree`
+CREATE TABLE `TREE`
 (
-    `id`             int not null primary key auto_increment,
-    `node_name`      varchar(100),
-    `node_type`      varchar(20),
-    `node_comment`   varchar(255),
-    `parent_node_id` int
+    `ID`             INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `NODE_NAME`      VARCHAR(100),
+    `NODE_TYPE`      VARCHAR(20),
+    `NODE_COMMENT`   VARCHAR(255),
+    `PARENT_NODE_ID` INT
 );
 
-create table `prop`
+CREATE TABLE `PROP`
 (
-    `id`    int not null primary key auto_increment,
-    `key`   varchar(255),
-    `value` varchar(255)
+    `ID`    INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    `KEY`   VARCHAR(255),
+    `VALUE` VARCHAR(255)
 );
