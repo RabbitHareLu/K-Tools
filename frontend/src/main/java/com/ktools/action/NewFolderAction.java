@@ -7,7 +7,9 @@ import com.ktools.common.model.TreeNodeType;
 import com.ktools.common.utils.StringUtil;
 import com.ktools.component.Tree;
 import com.ktools.component.TreeNode;
+import com.ktools.manager.uid.UidKey;
 import com.ktools.mybatis.entity.TreeEntity;
+import lombok.Data;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
@@ -45,7 +47,7 @@ public class NewFolderAction implements ActionListener {
 
         if (StringUtil.isNotBlank(result)) {
             TreeEntity treeEntity = new TreeEntity();
-            treeEntity.setId(10);
+            treeEntity.setId(KToolsContext.getInstance().getIdGenerator().getId(UidKey.TREE));
             treeEntity.setParentNodeId(currentTreeNode.getTreeEntity().getId());
             treeEntity.setNodeName(result);
             treeEntity.setNodeType(TreeNodeType.FOLDER);

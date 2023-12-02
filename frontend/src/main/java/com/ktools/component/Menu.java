@@ -70,7 +70,6 @@ public class Menu {
         about = new JMenuItem("关于");
         about.setIcon(ImageLoad.getInstance().getAboutIcon());
 
-
         jMenuBar.add(newMenu);
         jMenuBar.add(editMenu);
         jMenuBar.add(settingsMenu);
