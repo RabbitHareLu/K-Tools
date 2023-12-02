@@ -3,6 +3,7 @@ package com.ktools;
 import com.ktools.api.SystemApi;
 import com.ktools.manager.datasource.SysDataSource;
 import com.ktools.manager.task.TaskManager;
+import com.ktools.manager.uid.IdGenerator;
 import com.ktools.mybatis.MybatisContext;
 import com.ktools.service.SystemService;
 import lombok.Getter;
@@ -26,6 +27,8 @@ public class KToolsContext {
 
     private final TaskManager taskManager;
 
+    private final IdGenerator idGenerator;
+
     private KToolsContext() {
         // 初始化系统数据源
         DataSource dataSource = SysDataSource.init();
@@ -37,6 +40,8 @@ public class KToolsContext {
         this.properties = this.mybatisContext.loadAllProperties();
         // 初始化任务管理器
         this.taskManager = new TaskManager();
+        // 初始化id生成器
+        this.idGenerator = new IdGenerator(mybatisContext);
     }
 
     public static KToolsContext getInstance() {
