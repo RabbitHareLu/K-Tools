@@ -17,8 +17,6 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 /**
- *
- *
  * @author WCG
  */
 public class SystemService extends BaseService implements SystemApi {
@@ -57,6 +55,13 @@ public class SystemService extends BaseService implements SystemApi {
         this.getMapper(TreeMapper.class).delete(treeEntity);
         // 删除全部子节点
         QueryWrapper queryWrapper = QueryWrapper.create().where(TreeEntity::getNodePath).eq(path);
+        this.getMapper(TreeMapper.class).deleteByQuery(queryWrapper);
+    }
+
+    @Override
+    public void deleteNode(TreeEntity treeEntity) {
+        // 删除全部子节点
+        QueryWrapper queryWrapper = QueryWrapper.create().where(TreeEntity::getNodePath).likeLeft(treeEntity.getNodePath());
         this.getMapper(TreeMapper.class).deleteByQuery(queryWrapper);
     }
 

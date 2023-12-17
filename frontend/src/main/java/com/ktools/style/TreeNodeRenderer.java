@@ -49,8 +49,6 @@ public class TreeNodeRenderer extends DefaultTreeCellRenderer {
             }
         }
 
-
-
         return this;
     }
 }

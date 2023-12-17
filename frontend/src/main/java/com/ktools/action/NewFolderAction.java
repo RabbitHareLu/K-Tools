@@ -10,6 +10,7 @@ import com.ktools.component.TreeNode;
 import com.ktools.manager.uid.UidKey;
 import com.ktools.mybatis.entity.TreeEntity;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
@@ -25,6 +26,7 @@ import java.util.Objects;
  * @version 1.0
  * @date 2023年12月01日 10:50
  */
+@Slf4j
 public class NewFolderAction implements ActionListener {
 
     JTree jTree = Tree.getInstance().getJTree();
@@ -48,6 +50,8 @@ public class NewFolderAction implements ActionListener {
         );
 
         if (StringUtil.isNotBlank(result)) {
+            log.info("新建文件夹: {}", result);
+
             TreeEntity treeEntity = new TreeEntity();
             treeEntity.setId(KToolsContext.getInstance().getIdGenerator().getId(UidKey.TREE));
             treeEntity.setParentNodeId(currentTreeNode.getTreeEntity().getId());

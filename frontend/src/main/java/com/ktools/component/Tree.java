@@ -5,18 +5,14 @@ import com.ktools.api.SystemApi;
 import com.ktools.common.model.TreeNodeType;
 import com.ktools.common.utils.CollectionUtil;
 import com.ktools.mybatis.entity.TreeEntity;
+import com.ktools.style.TreeMouseAdapter;
 import com.ktools.style.TreeNodeRenderer;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author lsl
@@ -41,30 +37,7 @@ public class Tree {
         jTree.setShowsRootHandles(true);
         jTree.setCellRenderer(new TreeNodeRenderer());
         jTree.setRootVisible(false);
-        jTree.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                // 判断是否为鼠标右键点击
-                if (SwingUtilities.isRightMouseButton(e)) {
-                    int x = e.getX();
-                    int y = e.getY();
-
-                    TreePath path = jTree.getClosestPathForLocation(x, y);
-                    Rectangle pathBounds = jTree.getPathBounds(path);
-
-                    if (Objects.nonNull(pathBounds)) {
-                        if (y >= pathBounds.getY() && y <= (pathBounds.getY() + pathBounds.getHeight())) {
-                            jTree.setSelectionPath(path);
-
-                        }
-                    } else {
-                        // 当前菜单没有任何节点
-
-
-                    }
-                }
-            }
-        });
+        jTree.addMouseListener(new TreeMouseAdapter());
     }
 
     public static Tree getInstance() {

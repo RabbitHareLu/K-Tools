@@ -16,6 +16,7 @@ public interface SystemApi {
     void updateNode(TreeEntity treeEntity);
 
     void deleteNode(String nodeId);
+    void deleteNode(TreeEntity treeEntity);
 
     void saveOrUpdateProp(String key, String value);
 
