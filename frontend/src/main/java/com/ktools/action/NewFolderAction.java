@@ -16,6 +16,8 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -52,8 +54,12 @@ public class NewFolderAction implements ActionListener {
             treeEntity.setNodeName(result);
             treeEntity.setNodeType(TreeNodeType.FOLDER);
             treeEntity.setNodeComment(null);
-            treeEntity.setNodePath("0");
             treeEntity.setChild(null);
+
+            List<String> nodePathList = new ArrayList<>();
+            nodePathList.add(String.valueOf(treeEntity.getId()));
+            buildTreeNodePath(nodePathList, selectionPath);
+            treeEntity.setNodePath(getNodePathString(nodePathList));
 
             KToolsContext.getInstance().getApi(SystemApi.class).addNode(treeEntity);
 
@@ -71,6 +77,25 @@ public class NewFolderAction implements ActionListener {
             if (!jTree.isExpanded(selectionPath)) {
                 jTree.expandPath(selectionPath);
             }
+        }
+    }
+
+    public String getNodePathString(List<String> nodePathList) {
+        StringBuilder nodePathString = new StringBuilder();
+        for (int i = nodePathList.size() - 1; i >= 0; i--) {
+            nodePathString.append(nodePathList.get(i)).append("/");
+        }
+        return nodePathString.delete(nodePathString.length() - 1, nodePathString.length()).toString();
+    }
+
+    public void buildTreeNodePath(List<String> list, TreePath selectionPath) {
+        TreeNode currentTreeNode = (TreeNode) selectionPath.getLastPathComponent();
+        Integer id = currentTreeNode.getTreeEntity().getId();
+        list.add(String.valueOf(id));
+
+        TreePath parentPath = selectionPath.getParentPath();
+        if (Objects.nonNull(parentPath)) {
+            buildTreeNodePath(list, parentPath);
         }
     }
 }
