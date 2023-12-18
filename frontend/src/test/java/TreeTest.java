@@ -3,6 +3,7 @@ import com.ktools.api.SystemApi;
 import com.ktools.common.model.TreeNodeType;
 import com.ktools.component.Tree;
 import com.ktools.component.TreeNode;
+import com.ktools.exception.KToolException;
 import com.ktools.manager.uid.UidKey;
 import com.ktools.mybatis.entity.TreeEntity;
 
@@ -57,7 +58,11 @@ public class TreeTest {
             buildTreeNodePath(nodePathList, selectionPath);
             treeEntity.setNodePath(getNodePathString(nodePathList));
 
-            KToolsContext.getInstance().getApi(SystemApi.class).addNode(treeEntity);
+            try {
+                KToolsContext.getInstance().getApi(SystemApi.class).addNode(treeEntity);
+            } catch (KToolException e) {
+                throw new RuntimeException(e);
+            }
         }
 
     }
