@@ -1,6 +1,8 @@
 package com.ktools.service;
 
 import com.ktools.api.SystemApi;
+import com.ktools.common.utils.CollectionUtil;
+import com.ktools.exception.KToolException;
 import com.ktools.mybatis.entity.PropEntity;
 import com.ktools.mybatis.entity.TreeEntity;
 import com.ktools.mybatis.mapper.PropMapper;
@@ -36,15 +38,30 @@ public class SystemService extends BaseService implements SystemApi {
     }
 
     @Override
-    public void addNode(TreeEntity treeEntity) {
+    public void addNode(TreeEntity treeEntity) throws KToolException {
+        // 检查名称是否相同
+        checkNodeName(treeEntity);
         // 更新数据库
         this.getMapper(TreeMapper.class).insert(treeEntity);
     }
 
     @Override
-    public void updateNode(TreeEntity treeEntity) {
+    public void updateNode(TreeEntity treeEntity) throws KToolException {
+        // 检查名称是否相同
+        checkNodeName(treeEntity);
         // 更新数据库
         this.getMapper(TreeMapper.class).update(treeEntity);
+    }
+
+    private void checkNodeName(TreeEntity treeEntity) throws KToolException {
+        String nodePath = treeEntity.getNodePath();
+        QueryWrapper queryWrapper = QueryWrapper.create()
+                .where(TreeEntity::getNodePath).eq(nodePath)
+                .and(TreeEntity::getNodeName).eq(treeEntity.getNodeName());
+        List<TreeEntity> treeEntities = this.getMapper(TreeMapper.class).selectListByQuery(queryWrapper);
+        if (CollectionUtil.isNotEmpty(treeEntities)) {
+            throw new KToolException("节点名称已存在！");
+        }
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.ktools.common.model.TreeNodeType;
 import com.ktools.common.utils.StringUtil;
 import com.ktools.component.Tree;
 import com.ktools.component.TreeNode;
+import com.ktools.exception.KToolException;
 import com.ktools.manager.uid.UidKey;
 import com.ktools.mybatis.entity.TreeEntity;
 import lombok.Data;
@@ -64,7 +65,11 @@ public class NewFolderAction implements ActionListener {
             buildTreeNodePath(nodePathList, selectionPath);
             treeEntity.setNodePath(getNodePathString(nodePathList));
 
-            KToolsContext.getInstance().getApi(SystemApi.class).addNode(treeEntity);
+            try {
+                KToolsContext.getInstance().getApi(SystemApi.class).addNode(treeEntity);
+            } catch (KToolException ex) {
+                throw new RuntimeException(ex);
+            }
 
             TreeNode treeNode = new TreeNode(treeEntity);
             DefaultTreeModel model = (DefaultTreeModel) jTree.getModel();
