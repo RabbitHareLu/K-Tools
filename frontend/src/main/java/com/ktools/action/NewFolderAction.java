@@ -61,7 +61,6 @@ public class NewFolderAction implements ActionListener {
             treeEntity.setChild(null);
 
             List<String> nodePathList = new ArrayList<>();
-            nodePathList.add(String.valueOf(treeEntity.getId()));
             buildTreeNodePath(nodePathList, selectionPath);
             treeEntity.setNodePath(getNodePathString(nodePathList));
 
