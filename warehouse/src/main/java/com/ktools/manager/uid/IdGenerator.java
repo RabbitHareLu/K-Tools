@@ -32,7 +32,7 @@ public class IdGenerator {
      * @return id
      */
     public Integer getId(UidKey key) {
-        return getId(key, 1).get(0);
+        return getId(key, 1).getFirst();
     }
 
     public synchronized List<Integer> getId(UidKey key, int size) {
