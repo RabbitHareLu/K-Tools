@@ -20,27 +20,27 @@ public class ImageLoad {
     private static final ImageLoad INSTANCE = new ImageLoad();
 
     private ImageIcon logoIcon = null;
-    private ImageIcon tableIcon = null;
-    private ImageIcon folderIcon = null;
-    private ImageIcon databaseIcon = null;
-    private ImageIcon colIcon = null;
-    private ImageIcon connectionIcon = null;
-    private ImageIcon disConnectionIcon = null;
-    private ImageIcon refreshIcon = null;
     private ImageIcon deleteIcon = null;
-    private ImageIcon editIcon = null;
-    private ImageIcon sqlConsoleIcon = null;
-    private ImageIcon newFolderIcon = null;
-    private ImageIcon impalaConnectionIcon = null;
-    private ImageIcon renameIcon = null;
     private ImageIcon aboutIcon = null;
     private ImageIcon fontIcon = null;
+    private ImageIcon newIcon = null;
+    private ImageIcon newFolderIcon = null;
+    private ImageIcon databaseIcon = null;
+    private ImageIcon sqlConsoleIcon = null;
+    private ImageIcon exitIcon = null;
+    private ImageIcon impalaIcon = null;
 
     private ImageLoad() {
         logoIcon = buildIcon(this.getClass().getResource("/images/logo/kt.svg"));
         aboutIcon = buildIcon(this.getClass().getResource("/images/tree/about.svg"));
         deleteIcon = buildIcon(this.getClass().getResource("/images/tree/delete.svg"));
         fontIcon = buildIcon(this.getClass().getResource("/images/tree/font.svg"));
+        newIcon = buildIcon(this.getClass().getResource("/images/tree/new.svg"));
+        newFolderIcon = buildIcon(this.getClass().getResource("/images/tree/newFolder.svg"));
+        databaseIcon = buildIcon(this.getClass().getResource("/images/tree/database.svg"));
+        sqlConsoleIcon = buildIcon(this.getClass().getResource("/images/tree/sqlConsole.svg"));
+        exitIcon = buildIcon(this.getClass().getResource("/images/tree/exit.svg"));
+        impalaIcon = buildIcon(this.getClass().getResource("/images/tree/impala.svg"));
     }
 
     public static ImageLoad getInstance() {

@@ -4,13 +4,13 @@ import com.ktools.KToolsContext;
 import com.ktools.Main;
 import com.ktools.api.SystemApi;
 import com.ktools.common.model.TreeNodeType;
+import com.ktools.common.utils.DialogUtil;
 import com.ktools.common.utils.StringUtil;
 import com.ktools.component.Tree;
 import com.ktools.component.TreeNode;
 import com.ktools.exception.KToolException;
 import com.ktools.manager.uid.UidKey;
 import com.ktools.mybatis.entity.TreeEntity;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -68,6 +68,7 @@ public class NewFolderAction implements ActionListener {
             try {
                 KToolsContext.getInstance().getApi(SystemApi.class).addNode(treeEntity);
             } catch (KToolException ex) {
+                DialogUtil.showErrorDialog(Main.kToolsRootJFrame, ex.getMessage());
                 throw new RuntimeException(ex);
             }
 
@@ -76,8 +77,6 @@ public class NewFolderAction implements ActionListener {
             model.insertNodeInto(treeNode, currentTreeNode, currentTreeNode.getChildCount());
             expandTreeNode(selectionPath);
         }
-
-
     }
 
     private void expandTreeNode(TreePath selectionPath) {

@@ -4,10 +4,7 @@ import com.formdev.flatlaf.FlatClientProperties;
 import com.ktools.KToolsContext;
 import com.ktools.KToolsRootJFrame;
 import com.ktools.Main;
-import com.ktools.action.NewFolderAction;
-import com.ktools.action.UpdateFontNameAction;
-import com.ktools.action.UpdateFontSizeAction;
-import com.ktools.action.UpdateFontStyleAction;
+import com.ktools.action.*;
 import com.ktools.common.utils.FontUtil;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +30,7 @@ public class Menu {
 
     private JMenuBar jMenuBar;
 
-    private JMenu newMenu;
+    private JMenu fileMenu;
     private JMenu editMenu;
     private JMenu settingsMenu;
     private JMenu helpMenu;
@@ -41,19 +38,30 @@ public class Menu {
     private JMenu fontNameMenu;
     private JMenu fontSizeMenu;
     private JMenu fontStyleMenu;
+    private JMenu newMenu;
+    private JMenuItem exitMenu;
 
     private JMenuItem newFolder;
-    private JMenuItem newImpalaConnection;
+    private JMenu newJDBCConnection;
     private JMenuItem newSqlConsole;
     private JMenuItem about;
+
+    private JMenuItem newImpalaConnection;
 
     private Menu() {
         jMenuBar = new JMenuBar();
 
-        newMenu = new JMenu("新建");
+        fileMenu = new JMenu("文件");
         editMenu = new JMenu("编辑");
         settingsMenu = new JMenu("设置");
         helpMenu = new JMenu("帮助");
+
+        newMenu = new JMenu("新建");
+        newMenu.setIcon(ImageLoad.getInstance().getNewIcon());
+
+        exitMenu = new JMenuItem("退出");
+        exitMenu.setIcon(ImageLoad.getInstance().getExitIcon());
+        exitMenu.addActionListener(new ExitAction());
 
         fontMenu = new JMenu("字体");
         fontMenu.setIcon(ImageLoad.getInstance().getFontIcon());
@@ -62,34 +70,48 @@ public class Menu {
         fontStyleMenu = new JMenu("字体样式");
 
         newFolder = new JMenuItem("新建文件夹");
-        newFolder.setIcon(UIManager.getIcon("FileChooser.newFolderIcon"));
-        newImpalaConnection = new JMenuItem("新建Impala连接");
-        newImpalaConnection.setIcon(ImageLoad.getInstance().getImpalaConnectionIcon());
+        newFolder.setIcon(ImageLoad.getInstance().getNewFolderIcon());
+        newFolder.addActionListener(new NewFolderAction());
+
+        newJDBCConnection = new JMenu("新建JDBC连接");
+        newJDBCConnection.setIcon(ImageLoad.getInstance().getDatabaseIcon());
+
+        newImpalaConnection = new JMenuItem("Impala");
+        newImpalaConnection.setIcon(ImageLoad.getInstance().getImpalaIcon());
+
         newSqlConsole = new JMenuItem("新建SQL查询控制台");
         newSqlConsole.setIcon(ImageLoad.getInstance().getSqlConsoleIcon());
         about = new JMenuItem("关于");
         about.setIcon(ImageLoad.getInstance().getAboutIcon());
 
-        jMenuBar.add(newMenu);
+        jMenuBar.add(fileMenu);
         jMenuBar.add(editMenu);
         jMenuBar.add(settingsMenu);
         jMenuBar.add(helpMenu);
 
+        fileMenu.add(newMenu);
+        fileMenu.add(exitMenu);
+
         newMenu.add(newFolder);
-        newMenu.add(newImpalaConnection);
+        newMenu.add(newJDBCConnection);
         newMenu.add(newSqlConsole);
+
+        newJDBCConnection.add(newImpalaConnection);
 
         settingsMenu.add(fontMenu);
         fontMenu.add(fontNameMenu);
         fontMenu.add(fontSizeMenu);
         fontMenu.add(fontStyleMenu);
-        initFontMenu();
 
         helpMenu.add(about);
 
-        setNewFolderAction();
-        setNewImpalaConnectionAction();
+        initFontMenu();
+
         setAboutAction();
+    }
+
+    public static Menu getInstance() {
+        return INSTANCE;
     }
 
     private void initFontMenu() {
@@ -138,18 +160,6 @@ public class Menu {
         }
 
         FontUtil.updateUIFont(new Font(fontName, FontUtil.getFontStyle(fontStyle), fontSize));
-    }
-
-    public static Menu getInstance() {
-        return INSTANCE;
-    }
-
-    private void setNewFolderAction() {
-        newFolder.addActionListener(new NewFolderAction());
-    }
-
-    private void setNewImpalaConnectionAction() {
-//        newImpalaConnection.addActionListener(new NewImpalaConnectionAction());
     }
 
     private void setAboutAction() {
