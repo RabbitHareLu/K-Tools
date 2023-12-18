@@ -37,7 +37,6 @@ public class KToolsRootJFrame extends JFrame {
         init();
 
         setVisible(true);
-        rootJSplitPane.setDividerLocation(0.2);
     }
 
     private void init() {
@@ -48,9 +47,20 @@ public class KToolsRootJFrame extends JFrame {
         rootJSplitPane.setDividerSize(3);
         add(rootJSplitPane, BorderLayout.CENTER);
 
-        jTree = Tree.getInstance().getJTree();
-        rootJSplitPane.setLeftComponent(new JScrollPane(jTree));
-        rootJSplitPane.setRightComponent(new JScrollPane(new JTextArea()));
+        new SwingWorker<>() {
+            @Override
+            protected Object doInBackground() throws Exception {
+                jTree = Tree.getInstance().getJTree();
+                return null;
+            }
+
+            @Override
+            protected void done() {
+                rootJSplitPane.setLeftComponent(new JScrollPane(jTree));
+                rootJSplitPane.setRightComponent(new JScrollPane(new JTextArea()));
+                rootJSplitPane.setDividerLocation(0.2);
+            }
+        }.execute();
     }
 
 }

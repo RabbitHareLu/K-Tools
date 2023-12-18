@@ -30,6 +30,7 @@
         <logback.version>1.4.7</logback.version>
         <aviator.version>5.4.1</aviator.version>
         <flyway.version>10.1.0</flyway.version>
+        <batik-swing.version>1.17</batik-swing.version>
     </properties>
 
     <dependencyManagement>
@@ -56,6 +57,12 @@
                 <groupId>com.formdev</groupId>
                 <artifactId>flatlaf-extras</artifactId>
                 <version>${flatlaf.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.xmlgraphics</groupId>
+                <artifactId>batik-swing</artifactId>
+                <version>${batik-swing.version}</version>
             </dependency>
 
             <dependency>

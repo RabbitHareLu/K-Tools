@@ -1,6 +1,8 @@
 package com.ktools.component;
 
+import com.formdev.flatlaf.extras.components.FlatProgressBar;
 import com.ktools.KToolsContext;
+import com.ktools.Main;
 import com.ktools.api.SystemApi;
 import com.ktools.common.model.TreeNodeType;
 import com.ktools.common.utils.CollectionUtil;
@@ -49,7 +51,7 @@ public class Tree {
         List<TreeEntity> tree = api.getTree(0);
 
         TreeNode rootNode = new TreeNode(0, null, "ROOT", TreeNodeType.ROOT, "ROOT");
-        buildTree(rootNode, tree.get(0).getChild());
+        buildTree(rootNode, tree.getFirst().getChild());
         return rootNode;
     }
 

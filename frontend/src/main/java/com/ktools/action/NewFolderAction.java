@@ -46,7 +46,7 @@ public class NewFolderAction implements ActionListener {
                 Main.kToolsRootJFrame,
                 "目录名称",
                 "新建文件夹",
-                JOptionPane.YES_NO_CANCEL_OPTION
+                JOptionPane.INFORMATION_MESSAGE
         );
 
         if (StringUtil.isNotBlank(result)) {
@@ -76,7 +76,7 @@ public class NewFolderAction implements ActionListener {
 
     }
 
-    public void expandTreeNode(TreePath selectionPath) {
+    private void expandTreeNode(TreePath selectionPath) {
         if (Objects.nonNull(selectionPath)) {
             if (!jTree.isExpanded(selectionPath)) {
                 jTree.expandPath(selectionPath);
@@ -84,7 +84,7 @@ public class NewFolderAction implements ActionListener {
         }
     }
 
-    public String getNodePathString(List<String> nodePathList) {
+    private String getNodePathString(List<String> nodePathList) {
         StringBuilder nodePathString = new StringBuilder();
         for (int i = nodePathList.size() - 1; i >= 0; i--) {
             nodePathString.append(nodePathList.get(i)).append("/");
@@ -92,7 +92,7 @@ public class NewFolderAction implements ActionListener {
         return nodePathString.delete(nodePathString.length() - 1, nodePathString.length()).toString();
     }
 
-    public void buildTreeNodePath(List<String> list, TreePath selectionPath) {
+    private void buildTreeNodePath(List<String> list, TreePath selectionPath) {
         TreeNode currentTreeNode = (TreeNode) selectionPath.getLastPathComponent();
         Integer id = currentTreeNode.getTreeEntity().getId();
         list.add(String.valueOf(id));
