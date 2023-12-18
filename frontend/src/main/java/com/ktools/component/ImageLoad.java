@@ -1,8 +1,12 @@
 package com.ktools.component;
 
+import com.kitfox.svg.app.beans.SVGIcon;
 import lombok.Data;
 
 import javax.swing.*;
+import java.awt.*;
+import java.net.URI;
+import java.net.URL;
 import java.util.Objects;
 
 /**
@@ -15,7 +19,7 @@ public class ImageLoad {
 
     private static final ImageLoad INSTANCE = new ImageLoad();
 
-    private ImageIcon rootIcon = null;
+    private ImageIcon logoIcon = null;
     private ImageIcon tableIcon = null;
     private ImageIcon folderIcon = null;
     private ImageIcon databaseIcon = null;
@@ -33,25 +37,30 @@ public class ImageLoad {
     private ImageIcon fontIcon = null;
 
     private ImageLoad() {
-        rootIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/images/tree/root.png")));
-        tableIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/images/tree/table.png")));
-        folderIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/images/tree/folder.png")));
-        databaseIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/images/tree/database.png")));
-        colIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/images/tree/col.png")));
-        connectionIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/images/tree/connection.png")));
-        disConnectionIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/images/tree/disConnection.png")));
-        refreshIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/images/tree/refresh.png")));
-        deleteIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/images/tree/delete.png")));
-        editIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/images/tree/edit.png")));
-        sqlConsoleIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/images/tree/sqlConsole.png")));
-        newFolderIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/images/tree/newFolder.png")));
-        impalaConnectionIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/images/tree/impalaConnection.png")));
-        renameIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/images/tree/rename.png")));
-        aboutIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/images/tree/about.png")));
-        fontIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/images/tree/font.png")));
+        logoIcon = buildIcon(this.getClass().getResource("/images/logo/kt.svg"));
+        aboutIcon = buildIcon(this.getClass().getResource("/images/tree/about.svg"));
+        deleteIcon = buildIcon(this.getClass().getResource("/images/tree/delete.svg"));
+        fontIcon = buildIcon(this.getClass().getResource("/images/tree/font.svg"));
     }
 
     public static ImageLoad getInstance() {
         return INSTANCE;
+    }
+
+    private SVGIcon buildIcon(URL url) {
+        URI svgUri = URI.create(String.valueOf(url));
+        SVGIcon svgIcon = new SVGIcon();
+        svgIcon.setAntiAlias(true);
+        svgIcon.setSvgURI(svgUri);
+        return svgIcon;
+    }
+
+    private SVGIcon buildIcon(URL url, int width, int height) {
+        URI svgUri = URI.create(String.valueOf(url));
+        SVGIcon svgIcon = new SVGIcon();
+        svgIcon.setPreferredSize(new Dimension(width, height));
+        svgIcon.setAntiAlias(true);
+        svgIcon.setSvgURI(svgUri);
+        return svgIcon;
     }
 }

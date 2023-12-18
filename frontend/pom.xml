@@ -44,6 +44,12 @@
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf-extras</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>svgSalamander</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

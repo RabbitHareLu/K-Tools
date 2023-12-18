@@ -1,12 +1,12 @@
 package com.ktools;
 
+import com.ktools.component.ImageLoad;
 import com.ktools.component.Menu;
 import com.ktools.component.Tree;
 import lombok.Data;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Objects;
 
 /**
  * @author lsl
@@ -25,9 +25,7 @@ public class KToolsRootJFrame extends JFrame {
     JTree jTree;
 
     public KToolsRootJFrame() {
-        ImageIcon imageIcon = new ImageIcon(Objects.requireNonNull(this.getClass().getResource("/images/logo/kts.png")));
-        setIconImage(imageIcon.getImage());
-
+        setIconImage(ImageLoad.getInstance().getLogoIcon().getImage());
         setSize(WIDTH, HEIGHT);
         setTitle(TITLE);
 

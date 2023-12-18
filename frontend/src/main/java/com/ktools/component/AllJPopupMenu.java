@@ -42,7 +42,7 @@ public class AllJPopupMenu {
         folderPopupMenu.add(folderNewFolderItem);
 
         JMenuItem folderDeleteItem = new JMenuItem("删除");
-//        folderNewFolderItem.setIcon(UIManager.getIcon("FileChooser.newFolderIcon"));
+        folderDeleteItem.setIcon(ImageLoad.getInstance().getDeleteIcon());
         folderDeleteItem.addActionListener(new DeleteTreeNodeAction());
         folderPopupMenu.add(folderDeleteItem);
     }

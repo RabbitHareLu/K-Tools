@@ -30,7 +30,7 @@
         <logback.version>1.4.7</logback.version>
         <aviator.version>5.4.1</aviator.version>
         <flyway.version>10.1.0</flyway.version>
-        <batik-swing.version>1.17</batik-swing.version>
+        <svgSalamander.version>1.1.4</svgSalamander.version>
     </properties>
 
     <dependencyManagement>
@@ -60,9 +60,9 @@
             </dependency>
 
             <dependency>
-                <groupId>org.apache.xmlgraphics</groupId>
-                <artifactId>batik-swing</artifactId>
-                <version>${batik-swing.version}</version>
+                <groupId>com.formdev</groupId>
+                <artifactId>svgSalamander</artifactId>
+                <version>${svgSalamander.version}</version>
             </dependency>
 
             <dependency>
