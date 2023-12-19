@@ -1,10 +1,13 @@
 package com.ktools;
 
+import com.ktools.api.DataSourceApi;
 import com.ktools.api.SystemApi;
+import com.ktools.manager.datasource.KDataSourceManager;
 import com.ktools.manager.datasource.SysDataSource;
 import com.ktools.manager.task.TaskManager;
 import com.ktools.manager.uid.IdGenerator;
 import com.ktools.mybatis.MybatisContext;
+import com.ktools.service.DataSourceService;
 import com.ktools.service.SystemService;
 import lombok.Getter;
 
@@ -29,6 +32,8 @@ public class KToolsContext {
 
     private final IdGenerator idGenerator;
 
+    private final KDataSourceManager dataSourceManager;
+
     private KToolsContext() {
         // 初始化系统数据源
         DataSource dataSource = SysDataSource.init();
@@ -42,6 +47,8 @@ public class KToolsContext {
         this.taskManager = new TaskManager();
         // 初始化id生成器
         this.idGenerator = new IdGenerator(mybatisContext);
+        // 初始化数据源管理器
+        this.dataSourceManager = new KDataSourceManager();
     }
 
     public static KToolsContext getInstance() {
@@ -63,6 +70,8 @@ public class KToolsContext {
     public <T> T getApi(Class<T> tClass) {
         if (tClass == SystemApi.class) {
             return tClass.cast(new SystemService());
+        } else if (tClass == DataSourceApi.class){
+            return tClass.cast(new DataSourceService());
         }
         return null;
     }

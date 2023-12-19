@@ -11,6 +11,7 @@
     <modules>
         <module>frontend</module>
         <module>warehouse</module>
+        <module>k-connectors</module>
     </modules>
 
     <properties>
