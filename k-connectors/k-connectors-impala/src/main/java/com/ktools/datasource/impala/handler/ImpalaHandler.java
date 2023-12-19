@@ -21,4 +21,9 @@ public class ImpalaHandler extends AbstractJdbcHandler {
         this.impalaConfig = ConfigParamUtil.buildConfig(properties, ImpalaConfig.class);
     }
 
+    @Override
+    protected String getDriverClass() {
+        return "com.cloudera.impala.jdbc41.Driver";
+    }
+
 }

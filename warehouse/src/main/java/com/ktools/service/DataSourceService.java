@@ -4,6 +4,7 @@ import com.ktools.api.DataSourceApi;
 import com.ktools.exception.KToolException;
 import com.ktools.manager.datasource.KDataSourceFactory;
 import com.ktools.manager.datasource.KDataSourceHandler;
+import com.ktools.manager.datasource.KDataSourceManager;
 import com.ktools.manager.datasource.model.KDataSourceMetadata;
 
 import java.util.List;
@@ -35,6 +36,38 @@ public class DataSourceService extends BaseService implements DataSourceApi {
         KDataSourceHandler dataSourceHandler = sourceFactory.createDataSourceHandler(datasourceProperties);
         // 测试数据源连接
         dataSourceHandler.testConn();
+    }
+
+    @Override
+    public void conn(String id, String type, Map<String, String> properties) throws KToolException {
+        // 构建Properties
+        Properties datasourceProperties = new Properties();
+        datasourceProperties.putAll(properties);
+        // 获取数据源处理器
+        KDataSourceManager dataSourceManager = this.kToolsContext.getDataSourceManager();
+        KDataSourceHandler dataSourceHandler;
+        if (dataSourceManager.existHandler(id)) {
+            dataSourceHandler = dataSourceManager.getHandler(id);
+        } else {
+            KDataSourceFactory sourceFactory = this.kToolsContext.getDataSourceManager().getFactory(type);
+            dataSourceHandler = sourceFactory.createDataSourceHandler(datasourceProperties);
+            // 加入管理器
+            this.kToolsContext.getDataSourceManager().addHandler(id, dataSourceHandler);
+        }
+        // 连接数据源
+        dataSourceHandler.conn();
+    }
+
+    @Override
+    public void disConn(String id) {
+        // 获取数据源处理器
+        KDataSourceManager dataSourceManager = this.kToolsContext.getDataSourceManager();
+        if (dataSourceManager.existHandler(id)) {
+            KDataSourceHandler dataSourceHandler = dataSourceManager.getHandler(id);
+            dataSourceHandler.disConn();
+            // 从管理器中移除
+            this.kToolsContext.getDataSourceManager().removeHandler(id);
+        }
     }
 
 }

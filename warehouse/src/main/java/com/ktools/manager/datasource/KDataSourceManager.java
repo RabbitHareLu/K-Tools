@@ -3,9 +3,8 @@ package com.ktools.manager.datasource;
 import com.ktools.exception.KToolException;
 import com.ktools.manager.datasource.model.KDataSourceMetadata;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.ServiceLoader;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
@@ -19,6 +18,8 @@ public class KDataSourceManager {
      * 数据源工厂
      */
     private final ServiceLoader<KDataSourceFactory> factories;
+
+    private final Map<String, KDataSourceHandler> handlerMap = new ConcurrentHashMap<>();
 
     public KDataSourceManager() {
         this.factories = ServiceLoader.load(KDataSourceFactory.class);
@@ -51,6 +52,22 @@ public class KDataSourceManager {
             }
         }
         throw new KToolException("不支持的元数据类型");
+    }
+
+    public KDataSourceHandler getHandler(String key) {
+        return this.handlerMap.get(key);
+    }
+
+    public void addHandler(String key, KDataSourceHandler handler) {
+        this.handlerMap.put(key, handler);
+    }
+
+    public void removeHandler(String key) {
+        this.handlerMap.remove(key);
+    }
+
+    public boolean existHandler(String key) {
+        return this.handlerMap.containsKey(key);
     }
 
 }

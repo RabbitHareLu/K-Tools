@@ -54,6 +54,11 @@ public class MybatisContext {
         flexDataSource.removeDatasource(key);
     }
 
+    public boolean existDataSource(String key) {
+        FlexDataSource flexDataSource = FlexGlobalConfig.getDefaultConfig().getDataSource();
+        return flexDataSource.getDataSourceMap().containsKey(key);
+    }
+
     public void showdown() {
         FlexDataSource flexDataSource = FlexGlobalConfig.getDefaultConfig().getDataSource();
         Set<String> keySet = flexDataSource.getDataSourceMap().keySet();

@@ -1,6 +1,6 @@
 package com.ktools.common.utils;
 
-import com.ktools.manager.datasource.DataSourceProperties;
+import com.ktools.manager.datasource.jdbc.JdbcConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import javax.sql.DataSource;
@@ -10,12 +10,12 @@ import javax.sql.DataSource;
  */
 public class DataSourceUtil {
 
-    public static DataSource createDataSource(DataSourceProperties dataSourceProperties) {
+    public static DataSource createDataSource(JdbcConfig jdbcConfig) {
         HikariDataSource hikariDataSource = new HikariDataSource();
-        hikariDataSource.setDriverClassName(dataSourceProperties.getJdbcDriver());
-        hikariDataSource.setJdbcUrl(dataSourceProperties.getJdbcUrl());
-        hikariDataSource.setUsername(dataSourceProperties.getJdbcUserName());
-        hikariDataSource.setPassword(dataSourceProperties.getJdbcPassword());
+        hikariDataSource.setDriverClassName(jdbcConfig.getDriver());
+        hikariDataSource.setJdbcUrl(jdbcConfig.getJdbcUrl());
+        hikariDataSource.setUsername(jdbcConfig.getUsername());
+        hikariDataSource.setPassword(jdbcConfig.getPassword());
         hikariDataSource.setMinimumIdle(1);
         hikariDataSource.setMaximumPoolSize(10);
         hikariDataSource.setMaxLifetime(1800000);

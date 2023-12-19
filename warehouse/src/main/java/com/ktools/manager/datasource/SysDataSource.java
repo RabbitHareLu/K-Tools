@@ -1,6 +1,7 @@
 package com.ktools.manager.datasource;
 
 import com.ktools.common.utils.DataSourceUtil;
+import com.ktools.manager.datasource.jdbc.JdbcConfig;
 import org.flywaydb.core.Flyway;
 
 import javax.sql.DataSource;
@@ -34,13 +35,13 @@ public class SysDataSource {
         return dataSource;
     }
 
-    private static DataSourceProperties getDataSourceProperties() {
-        DataSourceProperties dataSourceProperties = new DataSourceProperties();
-        dataSourceProperties.setName(DATASOURCE_NAME);
-        dataSourceProperties.setJdbcDriver(H2_DRIVER);
+    private static JdbcConfig getDataSourceProperties() {
+        JdbcConfig dataSourceProperties = new JdbcConfig();
+        dataSourceProperties.setKey(DATASOURCE_NAME);
+        dataSourceProperties.setDriver(H2_DRIVER);
         dataSourceProperties.setJdbcUrl(H2_URL);
-        dataSourceProperties.setJdbcUserName(H2_USER_NAME);
-        dataSourceProperties.setJdbcPassword(H2_PASSWORD);
+        dataSourceProperties.setUsername(H2_USER_NAME);
+        dataSourceProperties.setPassword(H2_PASSWORD);
         return dataSourceProperties;
     }
 

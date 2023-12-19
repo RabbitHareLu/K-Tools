@@ -9,6 +9,16 @@ import lombok.Data;
 public class JdbcConfig {
 
     /**
+     * key
+     */
+    private String key;
+
+    /**
+     * driver
+     */
+    private String driver;
+
+    /**
      * url
      */
     @ConfigParam(name = "url", key = "jdbcUrl", must = true)

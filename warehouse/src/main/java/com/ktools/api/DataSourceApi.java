@@ -26,4 +26,20 @@ public interface DataSourceApi {
      */
     void testDataSource(String type, Map<String, String> properties) throws KToolException;
 
+    /**
+     * 连接数据源
+     *
+     * @param id         当前节点id
+     * @param type       数据源类型
+     * @param properties 属性
+     */
+    void conn(String id, String type, Map<String, String> properties) throws KToolException;
+
+    /**
+     * 数据源连接断开
+     *
+     * @param id 当前节点id
+     */
+    void disConn(String id);
+
 }

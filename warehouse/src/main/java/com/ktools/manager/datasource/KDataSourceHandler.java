@@ -14,4 +14,14 @@ public interface KDataSourceHandler {
      */
     void testConn() throws KToolException;
 
+    /**
+     * 连接数据源
+     */
+    void conn();
+
+    /**
+     * 断开连接数据源
+     */
+    void disConn();
+
 }
