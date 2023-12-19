@@ -1,7 +1,5 @@
 package com.ktools.common.utils;
 
-import com.ktools.Main;
-
 import javax.swing.*;
 import java.awt.*;
 

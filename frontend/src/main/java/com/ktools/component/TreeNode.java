@@ -26,7 +26,7 @@ public class TreeNode extends DefaultMutableTreeNode {
 
     public TreeNode(Integer id, Integer parentNodeId, String nodeName, String nodeType, String nodeComment) {
         super(nodeName);
-        this.treeEntity = new TreeEntity(id, parentNodeId, nodeName, nodeType, nodeComment, "0", null);
+        this.treeEntity = new TreeEntity(id, parentNodeId, nodeName, nodeType, nodeComment, "0", null, null);
     }
 
 }

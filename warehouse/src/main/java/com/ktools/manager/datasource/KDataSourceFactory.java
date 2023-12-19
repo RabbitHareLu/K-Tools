@@ -1,5 +1,6 @@
 package com.ktools.manager.datasource;
 
+import com.ktools.exception.KToolException;
 import com.ktools.manager.datasource.model.KDataSourceMetadata;
 
 import java.util.Properties;
@@ -22,6 +23,6 @@ public interface KDataSourceFactory {
      * @param properties 配置消息
      * @return 数据源处理器
      */
-    KDataSourceHandler createDataSourceHandler(Properties properties);
+    KDataSourceHandler createDataSourceHandler(Properties properties) throws KToolException;
 
 }

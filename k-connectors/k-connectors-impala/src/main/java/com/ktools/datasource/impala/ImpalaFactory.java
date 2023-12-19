@@ -2,6 +2,8 @@ package com.ktools.datasource.impala;
 
 import com.ktools.common.utils.ConfigParamUtil;
 import com.ktools.datasource.impala.config.ImpalaConfig;
+import com.ktools.datasource.impala.handler.ImpalaHandler;
+import com.ktools.exception.KToolException;
 import com.ktools.manager.datasource.KDataSourceFactory;
 import com.ktools.manager.datasource.KDataSourceHandler;
 import com.ktools.manager.datasource.model.KDataSourceMetadata;
@@ -23,9 +25,8 @@ public class ImpalaFactory implements KDataSourceFactory {
     }
 
     @Override
-    public KDataSourceHandler createDataSourceHandler(Properties properties) {
-
-        return null;
+    public KDataSourceHandler createDataSourceHandler(Properties properties) throws KToolException {
+        return new ImpalaHandler(properties);
     }
 
     private static KDataSourceMetadata createMetadata() {

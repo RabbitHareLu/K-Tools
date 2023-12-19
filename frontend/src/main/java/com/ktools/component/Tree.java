@@ -1,8 +1,6 @@
 package com.ktools.component;
 
-import com.formdev.flatlaf.extras.components.FlatProgressBar;
 import com.ktools.KToolsContext;
-import com.ktools.Main;
 import com.ktools.api.SystemApi;
 import com.ktools.common.model.TreeNodeType;
 import com.ktools.common.utils.CollectionUtil;

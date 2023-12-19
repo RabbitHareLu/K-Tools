@@ -1,6 +1,7 @@
 package com.ktools.mybatis.entity;
 
 import com.ktools.manager.datasource.SysDataSource;
+import com.ktools.mybatis.handler.NodeInfoHandler;
 import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.Table;
@@ -9,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author WCG
@@ -36,6 +38,9 @@ public class TreeEntity {
 
     @Column("node_path")
     private String nodePath;
+
+    @Column(value = "node_info", typeHandler = NodeInfoHandler.class)
+    private Map<String, String> nodeInfo;
 
     @Column(ignore = true)
     private List<TreeEntity> child;
