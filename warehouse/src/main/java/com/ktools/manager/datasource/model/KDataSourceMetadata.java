@@ -19,9 +19,14 @@ public class KDataSourceMetadata implements Serializable {
     private String name;
 
     /**
-     * logo
+     * 未连接logo
      */
     private String logo;
+
+    /**
+     * 已连接logo
+     */
+    private String connLogo;
 
     /**
      * 可配置项

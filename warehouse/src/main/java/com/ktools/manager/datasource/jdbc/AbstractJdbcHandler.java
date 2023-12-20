@@ -6,15 +6,13 @@ import com.ktools.common.utils.ConfigParamUtil;
 import com.ktools.common.utils.DataSourceUtil;
 import com.ktools.exception.KToolException;
 import com.ktools.manager.datasource.KDataSourceHandler;
+import com.ktools.manager.datasource.jdbc.model.TableMetadata;
 import com.ktools.mybatis.MybatisContext;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Properties;
-import java.util.UUID;
+import java.sql.*;
+import java.util.*;
 
 /**
  * JDBC 处理器
@@ -67,6 +65,12 @@ public abstract class AbstractJdbcHandler implements KDataSourceHandler {
                 }
             }
         }
+    }
+
+    @Override
+    public List<TableMetadata> selectMetadata() {
+
+        return null;
     }
 
     protected abstract String getDriverClass();

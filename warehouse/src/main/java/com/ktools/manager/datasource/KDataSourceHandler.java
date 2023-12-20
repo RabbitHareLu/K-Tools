@@ -1,6 +1,9 @@
 package com.ktools.manager.datasource;
 
 import com.ktools.exception.KToolException;
+import com.ktools.manager.datasource.jdbc.model.TableMetadata;
+
+import java.util.List;
 
 /**
  * 数据源接口
@@ -23,5 +26,10 @@ public interface KDataSourceHandler {
      * 断开连接数据源
      */
     void disConn();
+
+    /**
+     * 查询元数据
+     */
+    List<TableMetadata> selectMetadata();
 
 }
