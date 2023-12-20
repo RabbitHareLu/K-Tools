@@ -53,6 +53,7 @@ public class Menu {
     private JMenuItem newImpalaConnection;
 
     private Menu() {
+
         jMenuBar = new JMenuBar();
 
         fileMenu = new JMenu("文件");
