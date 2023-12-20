@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.net.URI;
 import java.net.URL;
-import java.util.Objects;
 
 /**
  * @author lsl
@@ -28,7 +27,9 @@ public class ImageLoad {
     private ImageIcon databaseIcon = null;
     private ImageIcon sqlConsoleIcon = null;
     private ImageIcon exitIcon = null;
-    private ImageIcon impalaIcon = null;
+    private ImageIcon fontNameIcon = null;
+    private ImageIcon fontSizeIcon = null;
+    private ImageIcon fontStyleIcon = null;
 
     private ImageLoad() {
         logoIcon = buildIcon(this.getClass().getResource("/images/logo/kt.svg"));
@@ -40,14 +41,16 @@ public class ImageLoad {
         databaseIcon = buildIcon(this.getClass().getResource("/images/tree/database.svg"));
         sqlConsoleIcon = buildIcon(this.getClass().getResource("/images/tree/sqlConsole.svg"));
         exitIcon = buildIcon(this.getClass().getResource("/images/tree/exit.svg"));
-        impalaIcon = buildIcon(this.getClass().getResource("/images/tree/impala.svg"));
+        fontNameIcon = buildIcon(this.getClass().getResource("/images/tree/font-name.svg"));
+        fontSizeIcon = buildIcon(this.getClass().getResource("/images/tree/font-size.svg"));
+        fontStyleIcon = buildIcon(this.getClass().getResource("/images/tree/font-style.svg"));
     }
 
     public static ImageLoad getInstance() {
         return INSTANCE;
     }
 
-    private SVGIcon buildIcon(URL url) {
+    public SVGIcon buildIcon(URL url) {
         URI svgUri = URI.create(String.valueOf(url));
         SVGIcon svgIcon = new SVGIcon();
         svgIcon.setAntiAlias(true);
@@ -55,7 +58,7 @@ public class ImageLoad {
         return svgIcon;
     }
 
-    private SVGIcon buildIcon(URL url, int width, int height) {
+    public SVGIcon buildIcon(URL url, int width, int height) {
         URI svgUri = URI.create(String.valueOf(url));
         SVGIcon svgIcon = new SVGIcon();
         svgIcon.setPreferredSize(new Dimension(width, height));

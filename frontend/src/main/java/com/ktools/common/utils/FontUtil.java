@@ -1,10 +1,15 @@
 package com.ktools.common.utils;
 
 import com.formdev.flatlaf.FlatLaf;
+import com.ktools.KToolsContext;
+import com.ktools.action.UpdateFontNameAction;
+import com.ktools.action.UpdateFontSizeAction;
+import com.ktools.action.UpdateFontStyleAction;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Objects;
+import java.util.Properties;
 
 /**
  * @author lsl
@@ -31,5 +36,14 @@ public class FontUtil {
         } else {
             return Font.PLAIN;
         }
+    }
+
+    public static void updateFont() {
+        Properties properties = KToolsContext.getInstance().getProperties();
+        String fontName = String.valueOf(properties.get("font.name"));
+        int fontSize = Integer.parseInt(String.valueOf(properties.get("font.size")));
+        String fontStyle = String.valueOf(properties.get("font.style"));
+
+        FontUtil.updateUIFont(new Font(fontName, FontUtil.getFontStyle(fontStyle), fontSize));
     }
 }

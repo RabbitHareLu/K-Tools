@@ -1,5 +1,6 @@
 package com.ktools;
 
+import com.ktools.common.utils.FontUtil;
 import com.ktools.component.ImageLoad;
 import com.ktools.component.Menu;
 import com.ktools.component.Tree;
@@ -43,6 +44,7 @@ public class KToolsRootJFrame extends JFrame {
 
         rootJSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         rootJSplitPane.setDividerSize(3);
+
         add(rootJSplitPane, BorderLayout.CENTER);
 
         new SwingWorker<>() {
@@ -54,9 +56,17 @@ public class KToolsRootJFrame extends JFrame {
 
             @Override
             protected void done() {
-                rootJSplitPane.setLeftComponent(new JScrollPane(jTree));
-                rootJSplitPane.setRightComponent(new JScrollPane(new JTextArea()));
+                JScrollPane jTreeScrollPane = new JScrollPane(jTree);
+                jTreeScrollPane.setMinimumSize(new Dimension(200, 0));
+                rootJSplitPane.setLeftComponent(jTreeScrollPane);
+
+                JScrollPane jTextAreaScrollPane = new JScrollPane(new JTextArea());
+                jTextAreaScrollPane.setMinimumSize(new Dimension(200, 0));
+
+                rootJSplitPane.setRightComponent(jTextAreaScrollPane);
                 rootJSplitPane.setDividerLocation(0.2);
+
+                FontUtil.updateFont();
             }
         }.execute();
     }

@@ -5,13 +5,17 @@ import com.ktools.KToolsContext;
 import com.ktools.KToolsRootJFrame;
 import com.ktools.Main;
 import com.ktools.action.*;
+import com.ktools.api.DataSourceApi;
 import com.ktools.common.utils.FontUtil;
+import com.ktools.frame.NewJDBCConnectionFrame;
+import com.ktools.manager.datasource.model.KDataSourceMetadata;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import java.awt.*;
 import java.time.Year;
+import java.util.List;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -66,8 +70,11 @@ public class Menu {
         fontMenu = new JMenu("字体");
         fontMenu.setIcon(ImageLoad.getInstance().getFontIcon());
         fontNameMenu = new JMenu("字体名称");
+        fontNameMenu.setIcon(ImageLoad.getInstance().getFontNameIcon());
         fontSizeMenu = new JMenu("字体大小");
+        fontSizeMenu.setIcon(ImageLoad.getInstance().getFontSizeIcon());
         fontStyleMenu = new JMenu("字体样式");
+        fontStyleMenu.setIcon(ImageLoad.getInstance().getFontStyleIcon());
 
         newFolder = new JMenuItem("新建文件夹");
         newFolder.setIcon(ImageLoad.getInstance().getNewFolderIcon());
@@ -76,8 +83,7 @@ public class Menu {
         newJDBCConnection = new JMenu("新建JDBC连接");
         newJDBCConnection.setIcon(ImageLoad.getInstance().getDatabaseIcon());
 
-        newImpalaConnection = new JMenuItem("Impala");
-        newImpalaConnection.setIcon(ImageLoad.getInstance().getImpalaIcon());
+        initDataSourceMenu();
 
         newSqlConsole = new JMenuItem("新建SQL查询控制台");
         newSqlConsole.setIcon(ImageLoad.getInstance().getSqlConsoleIcon());
@@ -96,8 +102,6 @@ public class Menu {
         newMenu.add(newJDBCConnection);
         newMenu.add(newSqlConsole);
 
-        newJDBCConnection.add(newImpalaConnection);
-
         settingsMenu.add(fontMenu);
         fontMenu.add(fontNameMenu);
         fontMenu.add(fontSizeMenu);
@@ -112,6 +116,17 @@ public class Menu {
 
     public static Menu getInstance() {
         return INSTANCE;
+    }
+
+    private void initDataSourceMenu() {
+        List<KDataSourceMetadata> allMetadata = KToolsContext.getInstance().getApi(DataSourceApi.class).getAllMetadata();
+
+        for (KDataSourceMetadata metadata : allMetadata) {
+            JMenuItem jMenuItem = new JMenuItem(metadata.getName());
+            jMenuItem.setIcon(ImageLoad.getInstance().buildIcon(this.getClass().getResource(metadata.getLogo())));
+            jMenuItem.addActionListener(new NewJDBCConnectionAction(metadata));
+            newJDBCConnection.add(jMenuItem);
+        }
     }
 
     private void initFontMenu() {
@@ -158,8 +173,6 @@ public class Menu {
             fontStyleGroup.add(jCheckBoxMenuItem);
             fontStyleMenu.add(jCheckBoxMenuItem);
         }
-
-        FontUtil.updateUIFont(new Font(fontName, FontUtil.getFontStyle(fontStyle), fontSize));
     }
 
     private void setAboutAction() {
