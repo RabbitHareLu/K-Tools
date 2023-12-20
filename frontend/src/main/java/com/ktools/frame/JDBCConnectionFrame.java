@@ -1,9 +1,15 @@
 package com.ktools.frame;
 
+import com.ktools.KToolsContext;
+import com.ktools.action.CancelDisposeFrameAction;
 import com.ktools.action.TestConnectionAction;
+import com.ktools.action.TreeJDBCNodeAction;
+import com.ktools.api.DataSourceApi;
 import com.ktools.common.utils.BoxUtil;
 import com.ktools.component.ImageLoad;
+import com.ktools.exception.KToolException;
 import com.ktools.manager.datasource.model.KDataSourceMetadata;
+import com.ktools.mybatis.entity.TreeEntity;
 import com.ktools.panel.AdvancedPanel;
 import com.ktools.panel.RegularPanel;
 import lombok.Data;
@@ -13,6 +19,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @author lsl
@@ -21,7 +28,7 @@ import java.util.Map;
  */
 @Slf4j
 @Data
-public class NewJDBCConnectionFrame extends JFrame {
+public class JDBCConnectionFrame extends JFrame {
 
     public static boolean openFlag = true;
 
@@ -29,66 +36,88 @@ public class NewJDBCConnectionFrame extends JFrame {
     private static final int HEIGHT = 700;
     private Map<String, Object> componentMap = new HashMap<>();
     private KDataSourceMetadata kDataSourceMetadata;
+    private TreeEntity treeEntity;
 
     private RegularPanel regularPanel;
     private AdvancedPanel advancedPanel;
 
-    public NewJDBCConnectionFrame() {
+    private JTextField nameField;
+    private JTextField commentField;
+
+    public JDBCConnectionFrame() {
     }
 
-    public NewJDBCConnectionFrame(KDataSourceMetadata kDataSourceMetadata) {
-        openFlag = false;
+    public JDBCConnectionFrame(KDataSourceMetadata kDataSourceMetadata) {
         this.kDataSourceMetadata = kDataSourceMetadata;
-
-        setIconImage(ImageLoad.getInstance().buildIcon(this.getClass().getResource(kDataSourceMetadata.getLogo())).getImage());
-
         setTitle("新建" + kDataSourceMetadata.getName() + "连接");
-        setSize(WIDTH, HEIGHT);
+        frameStartInit();
+        initNew();
+        frameEndInit();
+    }
 
+    public JDBCConnectionFrame(TreeEntity treeEntity) {
+        this.treeEntity = treeEntity;
+        try {
+            this.kDataSourceMetadata = KToolsContext.getInstance().getApi(DataSourceApi.class).getMetadata(treeEntity.getNodeType());
+        } catch (KToolException e) {
+            throw new RuntimeException(e);
+        }
+        setTitle("编辑" + kDataSourceMetadata.getName() + "连接");
+        frameStartInit();
+
+        frameEndInit();
+    }
+
+    private void frameStartInit() {
+        openFlag = false;
+        setIconImage(ImageLoad.getInstance().buildIcon(this.getClass().getResource(kDataSourceMetadata.getLogo())).getImage());
+        setSize(WIDTH, HEIGHT);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
-        init();
         setResizable(false);
-        setVisible(true);
-
         closeAction();
     }
 
-    private void init() {
+    private void frameEndInit() {
+        setVisible(true);
+    }
+
+    private void initNew() {
         Box publicBox = Box.createVerticalBox();
-        BoxUtil.addVerticalStrut(publicBox, 10);
-        initSubBox(publicBox, "名称: ");
         BoxUtil.addVerticalStrut(publicBox, 30);
-        initSubBox(publicBox, "注释: ");
+        nameField = initSubBox(publicBox, "名称: ");
+        BoxUtil.addVerticalStrut(publicBox, 30);
+        commentField = initSubBox(publicBox, "注释: ");
         BoxUtil.addVerticalStrut(publicBox, 30);
         add(publicBox, BorderLayout.NORTH);
 
         Box tabBox = Box.createHorizontalBox();
         BoxUtil.addHorizontalStrut(tabBox, 30);
         JTabbedPane tabbedPane = new JTabbedPane();
-        RegularPanel regularPanel = new RegularPanel();
-        AdvancedPanel advancedPanel = new AdvancedPanel();
+        regularPanel = new RegularPanel();
+        advancedPanel = new AdvancedPanel();
         tabbedPane.addTab("常规", null, regularPanel, "常规");
         tabbedPane.addTab("高级", null, advancedPanel, "高级");
         tabBox.add(tabbedPane);
         BoxUtil.addHorizontalStrut(tabBox, 30);
         add(tabBox, BorderLayout.CENTER);
 
-
         Box southBox = Box.createVerticalBox();
 
         Box buttonBox = Box.createHorizontalBox();
         BoxUtil.addHorizontalStrut(buttonBox, 30);
         JButton testButton = new JButton("测试连接");
-        testButton.addActionListener(new TestConnectionAction(regularPanel.getComponentMap(), kDataSourceMetadata.getName()));
+        testButton.addActionListener(new TestConnectionAction(regularPanel, kDataSourceMetadata.getName()));
         buttonBox.add(testButton);
         buttonBox.add(Box.createHorizontalGlue());
         JButton okButton = new JButton("确认");
         okButton.setBackground(new Color(53, 116, 240));
+        okButton.addActionListener(new TreeJDBCNodeAction(this));
+
         buttonBox.add(okButton);
         BoxUtil.addHorizontalStrut(buttonBox, 20);
         JButton cancelButton = new JButton("取消");
+        cancelButton.addActionListener(new CancelDisposeFrameAction(this));
         buttonBox.add(cancelButton);
         BoxUtil.addHorizontalStrut(buttonBox, 30);
 
@@ -98,7 +127,7 @@ public class NewJDBCConnectionFrame extends JFrame {
         add(southBox, BorderLayout.SOUTH);
     }
 
-    private void initSubBox(Box rootBox, String key) {
+    private JTextField initSubBox(Box rootBox, String key) {
         Box keyBox = Box.createHorizontalBox();
         BoxUtil.addHorizontalStrut(keyBox, 30);
 
@@ -118,7 +147,7 @@ public class NewJDBCConnectionFrame extends JFrame {
 
         BoxUtil.addHorizontalStrut(keyBox, 100);
         rootBox.add(keyBox);
-        componentMap.put(key, valueInputField);
+        return valueInputField;
     }
 
     private void closeAction() {

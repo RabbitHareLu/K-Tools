@@ -7,13 +7,11 @@ import com.ktools.Main;
 import com.ktools.action.*;
 import com.ktools.api.DataSourceApi;
 import com.ktools.common.utils.FontUtil;
-import com.ktools.frame.NewJDBCConnectionFrame;
 import com.ktools.manager.datasource.model.KDataSourceMetadata;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
-import java.awt.*;
 import java.time.Year;
 import java.util.List;
 import java.util.Objects;

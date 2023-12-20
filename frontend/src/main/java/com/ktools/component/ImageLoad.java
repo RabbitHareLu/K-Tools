@@ -30,6 +30,7 @@ public class ImageLoad {
     private ImageIcon fontNameIcon = null;
     private ImageIcon fontSizeIcon = null;
     private ImageIcon fontStyleIcon = null;
+    private ImageIcon requiredIcon = null;
 
     private ImageLoad() {
         logoIcon = buildIcon(this.getClass().getResource("/images/logo/kt.svg"));
@@ -44,6 +45,7 @@ public class ImageLoad {
         fontNameIcon = buildIcon(this.getClass().getResource("/images/tree/font-name.svg"));
         fontSizeIcon = buildIcon(this.getClass().getResource("/images/tree/font-size.svg"));
         fontStyleIcon = buildIcon(this.getClass().getResource("/images/tree/font-style.svg"));
+        requiredIcon = buildIcon(this.getClass().getResource("/images/tree/required.svg"));
     }
 
     public static ImageLoad getInstance() {

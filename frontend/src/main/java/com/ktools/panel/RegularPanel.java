@@ -1,13 +1,10 @@
 package com.ktools.panel;
 
 import com.ktools.common.utils.BoxUtil;
-import com.ktools.manager.datasource.model.KDataSourceMetadata;
 import lombok.Data;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author lsl
@@ -17,28 +14,25 @@ import java.util.Map;
 @Data
 public class RegularPanel extends JPanel {
 
-    private Map<String, Object> componentMap = new HashMap<>();
+    private JTextField usernameField;
+    private JPasswordField passwordField;
+    private JTextField urlField;
 
     public RegularPanel() {
         setLayout(new BorderLayout());
         Box box = Box.createVerticalBox();
         BoxUtil.addVerticalStrut(box, 30);
 
-        initSubBox(box, "用户名: ");
+        usernameField = initSubBox(box, "用户名: ");
         BoxUtil.addVerticalStrut(box, 30);
-        initPasswordBox(box, "密码: ");
+        passwordField = initPasswordBox(box, "密码: ");
         BoxUtil.addVerticalStrut(box, 30);
-        initSubBox(box, "URL: ");
+        urlField = initSubBox(box, "URL: ");
 
         add(box, BorderLayout.NORTH);
     }
 
-//    private RegularPanel() {
-//
-//    }
-
-
-    private void initSubBox(Box rootBox, String key) {
+    private JTextField initSubBox(Box rootBox, String key) {
         Box keyBox = Box.createHorizontalBox();
 
         JLabel keyLabel = new JLabel(key);
@@ -57,15 +51,10 @@ public class RegularPanel extends JPanel {
         BoxUtil.addHorizontalStrut(keyBox, 70);
 
         rootBox.add(keyBox);
-
-        switch (key) {
-            case "用户名: " -> componentMap.put("username", valueInputField);
-            case "URL: " -> componentMap.put("jdbcUrl", valueInputField);
-        }
-
+        return valueInputField;
     }
 
-    private void initPasswordBox(Box rootBox, String key) {
+    private JPasswordField initPasswordBox(Box rootBox, String key) {
         Box keyBox = Box.createHorizontalBox();
 
         JLabel keyLabel = new JLabel(key);
@@ -84,7 +73,7 @@ public class RegularPanel extends JPanel {
         BoxUtil.addHorizontalStrut(keyBox, 70);
 
         rootBox.add(keyBox);
-        componentMap.put("password", valueInputField);
+        return valueInputField;
     }
 
 }

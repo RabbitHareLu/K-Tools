@@ -1,7 +1,12 @@
 package com.ktools.style;
 
+import com.ktools.KToolsContext;
+import com.ktools.api.DataSourceApi;
 import com.ktools.common.model.TreeNodeType;
+import com.ktools.component.ImageLoad;
 import com.ktools.component.TreeNode;
+import com.ktools.exception.KToolException;
+import com.ktools.manager.datasource.model.KDataSourceMetadata;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -43,7 +48,15 @@ public class TreeNodeRenderer extends DefaultTreeCellRenderer {
                         this.setIcon(UIManager.getIcon("Tree.closedIcon"));
                     }
                 }
-                case TreeNodeType.CONNECTION -> log.info("{}", TreeNodeType.CONNECTION);
+                case "IMPALA" -> {
+                    KDataSourceMetadata metadata;
+                    try {
+                        metadata = KToolsContext.getInstance().getApi(DataSourceApi.class).getMetadata("IMPALA");
+                    } catch (KToolException e) {
+                        throw new RuntimeException(e);
+                    }
+                    this.setIcon(ImageLoad.getInstance().buildIcon(this.getClass().getResource(metadata.getLogo())));
+                }
                 case TreeNodeType.TABLE -> log.info("{}", TreeNodeType.TABLE);
                 default -> log.info("default");
             }

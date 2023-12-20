@@ -4,9 +4,9 @@ import com.ktools.KToolsContext;
 import com.ktools.api.DataSourceApi;
 import com.ktools.common.utils.DialogUtil;
 import com.ktools.exception.KToolException;
+import com.ktools.panel.RegularPanel;
 import lombok.Data;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,14 +21,14 @@ import java.util.Map;
 @Data
 public class TestConnectionAction implements ActionListener {
 
-    private Map<String, Object> componentMap;
+    private RegularPanel regularPanel;
     private String type;
 
     public TestConnectionAction() {
     }
 
-    public TestConnectionAction(Map<String, Object> map, String type) {
-        this.componentMap = map;
+    public TestConnectionAction(RegularPanel regularPanel, String type) {
+        this.regularPanel = regularPanel;
         this.type = type;
     }
 
@@ -45,14 +45,9 @@ public class TestConnectionAction implements ActionListener {
 
     private Map<String, String> buildMap() {
         Map<String, String> map = new HashMap<>();
-        for (Map.Entry<String, Object> stringObjectEntry : componentMap.entrySet()) {
-            switch (stringObjectEntry.getValue()) {
-                case JPasswordField value -> map.put(stringObjectEntry.getKey(), String.valueOf(value.getPassword()));
-                case JTextField value -> map.put(stringObjectEntry.getKey(), value.getText());
-                default -> throw new IllegalStateException("Unexpected value: " + stringObjectEntry.getValue());
-            }
-
-        }
+        map.put("username", regularPanel.getUsernameField().getText());
+        map.put("jdbcUrl", regularPanel.getUrlField().getText());
+        map.put("password", String.valueOf(regularPanel.getPasswordField().getPassword()));
         return map;
     }
 }

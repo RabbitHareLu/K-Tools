@@ -21,7 +21,7 @@ public class JdbcConfig {
     /**
      * url
      */
-    @ConfigParam(name = "url", key = "jdbcUrl", must = true)
+    @ConfigParam(name = "URL", key = "jdbcUrl", must = true)
     private String jdbcUrl;
 
     /**
