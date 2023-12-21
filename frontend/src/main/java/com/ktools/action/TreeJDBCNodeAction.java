@@ -79,10 +79,11 @@ public class TreeJDBCNodeAction implements ActionListener {
         treeEntity.setNodePath(getNodePathString(nodePathList));
         treeEntity.setNodeInfo(advanceValueMap);
 
+        JFrame jFrame = (JFrame) SwingUtilities.getWindowAncestor((JButton) e.getSource());
         try {
             KToolsContext.getInstance().getApi(SystemApi.class).addNode(treeEntity);
         } catch (KToolException ex) {
-            DialogUtil.showErrorDialog((Component) e.getSource(), ex.getMessage());
+            DialogUtil.showErrorDialog(jFrame, ex.getMessage());
             throw new RuntimeException(ex);
         }
 

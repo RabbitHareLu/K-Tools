@@ -7,7 +7,7 @@ import com.ktools.exception.KToolException;
 import com.ktools.panel.RegularPanel;
 import lombok.Data;
 
-import java.awt.*;
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -35,10 +35,14 @@ public class TestConnectionAction implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Map<String, String> propertiesMap = buildMap();
+        JFrame jFrame = (JFrame) SwingUtilities.getWindowAncestor((JButton) e.getSource());
         try {
             KToolsContext.getInstance().getApi(DataSourceApi.class).testDataSource(type, propertiesMap);
+            JOptionPane.showMessageDialog(jFrame,
+                    new Object[]{"数据源连接测试成功！"},
+                    "测试连接", JOptionPane.PLAIN_MESSAGE);
         } catch (KToolException ex) {
-            DialogUtil.showErrorDialog((Component) e.getSource(), ex.getMessage());
+            DialogUtil.showErrorDialog(jFrame, ex.getMessage());
             throw new RuntimeException(ex);
         }
     }

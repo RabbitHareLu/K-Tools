@@ -1,7 +1,5 @@
 package com.ktools.component;
 
-import lombok.Data;
-
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,10 +16,6 @@ public class KTTableModel extends AbstractTableModel {
 
     public KTTableModel() {
     }
-
-//    public Class<?> getColumnClass(int c) {
-//        return getValueAt(0, c).getClass();
-//    }
 
     public void addColumn(String columnName) {
         columnNames.add(columnName);
