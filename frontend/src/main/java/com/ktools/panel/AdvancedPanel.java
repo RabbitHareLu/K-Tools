@@ -77,7 +77,10 @@ public class AdvancedPanel extends JPanel {
             for (int col = 0; col < 2; col++) {
                 rowData[col] = String.valueOf(model.getValueAt(row, col));
             }
-            keyNameMap.computeIfPresent(rowData[0], (k, v) -> advanceValueMap.put(v, rowData[1]));
+            keyNameMap.computeIfPresent(rowData[0], (k, v) -> {
+                advanceValueMap.put(v, rowData[1]);
+                return v;
+            });
         }
     }
 

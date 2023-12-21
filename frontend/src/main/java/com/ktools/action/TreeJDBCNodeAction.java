@@ -128,7 +128,7 @@ public class TreeJDBCNodeAction implements ActionListener {
                             DialogUtil.showErrorDialog(jdbcConnectionFrame, kDataSourceConfig.getName() + "不能为空");
                             throw new RuntimeException(kDataSourceConfig.getName() + "为必填项, 不能为空");
                         }
-                        return null;
+                        return v;
                     });
                 }
 
