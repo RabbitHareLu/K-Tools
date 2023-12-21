@@ -2,6 +2,7 @@ import com.ktools.KToolsContext;
 import com.ktools.exception.KToolException;
 import com.ktools.manager.datasource.KDataSourceFactory;
 import com.ktools.manager.datasource.KDataSourceHandler;
+import com.ktools.manager.datasource.jdbc.model.TableMetadata;
 
 import java.util.Properties;
 
@@ -23,7 +24,12 @@ public class Test {
         try {
             KDataSourceFactory factory = instance.getDataSourceManager().getFactory("IMPALA");
             KDataSourceHandler dataSourceHandler = factory.createDataSourceHandler(properties);
-            dataSourceHandler.testConn();
+            dataSourceHandler.conn();
+//            System.out.println(dataSourceHandler.selectAllSchema());
+//            System.out.println(dataSourceHandler.selectAllTable("default"));
+            TableMetadata tableMetadata = dataSourceHandler.selectTableMetadata("default", "test");
+            System.out.println(tableMetadata);
+            dataSourceHandler.disConn();
         } catch (KToolException e) {
             throw new RuntimeException(e);
         }

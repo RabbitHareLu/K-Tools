@@ -1,6 +1,7 @@
 package com.ktools.api;
 
 import com.ktools.exception.KToolException;
+import com.ktools.manager.datasource.jdbc.model.TableMetadata;
 import com.ktools.manager.datasource.model.KDataSourceMetadata;
 
 import java.util.List;
@@ -41,5 +42,20 @@ public interface DataSourceApi {
      * @param id 当前节点id
      */
     void disConn(String id);
+
+    /**
+     * 查询所有schema
+     */
+    List<String> selectAllSchema(String id) throws KToolException;
+
+    /**
+     * 查询所有表名
+     */
+    List<String> selectAllTable(String id, String schema) throws KToolException;
+
+    /**
+     * 查询表元数据
+     */
+    TableMetadata selectTableMetadata(String id, String schema, String tableName) throws KToolException;
 
 }

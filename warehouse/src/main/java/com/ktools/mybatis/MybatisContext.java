@@ -1,5 +1,6 @@
 package com.ktools.mybatis;
 
+import com.ktools.exception.KToolException;
 import com.ktools.manager.datasource.SysDataSource;
 import com.ktools.mybatis.entity.PropEntity;
 import com.ktools.mybatis.mapper.PropMapper;
@@ -57,6 +58,14 @@ public class MybatisContext {
     public boolean existDataSource(String key) {
         FlexDataSource flexDataSource = FlexGlobalConfig.getDefaultConfig().getDataSource();
         return flexDataSource.getDataSourceMap().containsKey(key);
+    }
+
+    public DataSource getDataSource(String key) throws KToolException {
+        FlexDataSource flexDataSource = FlexGlobalConfig.getDefaultConfig().getDataSource();
+        if (!flexDataSource.getDataSourceMap().containsKey(key)) {
+            throw new KToolException("数据源不存在！");
+        }
+        return flexDataSource.getDataSourceMap().get(key);
     }
 
     public void showdown() {

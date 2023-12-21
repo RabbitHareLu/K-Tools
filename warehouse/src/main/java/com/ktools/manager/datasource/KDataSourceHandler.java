@@ -28,8 +28,20 @@ public interface KDataSourceHandler {
     void disConn();
 
     /**
-     * 查询元数据
+     * 查询所有schema
      */
-    List<TableMetadata> selectMetadata();
+    List<String> selectAllSchema() throws KToolException;
+
+    /**
+     * 查询所有表名
+     *
+     * @param schema schema
+     */
+    List<String> selectAllTable(String schema) throws KToolException;
+
+    /**
+     * 查询表元数据
+     */
+    TableMetadata selectTableMetadata(String schema, String tableName) throws KToolException;
 
 }

@@ -5,8 +5,10 @@ import com.ktools.exception.KToolException;
 import com.ktools.manager.datasource.KDataSourceFactory;
 import com.ktools.manager.datasource.KDataSourceHandler;
 import com.ktools.manager.datasource.KDataSourceManager;
+import com.ktools.manager.datasource.jdbc.model.TableMetadata;
 import com.ktools.manager.datasource.model.KDataSourceMetadata;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -68,6 +70,39 @@ public class DataSourceService extends BaseService implements DataSourceApi {
             // 从管理器中移除
             this.kToolsContext.getDataSourceManager().removeHandler(id);
         }
+    }
+
+    @Override
+    public List<String> selectAllSchema(String id) throws KToolException {
+        // 获取数据源处理器
+        KDataSourceManager dataSourceManager = this.kToolsContext.getDataSourceManager();
+        if (dataSourceManager.existHandler(id)) {
+            KDataSourceHandler dataSourceHandler = dataSourceManager.getHandler(id);
+            return dataSourceHandler.selectAllSchema();
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public List<String> selectAllTable(String id, String schema) throws KToolException {
+        // 获取数据源处理器
+        KDataSourceManager dataSourceManager = this.kToolsContext.getDataSourceManager();
+        if (dataSourceManager.existHandler(id)) {
+            KDataSourceHandler dataSourceHandler = dataSourceManager.getHandler(id);
+            return dataSourceHandler.selectAllTable(schema);
+        }
+        return new ArrayList<>();
+    }
+
+    @Override
+    public TableMetadata selectTableMetadata(String id, String schema, String tableName) throws KToolException {
+        // 获取数据源处理器
+        KDataSourceManager dataSourceManager = this.kToolsContext.getDataSourceManager();
+        if (dataSourceManager.existHandler(id)) {
+            KDataSourceHandler dataSourceHandler = dataSourceManager.getHandler(id);
+            return dataSourceHandler.selectTableMetadata(schema, tableName);
+        }
+        return null;
     }
 
 }
