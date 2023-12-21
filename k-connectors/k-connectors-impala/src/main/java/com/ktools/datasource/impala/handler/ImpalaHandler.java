@@ -59,7 +59,7 @@ public class ImpalaHandler extends AbstractJdbcHandler {
     protected String buildPageSql(String querySql, PageQuery pageQuery) {
         StringBuilder sqlBuilder = new StringBuilder(querySql.length() + 14);
         sqlBuilder.append(querySql);
-        long offset = (long) (pageQuery.getPageNum() - 1) * pageQuery.getPageSize();
+        long offset = (pageQuery.getPageNum() - 1) * pageQuery.getPageSize();
         if (offset == 0L) {
             sqlBuilder.append("\n LIMIT ").append(pageQuery.getPageSize());
         } else {

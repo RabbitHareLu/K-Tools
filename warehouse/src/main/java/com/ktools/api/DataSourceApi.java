@@ -2,6 +2,7 @@ package com.ktools.api;
 
 import com.ktools.exception.KToolException;
 import com.ktools.manager.datasource.jdbc.model.TableMetadata;
+import com.ktools.manager.datasource.jdbc.query.CommonPage;
 import com.ktools.manager.datasource.jdbc.query.QueryCondition;
 import com.ktools.manager.datasource.model.KDataSourceMetadata;
 
@@ -62,6 +63,6 @@ public interface DataSourceApi {
     /**
      * 查询数据
      */
-    List<Map<String, Object>> selectData(String id, String schema, String tableName, QueryCondition queryCondition) throws KToolException;
+    CommonPage<Map<String, Object>> selectData(String id, String schema, String tableName, QueryCondition queryCondition) throws KToolException;
 
 }

@@ -3,33 +3,24 @@ package com.ktools.manager.datasource.jdbc.query;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
- * 分页条件
+ * 分页数据封装类
  *
  * @author WCG
  */
 @Data
-public class PageQuery implements Serializable {
+public class CommonPage<T> implements Serializable {
 
-    /**
-     * 页数
-     */
     private Long pageNum;
 
-    /**
-     * 页大小
-     */
     private Long pageSize;
 
-    /**
-     * 总页数
-     */
     private Long totalPage;
 
-    /**
-     * 数据总数
-     */
     private Long total;
+
+    private List<T> records;
 
 }

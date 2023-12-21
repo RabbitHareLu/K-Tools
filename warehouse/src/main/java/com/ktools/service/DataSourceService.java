@@ -6,6 +6,7 @@ import com.ktools.manager.datasource.KDataSourceFactory;
 import com.ktools.manager.datasource.KDataSourceHandler;
 import com.ktools.manager.datasource.KDataSourceManager;
 import com.ktools.manager.datasource.jdbc.model.TableMetadata;
+import com.ktools.manager.datasource.jdbc.query.CommonPage;
 import com.ktools.manager.datasource.jdbc.query.QueryCondition;
 import com.ktools.manager.datasource.model.KDataSourceMetadata;
 
@@ -107,14 +108,14 @@ public class DataSourceService extends BaseService implements DataSourceApi {
     }
 
     @Override
-    public List<Map<String, Object>> selectData(String id, String schema, String tableName, QueryCondition queryCondition) throws KToolException {
+    public CommonPage<Map<String, Object>> selectData(String id, String schema, String tableName, QueryCondition queryCondition) throws KToolException {
         // 获取数据源处理器
         KDataSourceManager dataSourceManager = this.kToolsContext.getDataSourceManager();
         if (dataSourceManager.existHandler(id)) {
             KDataSourceHandler dataSourceHandler = dataSourceManager.getHandler(id);
             return dataSourceHandler.selectData(schema, tableName, queryCondition);
         }
-        return new ArrayList<>();
+        return new CommonPage<>();
     }
 
 }
