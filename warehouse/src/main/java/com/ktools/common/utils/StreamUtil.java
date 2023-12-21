@@ -55,7 +55,7 @@ public class StreamUtil {
         @Override
         public Map<String, Object> next() {
             try {
-                Map<String, Object> map = new HashMap<>();
+                Map<String, Object> map = new LinkedHashMap<>();
                 for (String fieldName : fieldList) {
                     map.put(fieldName, resultSet.getObject(fieldName));
                 }

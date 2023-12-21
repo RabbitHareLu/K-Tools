@@ -14,6 +14,11 @@ import java.util.stream.Collectors;
 public class TableMetadata {
 
     /**
+     * schema
+     */
+    private String schema;
+
+    /**
      * 表名
      */
     private String tableName;

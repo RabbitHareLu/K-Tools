@@ -5,10 +5,13 @@ import com.ktools.KToolsContext;
 import com.ktools.common.utils.ConfigParamUtil;
 import com.ktools.common.utils.DataSourceUtil;
 import com.ktools.common.utils.StreamUtil;
+import com.ktools.common.utils.StringUtil;
 import com.ktools.exception.KToolException;
 import com.ktools.manager.datasource.KDataSourceHandler;
 import com.ktools.manager.datasource.jdbc.model.TableColumn;
 import com.ktools.manager.datasource.jdbc.model.TableMetadata;
+import com.ktools.manager.datasource.jdbc.query.PageQuery;
+import com.ktools.manager.datasource.jdbc.query.QueryCondition;
 import com.ktools.mybatis.MybatisContext;
 import lombok.extern.slf4j.Slf4j;
 
@@ -98,6 +101,7 @@ public abstract class AbstractJdbcHandler implements KDataSourceHandler {
     @Override
     public TableMetadata selectTableMetadata(String schema, String tableName) throws KToolException {
         TableMetadata metadata = new TableMetadata();
+        metadata.setSchema(schema);
         metadata.setTableName(tableName);
 
         try (Connection connection = getDataSource().getConnection()) {
@@ -130,13 +134,82 @@ public abstract class AbstractJdbcHandler implements KDataSourceHandler {
         }
     }
 
+    @Override
+    public List<Map<String, Object>> selectData(String schema, String tableName, QueryCondition queryCondition) throws KToolException {
+        // 查询表元数据
+        TableMetadata tableMetadata = selectTableMetadata(schema, tableName);
+        // 构建查询sql
+        String querySql = buildQuerySql(tableMetadata, queryCondition.getWhereCondition());
+        // 构建分页查询sql
+        String pageSql = buildPageSql(querySql, queryCondition);
+        // 执行sql
+        return executeSql(pageSql);
+    }
+
+    protected String buildQuerySql(TableMetadata tableMetadata, String whereCondition) {
+        StringBuilder sql = new StringBuilder("select ");
+        StringJoiner selectField = new StringJoiner(",");
+        tableMetadata.getColumns().keySet().forEach(key -> selectField.add(processKeywords(key)));
+        sql.append(" ").append(selectField).append(" ");
+        sql.append(" from ")
+                .append(processKeywords(tableMetadata.getSchema()))
+                .append(".")
+                .append(processKeywords(tableMetadata.getTableName()));
+        sql.append(" ");
+        if (StringUtil.isNotBlank(whereCondition)) {
+            sql.append(" where ").append(whereCondition);
+        }
+        return sql.toString();
+    }
+
     protected DataSource getDataSource() throws KToolException {
         MybatisContext mybatisContext = KToolsContext.getInstance().getMybatisContext();
         return mybatisContext.getDataSource(jdbcConfig.getKey());
     }
 
+    protected List<Map<String, Object>> executeSql(String sql, Object... params) throws KToolException {
+        // 解析sql操作类型
+        OperationType operationType = parseSql(sql);
+
+        try (Connection connection = getDataSource().getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)
+        ) {
+            // 填充参数
+            if (params != null) {
+                for (int i = 0; i < params.length; i++) {
+                    preparedStatement.setObject(i + 1, params[i]);
+                }
+            }
+            // 根据不同的操作类型执行sql，并封装执行结果
+            switch (operationType) {
+                case QUERY -> {
+                    // 执行sql
+                    ResultSet query = preparedStatement.executeQuery();
+                    // 获取返回结果
+                    return StreamUtil.buildStream(query).toList();
+                }
+                case UPDATE,DELETE -> {
+                    int result = preparedStatement.executeUpdate();
+                    return Collections.singletonList(Map.of(JdbcConstant.SQL_EXEC_RESULT, result));
+                }
+                default -> {
+                    boolean result = preparedStatement.execute();
+                    return Collections.singletonList(Map.of(JdbcConstant.SQL_EXEC_RESULT, result));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     protected abstract String getDriverClass();
 
+    protected abstract String processKeywords(String keyword);
+
     protected abstract SQLType getSqlTypeByJdbcType(String typeName);
+
+    protected abstract OperationType parseSql(String sql);
+
+    protected abstract String buildPageSql(String querySql, PageQuery pageQuery);
 
 }

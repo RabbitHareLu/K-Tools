@@ -1,9 +1,11 @@
 package com.ktools.manager.datasource;
 
 import com.ktools.exception.KToolException;
+import com.ktools.manager.datasource.jdbc.query.QueryCondition;
 import com.ktools.manager.datasource.jdbc.model.TableMetadata;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 数据源接口
@@ -43,5 +45,10 @@ public interface KDataSourceHandler {
      * 查询表元数据
      */
     TableMetadata selectTableMetadata(String schema, String tableName) throws KToolException;
+
+    /**
+     * 查询数据
+     */
+    List<Map<String, Object>> selectData(String schema, String tableName, QueryCondition queryCondition) throws KToolException;
 
 }

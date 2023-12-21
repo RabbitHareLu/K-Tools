@@ -3,7 +3,10 @@ import com.ktools.exception.KToolException;
 import com.ktools.manager.datasource.KDataSourceFactory;
 import com.ktools.manager.datasource.KDataSourceHandler;
 import com.ktools.manager.datasource.jdbc.model.TableMetadata;
+import com.ktools.manager.datasource.jdbc.query.QueryCondition;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -27,8 +30,13 @@ public class Test {
             dataSourceHandler.conn();
 //            System.out.println(dataSourceHandler.selectAllSchema());
 //            System.out.println(dataSourceHandler.selectAllTable("default"));
-            TableMetadata tableMetadata = dataSourceHandler.selectTableMetadata("default", "test");
-            System.out.println(tableMetadata);
+//            System.out.println(dataSourceHandler.selectTableMetadata("default", "test"));
+            QueryCondition queryCondition = new QueryCondition();
+            queryCondition.setPageNum(1);
+            queryCondition.setPageSize(20);
+            queryCondition.setWhereCondition(" bond_id = '111808224 '");
+            List<Map<String, Object>> maps = dataSourceHandler.selectData("default", "ads_bond_info", queryCondition);
+            System.out.println(maps);
             dataSourceHandler.disConn();
         } catch (KToolException e) {
             throw new RuntimeException(e);

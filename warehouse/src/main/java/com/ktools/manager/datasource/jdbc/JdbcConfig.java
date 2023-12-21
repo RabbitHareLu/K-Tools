@@ -1,5 +1,6 @@
 package com.ktools.manager.datasource.jdbc;
 
+import com.ktools.manager.datasource.ConfigParam;
 import lombok.Data;
 
 /**

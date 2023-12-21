@@ -1,4 +1,4 @@
-package com.ktools.manager.datasource.jdbc;
+package com.ktools.manager.datasource;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

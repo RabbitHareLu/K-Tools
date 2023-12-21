@@ -1,6 +1,6 @@
 package com.ktools.datasource.impala.config;
 
-import com.ktools.manager.datasource.jdbc.ConfigParam;
+import com.ktools.manager.datasource.ConfigParam;
 import com.ktools.manager.datasource.jdbc.JdbcConfig;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

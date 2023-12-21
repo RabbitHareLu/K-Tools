@@ -1,7 +1,7 @@
 package com.ktools.common.utils;
 
 import com.ktools.exception.KToolException;
-import com.ktools.manager.datasource.jdbc.ConfigParam;
+import com.ktools.manager.datasource.ConfigParam;
 import com.ktools.manager.datasource.model.KDataSourceConfig;
 
 import java.lang.reflect.Field;
