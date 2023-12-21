@@ -15,12 +15,6 @@ import lombok.EqualsAndHashCode;
 public class ImpalaConfig extends JdbcConfig {
 
     /**
-     * 存储类型
-     */
-    @ConfigParam(name = "存储类型", key = "impala.storageType", defaultValue = "kudu")
-    private String storageType;
-
-    /**
      * kudu 地址
      */
     @ConfigParam(name = "kudu 地址", key = "impala.kuduMaster")

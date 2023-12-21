@@ -95,7 +95,7 @@ public class JDBCConnectionFrame extends JFrame {
         BoxUtil.addHorizontalStrut(tabBox, 30);
         JTabbedPane tabbedPane = new JTabbedPane();
         regularPanel = new RegularPanel();
-        advancedPanel = new AdvancedPanel();
+        advancedPanel = new AdvancedPanel(kDataSourceMetadata);
         tabbedPane.addTab("常规", null, regularPanel, "常规");
         tabbedPane.addTab("高级", null, advancedPanel, "高级");
         tabBox.add(tabbedPane);

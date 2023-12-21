@@ -31,6 +31,9 @@ public class ImageLoad {
     private ImageIcon fontSizeIcon = null;
     private ImageIcon fontStyleIcon = null;
     private ImageIcon requiredIcon = null;
+    private ImageIcon editIcon = null;
+    private ImageIcon connectIcon = null;
+    private ImageIcon disConnectIcon = null;
 
     private ImageLoad() {
         logoIcon = buildIcon(this.getClass().getResource("/images/logo/kt.svg"));
@@ -46,6 +49,9 @@ public class ImageLoad {
         fontSizeIcon = buildIcon(this.getClass().getResource("/images/tree/font-size.svg"));
         fontStyleIcon = buildIcon(this.getClass().getResource("/images/tree/font-style.svg"));
         requiredIcon = buildIcon(this.getClass().getResource("/images/tree/required.svg"));
+        editIcon = buildIcon(this.getClass().getResource("/images/tree/edit.svg"));
+        connectIcon = buildIcon(this.getClass().getResource("/images/tree/connect.svg"));
+        disConnectIcon = buildIcon(this.getClass().getResource("/images/tree/disconnect.svg"));
     }
 
     public static ImageLoad getInstance() {

@@ -16,10 +16,12 @@ public class AllJPopupMenu {
     private static final AllJPopupMenu INSTANCE = new AllJPopupMenu();
     private JPopupMenu rootPopupMenu;
     private JPopupMenu folderPopupMenu;
+    private JPopupMenu jdbcPopupMenu;
 
     private AllJPopupMenu() {
         initRootPopupMenu();
         initFolderPopupMenu();
+        initJDBCPopupMenu();
     }
 
     public static AllJPopupMenu getInstance() {
@@ -45,6 +47,19 @@ public class AllJPopupMenu {
         folderDeleteItem.setIcon(ImageLoad.getInstance().getDeleteIcon());
         folderDeleteItem.addActionListener(new DeleteTreeNodeAction());
         folderPopupMenu.add(folderDeleteItem);
+    }
+
+    private void initJDBCPopupMenu() {
+        jdbcPopupMenu = new JPopupMenu();
+        JMenuItem editItem = new JMenuItem("编辑");
+        editItem.setIcon(ImageLoad.getInstance().getEditIcon());
+        jdbcPopupMenu.add(editItem);
+        JMenuItem connectItem = new JMenuItem("连接");
+        connectItem.setIcon(ImageLoad.getInstance().getConnectIcon());
+        jdbcPopupMenu.add(connectItem);
+        JMenuItem disconnectItem = new JMenuItem("断开");
+        disconnectItem.setIcon(ImageLoad.getInstance().getDisConnectIcon());
+        jdbcPopupMenu.add(disconnectItem);
     }
 
 }

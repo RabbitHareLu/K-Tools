@@ -97,6 +97,8 @@ public class TreeJDBCNodeAction implements ActionListener {
         kDataSourceMetadata = jdbcConnectionFrame.getKDataSourceMetadata();
         name = jdbcConnectionFrame.getNameField().getText();
         comment = jdbcConnectionFrame.getCommentField().getText();
+
+        jdbcConnectionFrame.getAdvancedPanel().collectValue();
         advanceValueMap = jdbcConnectionFrame.getAdvancedPanel().getAdvanceValueMap();
 
         username = jdbcConnectionFrame.getRegularPanel().getUsernameField().getText();

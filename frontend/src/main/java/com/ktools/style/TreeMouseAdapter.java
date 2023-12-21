@@ -59,6 +59,8 @@ public class TreeMouseAdapter extends MouseAdapter {
 
                     if (Objects.equals(currentTreeNode.getTreeEntity().getNodeType(), TreeNodeType.FOLDER)) {
                         AllJPopupMenu.getInstance().getFolderPopupMenu().show(jTree, x, y);
+                    } else {
+                        AllJPopupMenu.getInstance().getJdbcPopupMenu().show(jTree, x, y);
                     }
                 } else {
                     // 如果在树的空白处点击
