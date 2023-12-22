@@ -7,14 +7,14 @@ import java.util.List;
 /**
  * @author lsl
  * @version 1.0
- * @date 2023年12月21日 14:01
+ * @date 2023年12月22日 18:11
  */
-public class KTTableModel extends AbstractTableModel {
+public class TableDataTableModel extends AbstractTableModel {
 
     private List<Object[]> data = new ArrayList<>();
     private List<String> columnNames = new ArrayList<>();
 
-    public KTTableModel() {
+    public TableDataTableModel() {
     }
 
     public void addColumn(String columnName) {
@@ -56,10 +56,6 @@ public class KTTableModel extends AbstractTableModel {
     public void setValueAt(Object value, int rowIndex, int columnIndex) {
         data.get(rowIndex)[columnIndex] = value;
         fireTableCellUpdated(rowIndex, columnIndex);
-    }
-
-    public boolean isCellEditable(int rowIndex, int columnIndex) {
-        return columnIndex != 0;
     }
 
 }

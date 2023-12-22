@@ -3,7 +3,7 @@ package com.ktools.panel;
 import com.ktools.action.TableCellListener;
 import com.ktools.common.utils.BoxUtil;
 import com.ktools.common.utils.CollectionUtil;
-import com.ktools.component.KTTableModel;
+import com.ktools.component.AdvanceTableModel;
 import com.ktools.manager.datasource.model.KDataSourceConfig;
 import com.ktools.manager.datasource.model.KDataSourceMetadata;
 import com.ktools.mybatis.entity.TreeEntity;
@@ -58,7 +58,7 @@ public class AdvancedPanel extends JPanel {
         Map<String, String> nodeInfo = treeEntity.getNodeInfo();
         if (CollectionUtil.isNotEmpty(config)) {
             keyNameMap = config.stream().collect(Collectors.toMap(KDataSourceConfig::getName, KDataSourceConfig::getKey));
-            KTTableModel model = (KTTableModel) jTable.getModel();
+            AdvanceTableModel model = (AdvanceTableModel) jTable.getModel();
             for (KDataSourceConfig kDataSourceConfig : config) {
                 if (Objects.equals(kDataSourceConfig.getKey(), "jdbcUrl") ||
                         Objects.equals(kDataSourceConfig.getKey(), "username") ||
@@ -79,7 +79,7 @@ public class AdvancedPanel extends JPanel {
 
         if (CollectionUtil.isNotEmpty(config)) {
             keyNameMap = config.stream().collect(Collectors.toMap(KDataSourceConfig::getName, KDataSourceConfig::getKey));
-            KTTableModel model = (KTTableModel) jTable.getModel();
+            AdvanceTableModel model = (AdvanceTableModel) jTable.getModel();
             for (KDataSourceConfig kDataSourceConfig : config) {
                 if (Objects.equals(kDataSourceConfig.getKey(), "jdbcUrl") ||
                         Objects.equals(kDataSourceConfig.getKey(), "username") ||
@@ -99,7 +99,7 @@ public class AdvancedPanel extends JPanel {
         if (jTable.isEditing()) {
             jTable.getCellEditor().stopCellEditing();
         }
-        KTTableModel model = (KTTableModel) jTable.getModel();
+        AdvanceTableModel model = (AdvanceTableModel) jTable.getModel();
         for (int row = 0; row < model.getRowCount(); row++) {
             String[] rowData = new String[2];
             for (int col = 0; col < 2; col++) {
@@ -117,8 +117,10 @@ public class AdvancedPanel extends JPanel {
         add(box, BorderLayout.CENTER);
 
         // 创建表格模型
-        KTTableModel model = new KTTableModel();
+        AdvanceTableModel model = new AdvanceTableModel();
         jTable = new JTable(model);
+        jTable.setShowHorizontalLines(true);
+        jTable.setShowVerticalLines(true);
         jTable.setAutoCreateRowSorter(true);
         model.addColumn("名称");
         model.addColumn("值");

@@ -15,9 +15,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Objects;
+import java.util.function.BiConsumer;
 
-import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_TAB_CLOSABLE;
-import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_TAB_CLOSE_TOOLTIPTEXT;
+import static com.formdev.flatlaf.FlatClientProperties.*;
 
 /**
  * @author lsl
@@ -45,17 +45,30 @@ public class TreeMouseAdapter extends MouseAdapter {
                     tabbedPane.putClientProperty(TABBED_PANE_TAB_CLOSABLE, true);
                     tabbedPane.putClientProperty(TABBED_PANE_TAB_CLOSE_TOOLTIPTEXT, "Close");
                     tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+                    tabbedPane.putClientProperty(TABBED_PANE_TAB_CLOSE_CALLBACK,
+                            (BiConsumer<JTabbedPane, Integer>) (tabPane, tabIndex) -> tabbedPane.remove(tabIndex));
+
                     Main.kToolsRootJFrame.setClosableTabsTabbedPane(tabbedPane);
                     Main.kToolsRootJFrame.getRootJSplitPane().setRightComponent(Main.kToolsRootJFrame.getClosableTabsTabbedPane());
                     closableTabsTabbedPane = Main.kToolsRootJFrame.getClosableTabsTabbedPane();
                 }
-                closableTabsTabbedPane.add(treeEntity.getNodeName(), new TableDataPanel(selectionPath));
+                int i = closableTabsTabbedPane.indexOfTab(treeEntity.getNodeName());
+                if (i < 0) {
+                    closableTabsTabbedPane.add(treeEntity.getNodeName(), new TableDataPanel(selectionPath));
+                }
+                closableTabsTabbedPane.setSelectedIndex(closableTabsTabbedPane.indexOfTab(treeEntity.getNodeName()));
+
+
+//                closableTabsTabbedPane.setSelectedIndex(closableTabsTabbedPane.getTabCount() - 1);
+//                closableTabsTabbedPane.add(treeEntity.getNodeName(), new JPanel());
             } else {
                 // 单独处理鼠标双击事件，如果节点是table则双击事件默认为打开一个tab页，其他节点默认展开
-                if (jTree.isExpanded(selectionPath)) {
-                    jTree.collapsePath(selectionPath);
-                } else {
-                    jTree.expandPath(selectionPath);
+                if (selectionPath.getPath().length > 1) {
+                    if (jTree.isExpanded(selectionPath)) {
+                        jTree.collapsePath(selectionPath);
+                    } else {
+                        jTree.expandPath(selectionPath);
+                    }
                 }
             }
         }
