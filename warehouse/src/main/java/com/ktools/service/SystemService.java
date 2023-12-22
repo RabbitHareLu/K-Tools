@@ -57,7 +57,8 @@ public class SystemService extends BaseService implements SystemApi {
         String nodePath = treeEntity.getNodePath();
         QueryWrapper queryWrapper = QueryWrapper.create()
                 .where(TreeEntity::getNodePath).eq(nodePath)
-                .and(TreeEntity::getNodeName).eq(treeEntity.getNodeName());
+                .and(TreeEntity::getNodeName).eq(treeEntity.getNodeName())
+                .and(TreeEntity::getId).ne(treeEntity.getId());
         List<TreeEntity> treeEntities = this.getMapper(TreeMapper.class).selectListByQuery(queryWrapper);
         if (CollectionUtil.isNotEmpty(treeEntities)) {
             throw new KToolException("节点名称已存在！");
