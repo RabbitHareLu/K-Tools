@@ -72,7 +72,7 @@ public class JDBCConnectionFrame extends JFrame {
 
     private void frameStartInit() {
         openFlag = false;
-        setIconImage(ImageLoad.getInstance().buildIcon(this.getClass().getResource(kDataSourceMetadata.getLogo())).getImage());
+        setIconImage(ImageLoad.getInstance().buildIcon(kDataSourceMetadata.getLogo()).getImage());
         setSize(WIDTH, HEIGHT);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

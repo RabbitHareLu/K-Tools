@@ -33,7 +33,7 @@ public class ImpalaFactory implements KDataSourceFactory {
         // 构建元数据
         var kDataSourceMetadata = new KDataSourceMetadata();
         kDataSourceMetadata.setName(DATA_SOURCE_TYPE);
-        kDataSourceMetadata.setLogo("/images/impala.svg");
+        kDataSourceMetadata.setLogo("images/impala.svg");
         kDataSourceMetadata.setConfig(ConfigParamUtil.parseConfigClass(ImpalaConfig.class));
         return kDataSourceMetadata;
     }

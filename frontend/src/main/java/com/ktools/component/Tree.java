@@ -43,6 +43,7 @@ public class Tree {
         jTree.setCellRenderer(new TreeNodeRenderer());
         jTree.setRootVisible(false);
         jTree.addMouseListener(new TreeMouseAdapter());
+        jTree.setToggleClickCount(0); // 0 表示禁用双击展开
     }
 
     public static Tree getInstance() {

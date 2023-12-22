@@ -1,8 +1,12 @@
 package com.ktools.style;
 
+import com.ktools.Main;
 import com.ktools.common.model.TreeNodeType;
 import com.ktools.component.AllJPopupMenu;
+import com.ktools.component.Tree;
 import com.ktools.component.TreeNode;
+import com.ktools.mybatis.entity.TreeEntity;
+import com.ktools.panel.TableDataPanel;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
@@ -11,6 +15,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Objects;
+
+import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_TAB_CLOSABLE;
+import static com.formdev.flatlaf.FlatClientProperties.TABBED_PANE_TAB_CLOSE_TOOLTIPTEXT;
 
 /**
  * @author lsl
@@ -27,8 +34,30 @@ public class TreeMouseAdapter extends MouseAdapter {
         // 判断鼠标左键双击
         if (e.getClickCount() == 2) {
             log.info("鼠标左键双击");
-
-
+            Tree instance = Tree.getInstance();
+            TreePath selectionPath = instance.getCurrentTreePath();
+            TreeNode currentTreeNode = instance.getCurrentTreeNode(selectionPath);
+            TreeEntity treeEntity = currentTreeNode.getTreeEntity();
+            if (Objects.equals(treeEntity.getNodeType(), TreeNodeType.TABLE)) {
+                JTabbedPane closableTabsTabbedPane = Main.kToolsRootJFrame.getClosableTabsTabbedPane();
+                if (Objects.isNull(closableTabsTabbedPane)) {
+                    JTabbedPane tabbedPane = new JTabbedPane();
+                    tabbedPane.putClientProperty(TABBED_PANE_TAB_CLOSABLE, true);
+                    tabbedPane.putClientProperty(TABBED_PANE_TAB_CLOSE_TOOLTIPTEXT, "Close");
+                    tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+                    Main.kToolsRootJFrame.setClosableTabsTabbedPane(tabbedPane);
+                    Main.kToolsRootJFrame.getRootJSplitPane().setRightComponent(Main.kToolsRootJFrame.getClosableTabsTabbedPane());
+                    closableTabsTabbedPane = Main.kToolsRootJFrame.getClosableTabsTabbedPane();
+                }
+                closableTabsTabbedPane.add(treeEntity.getNodeName(), new TableDataPanel(selectionPath));
+            } else {
+                // 单独处理鼠标双击事件，如果节点是table则双击事件默认为打开一个tab页，其他节点默认展开
+                if (jTree.isExpanded(selectionPath)) {
+                    jTree.collapsePath(selectionPath);
+                } else {
+                    jTree.expandPath(selectionPath);
+                }
+            }
         }
 
         // 判断是否为鼠标左键点击

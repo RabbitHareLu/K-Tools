@@ -1,12 +1,9 @@
 package com.ktools.component;
 
-import com.kitfox.svg.app.beans.SVGIcon;
+import com.formdev.flatlaf.extras.FlatSVGIcon;
 import lombok.Data;
 
 import javax.swing.*;
-import java.awt.*;
-import java.net.URI;
-import java.net.URL;
 
 /**
  * @author lsl
@@ -40,50 +37,41 @@ public class ImageLoad {
     private ImageIcon tableIcon = null;
     private ImageIcon lookIcon = null;
     private ImageIcon columnIcon = null;
+    private ImageIcon tableRefreshIcon = null;
 
     private ImageLoad() {
-        logoIcon = buildIcon(this.getClass().getResource("/images/logo/kt.svg"));
-        aboutIcon = buildIcon(this.getClass().getResource("/images/tree/about.svg"));
-        deleteIcon = buildIcon(this.getClass().getResource("/images/tree/delete.svg"));
-        fontIcon = buildIcon(this.getClass().getResource("/images/tree/font.svg"));
-        newIcon = buildIcon(this.getClass().getResource("/images/tree/new.svg"));
-        newFolderIcon = buildIcon(this.getClass().getResource("/images/tree/newFolder.svg"));
-        databaseIcon = buildIcon(this.getClass().getResource("/images/tree/database.svg"));
-        sqlConsoleIcon = buildIcon(this.getClass().getResource("/images/tree/sqlConsole.svg"));
-        exitIcon = buildIcon(this.getClass().getResource("/images/tree/exit.svg"));
-        fontNameIcon = buildIcon(this.getClass().getResource("/images/tree/font-name.svg"));
-        fontSizeIcon = buildIcon(this.getClass().getResource("/images/tree/font-size.svg"));
-        fontStyleIcon = buildIcon(this.getClass().getResource("/images/tree/font-style.svg"));
-        requiredIcon = buildIcon(this.getClass().getResource("/images/tree/required.svg"));
-        editIcon = buildIcon(this.getClass().getResource("/images/tree/edit.svg"));
-        connectIcon = buildIcon(this.getClass().getResource("/images/tree/connect.svg"));
-        disConnectIcon = buildIcon(this.getClass().getResource("/images/tree/disconnect.svg"));
-        renameIcon = buildIcon(this.getClass().getResource("/images/tree/rename.svg"));
-        refreshIcon = buildIcon(this.getClass().getResource("/images/tree/refresh.svg"));
-        schemaIcon = buildIcon(this.getClass().getResource("/images/tree/schema.svg"));
-        tableIcon = buildIcon(this.getClass().getResource("/images/tree/table.svg"));
-        lookIcon = buildIcon(this.getClass().getResource("/images/tree/look.svg"));
-        columnIcon = buildIcon(this.getClass().getResource("/images/tree/column.svg"));
+        logoIcon = buildIcon("images/logo/kt.svg");
+        aboutIcon = buildIcon("images/tree/about.svg");
+        deleteIcon = buildIcon("images/tree/delete.svg");
+        fontIcon = buildIcon("images/tree/font.svg");
+        newIcon = buildIcon("images/tree/new.svg");
+        newFolderIcon = buildIcon("images/tree/newFolder.svg");
+        databaseIcon = buildIcon("images/tree/database.svg");
+        sqlConsoleIcon = buildIcon("images/tree/sqlConsole.svg");
+        exitIcon = buildIcon("images/tree/exit.svg");
+        fontNameIcon = buildIcon("images/tree/font-name.svg");
+        fontSizeIcon = buildIcon("images/tree/font-size.svg");
+        fontStyleIcon = buildIcon("images/tree/font-style.svg");
+        requiredIcon = buildIcon("images/tree/required.svg");
+        editIcon = buildIcon("images/tree/edit.svg");
+        connectIcon = buildIcon("images/tree/connect.svg");
+        disConnectIcon = buildIcon("images/tree/disconnect.svg");
+        renameIcon = buildIcon("images/tree/rename.svg");
+        refreshIcon = buildIcon("images/tree/refresh.svg");
+        schemaIcon = buildIcon("images/tree/schema.svg");
+        tableIcon = buildIcon("images/tree/table.svg");
+        lookIcon = buildIcon("images/tree/look.svg");
+        columnIcon = buildIcon("images/tree/column.svg");
+        tableRefreshIcon = buildIcon("images/tree/tableRefresh.svg");
     }
 
     public static ImageLoad getInstance() {
         return INSTANCE;
     }
-
-    public SVGIcon buildIcon(URL url) {
-        URI svgUri = URI.create(String.valueOf(url));
-        SVGIcon svgIcon = new SVGIcon();
-        svgIcon.setAntiAlias(true);
-        svgIcon.setSvgURI(svgUri);
-        return svgIcon;
+    
+    public FlatSVGIcon buildIcon(String name) {
+        return new FlatSVGIcon(name);
     }
 
-    public SVGIcon buildIcon(URL url, int width, int height) {
-        URI svgUri = URI.create(String.valueOf(url));
-        SVGIcon svgIcon = new SVGIcon();
-        svgIcon.setPreferredSize(new Dimension(width, height));
-        svgIcon.setAntiAlias(true);
-        svgIcon.setSvgURI(svgUri);
-        return svgIcon;
-    }
+
 }

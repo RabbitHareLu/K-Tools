@@ -55,7 +55,7 @@ public class TreeNodeRenderer extends DefaultTreeCellRenderer {
                     } catch (KToolException e) {
                         throw new RuntimeException(e);
                     }
-                    this.setIcon(ImageLoad.getInstance().buildIcon(this.getClass().getResource(metadata.getLogo())));
+                    this.setIcon(ImageLoad.getInstance().buildIcon(metadata.getLogo()));
                 }
                 case TreeNodeType.SCHEMA -> this.setIcon(ImageLoad.getInstance().getSchemaIcon());
                 case TreeNodeType.TABLE -> this.setIcon(ImageLoad.getInstance().getTableIcon());

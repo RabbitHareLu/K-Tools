@@ -122,7 +122,7 @@ public class Menu {
 
         for (KDataSourceMetadata metadata : allMetadata) {
             JMenuItem jMenuItem = new JMenuItem(metadata.getName());
-            jMenuItem.setIcon(ImageLoad.getInstance().buildIcon(this.getClass().getResource(metadata.getLogo())));
+            jMenuItem.setIcon(ImageLoad.getInstance().buildIcon(metadata.getLogo()));
             jMenuItem.addActionListener(new NewJDBCConnectionAction(metadata));
             newJDBCConnection.add(jMenuItem);
         }

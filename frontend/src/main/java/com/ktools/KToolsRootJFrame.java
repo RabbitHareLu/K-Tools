@@ -23,6 +23,7 @@ public class KToolsRootJFrame extends JFrame {
     JMenuBar jMenuBar;
     JSplitPane rootJSplitPane;
     JTree jTree;
+    JTabbedPane closableTabsTabbedPane;
 
 
     public KToolsRootJFrame() {
