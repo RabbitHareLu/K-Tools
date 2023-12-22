@@ -14,6 +14,7 @@ import com.ktools.manager.datasource.model.KDataSourceMetadata;
 import com.ktools.manager.uid.UidKey;
 import com.ktools.mybatis.entity.TreeEntity;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
@@ -31,6 +32,7 @@ import java.util.Objects;
  * @date 2023年12月20日 21:28
  */
 @Data
+@Slf4j
 public class TreeJDBCNodeAction implements ActionListener {
 
     JTree jTree = Tree.getInstance().getJTree();
@@ -86,6 +88,7 @@ public class TreeJDBCNodeAction implements ActionListener {
             DefaultTreeModel model = (DefaultTreeModel) jTree.getModel();
             model.insertNodeInto(treeNode, currentTreeNode, currentTreeNode.getChildCount());
             jdbcConnectionFrame.dispose();
+            log.info("新增{}节点: {}", jdbcConnectionFrame.getKDataSourceMetadata().getName(), treeEntity.getNodeName());
         } else {
             TreeEntity treeEntity = jdbcConnectionFrame.getTreeEntity();
             treeEntity.setNodeName(name);
@@ -102,9 +105,10 @@ public class TreeJDBCNodeAction implements ActionListener {
             }
 
             currentTreeNode.setTreeEntity(treeEntity);
-            Tree.getInstance().getDefaultTreeModel().reload();
+            Tree.getInstance().getDefaultTreeModel().nodeChanged(currentTreeNode);
 
             jdbcConnectionFrame.dispose();
+            log.info("修改{}节点: {}", jdbcConnectionFrame.getKDataSourceMetadata().getName(), treeEntity.getNodeName());
         }
 
 

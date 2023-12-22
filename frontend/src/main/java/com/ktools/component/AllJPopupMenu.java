@@ -3,6 +3,7 @@ package com.ktools.component;
 import com.ktools.action.DeleteTreeNodeAction;
 import com.ktools.action.EditJDBCConnectionAction;
 import com.ktools.action.NewFolderAction;
+import com.ktools.action.RenameFolderAction;
 import lombok.Data;
 
 import javax.swing.*;
@@ -43,6 +44,11 @@ public class AllJPopupMenu {
         folderNewFolderItem.setIcon(UIManager.getIcon("FileChooser.newFolderIcon"));
         folderNewFolderItem.addActionListener(new NewFolderAction());
         folderPopupMenu.add(folderNewFolderItem);
+
+        JMenuItem folderRenameFolderItem = new JMenuItem("重命名");
+        folderRenameFolderItem.setIcon(ImageLoad.getInstance().getRenameIcon());
+        folderRenameFolderItem.addActionListener(new RenameFolderAction());
+        folderPopupMenu.add(folderRenameFolderItem);
 
         JMenuItem folderDeleteItem = new JMenuItem("删除");
         folderDeleteItem.setIcon(ImageLoad.getInstance().getDeleteIcon());
