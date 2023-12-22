@@ -57,10 +57,8 @@ public class TreeNodeRenderer extends DefaultTreeCellRenderer {
                     }
                     this.setIcon(ImageLoad.getInstance().buildIcon(this.getClass().getResource(metadata.getLogo())));
                 }
-                case TreeNodeType.SCHEMA -> {
-                    this.setIcon(ImageLoad.getInstance().getSchemaIcon());
-                }
-                case TreeNodeType.TABLE -> log.info("{}", TreeNodeType.TABLE);
+                case TreeNodeType.SCHEMA -> this.setIcon(ImageLoad.getInstance().getSchemaIcon());
+                case TreeNodeType.TABLE -> this.setIcon(ImageLoad.getInstance().getTableIcon());
                 default -> log.info("default");
             }
         }

@@ -60,7 +60,7 @@ public class TreeMouseAdapter extends MouseAdapter {
                     if (Objects.equals(currentTreeNode.getTreeEntity().getNodeType(), TreeNodeType.FOLDER)) {
                         AllJPopupMenu.getInstance().getFolderPopupMenu().show(jTree, x, y);
                     } else if (Objects.equals(currentTreeNode.getTreeEntity().getNodeType(), TreeNodeType.SCHEMA)) {
-
+                        AllJPopupMenu.getInstance().getSchemaPopupMenu().show(jTree, x, y);
                     } else {
                         AllJPopupMenu.getInstance().getJdbcPopupMenu().show(jTree, x, y);
                     }

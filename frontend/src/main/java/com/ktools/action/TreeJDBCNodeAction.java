@@ -17,7 +17,6 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -87,8 +86,8 @@ public class TreeJDBCNodeAction implements ActionListener {
             }
 
             TreeNode treeNode = new TreeNode(treeEntity);
-            DefaultTreeModel model = (DefaultTreeModel) jTree.getModel();
-            model.insertNodeInto(treeNode, currentTreeNode, currentTreeNode.getChildCount());
+            currentTreeNode.add(treeNode);
+            instance.getDefaultTreeModel().nodeStructureChanged(currentTreeNode);
             jdbcConnectionFrame.dispose();
             log.info("新增{}节点: {}", jdbcConnectionFrame.getKDataSourceMetadata().getName(), treeEntity.getNodeName());
         } else {

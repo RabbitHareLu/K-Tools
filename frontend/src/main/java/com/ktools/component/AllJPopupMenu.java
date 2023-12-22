@@ -22,6 +22,7 @@ public class AllJPopupMenu {
         initRootPopupMenu();
         initFolderPopupMenu();
         initJDBCPopupMenu();
+        initSchemaPopupMenu();
     }
 
     public static AllJPopupMenu getInstance() {
@@ -70,6 +71,14 @@ public class AllJPopupMenu {
         JMenuItem disconnectItem = new JMenuItem("断开");
         disconnectItem.setIcon(ImageLoad.getInstance().getDisConnectIcon());
         jdbcPopupMenu.add(disconnectItem);
+    }
+
+    private void initSchemaPopupMenu() {
+        schemaPopupMenu = new JPopupMenu();
+        JMenuItem refreshItem = new JMenuItem("刷新");
+        refreshItem.setIcon(ImageLoad.getInstance().getRefreshIcon());
+        refreshItem.addActionListener(new SchemaNodeRefreshAction());
+        schemaPopupMenu.add(refreshItem);
     }
 
 }

@@ -13,7 +13,6 @@ import com.ktools.manager.uid.UidKey;
 import com.ktools.mybatis.entity.TreeEntity;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,14 +20,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * JDBC节点刷新操作
- * 1. 首先需要
- *
  * @author lsl
  * @version 1.0
- * @date 2023年12月22日 13:07
+ * @date 2023年12月22日 15:19
  */
-public class JDBCNodeRefreshAction implements ActionListener {
+public class SchemaNodeRefreshAction implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         sync();
@@ -38,15 +34,17 @@ public class JDBCNodeRefreshAction implements ActionListener {
         Tree instance = Tree.getInstance();
         TreePath selectionPath = instance.getCurrentTreePath();
         TreeNode currentTreeNode = instance.getCurrentTreeNode(selectionPath);
-
+        TreeNode jdbcNode = instance.getCurrentTreeNode(new TreePath(currentTreeNode.getParent()));
+        TreeEntity jdbcTreeEntity = jdbcNode.getTreeEntity();
         TreeEntity treeEntity = currentTreeNode.getTreeEntity();
 
         try {
-            KToolsContext.getInstance().getApi(DataSourceApi.class).conn(String.valueOf(treeEntity.getId()), treeEntity.getNodeType(), treeEntity.getNodeInfo());
+            KToolsContext.getInstance().getApi(DataSourceApi.class).conn(String.valueOf(jdbcTreeEntity.getId()), jdbcTreeEntity.getNodeType(), jdbcTreeEntity.getNodeInfo());
 
-            new SwingWorker<Void, Integer>() {
+            new SwingWorker<Void, Integer>(){
+
                 @Override
-                protected Void doInBackground() {
+                protected Void doInBackground() throws Exception {
                     publish(currentTreeNode.getChildCount());
                     return null;
                 }
@@ -62,14 +60,13 @@ public class JDBCNodeRefreshAction implements ActionListener {
                 @Override
                 protected void done() {
                     try {
-                        List<String> schemaList = KToolsContext.getInstance().getApi(DataSourceApi.class).selectAllSchema(String.valueOf(treeEntity.getId()));
-                        for (String schema : schemaList) {
+                        List<String> tableNameList = KToolsContext.getInstance().getApi(DataSourceApi.class).selectAllTable(String.valueOf(jdbcNode.getTreeEntity().getId()), treeEntity.getNodeName());
+                        for (String tableName : tableNameList) {
                             TreeEntity newTreeEntity = new TreeEntity();
                             newTreeEntity.setId(KToolsContext.getInstance().getIdGenerator().getId(UidKey.TREE));
                             newTreeEntity.setParentNodeId(treeEntity.getId());
-                            newTreeEntity.setNodeName(schema);
-                            newTreeEntity.setNodeType(TreeNodeType.SCHEMA);
-                            newTreeEntity.setNodeComment(null);
+                            newTreeEntity.setNodeName(tableName);
+                            newTreeEntity.setNodeType(TreeNodeType.TABLE);
                             List<String> nodePathList = new ArrayList<>();
                             instance.buildTreeNodePath(nodePathList, selectionPath);
                             newTreeEntity.setNodePath(instance.getNodePathString(nodePathList));
@@ -88,6 +85,7 @@ public class JDBCNodeRefreshAction implements ActionListener {
                     instance.expandTreeNode(selectionPath);
                 }
             }.execute();
+
         } catch (KToolException e) {
             DialogUtil.showErrorDialog(Main.kToolsRootJFrame, e.getMessage());
             throw new RuntimeException(e);
@@ -99,24 +97,24 @@ public class JDBCNodeRefreshAction implements ActionListener {
         Tree instance = Tree.getInstance();
         TreePath selectionPath = instance.getCurrentTreePath();
         TreeNode currentTreeNode = instance.getCurrentTreeNode(selectionPath);
-
+        TreeNode jdbcNode = instance.getCurrentTreeNode(new TreePath(currentTreeNode.getParent()));
+        TreeEntity jdbcTreeEntity = jdbcNode.getTreeEntity();
         TreeEntity treeEntity = currentTreeNode.getTreeEntity();
 
         try {
-            KToolsContext.getInstance().getApi(DataSourceApi.class).conn(String.valueOf(treeEntity.getId()), treeEntity.getNodeType(), treeEntity.getNodeInfo());
+            KToolsContext.getInstance().getApi(DataSourceApi.class).conn(String.valueOf(jdbcTreeEntity.getId()), jdbcTreeEntity.getNodeType(), jdbcTreeEntity.getNodeInfo());
+
             if (currentTreeNode.getChildCount() > 0) {
                 KToolsContext.getInstance().getApi(SystemApi.class).deleteChildNode(treeEntity);
                 instance.deleteTreeChildNode(currentTreeNode);
             }
-
-            List<String> schemaList = KToolsContext.getInstance().getApi(DataSourceApi.class).selectAllSchema(String.valueOf(treeEntity.getId()));
-            for (String schema : schemaList) {
+            List<String> tableNameList = KToolsContext.getInstance().getApi(DataSourceApi.class).selectAllTable(String.valueOf(jdbcNode.getTreeEntity().getId()), treeEntity.getNodeName());
+            for (String tableName : tableNameList) {
                 TreeEntity newTreeEntity = new TreeEntity();
                 newTreeEntity.setId(KToolsContext.getInstance().getIdGenerator().getId(UidKey.TREE));
                 newTreeEntity.setParentNodeId(treeEntity.getId());
-                newTreeEntity.setNodeName(schema);
-                newTreeEntity.setNodeType(TreeNodeType.SCHEMA);
-                newTreeEntity.setNodeComment(null);
+                newTreeEntity.setNodeName(tableName);
+                newTreeEntity.setNodeType(TreeNodeType.TABLE);
                 List<String> nodePathList = new ArrayList<>();
                 instance.buildTreeNodePath(nodePathList, selectionPath);
                 newTreeEntity.setNodePath(instance.getNodePathString(nodePathList));
@@ -126,15 +124,14 @@ public class JDBCNodeRefreshAction implements ActionListener {
                 KToolsContext.getInstance().getApi(SystemApi.class).addNode(newTreeEntity);
 
                 TreeNode treeNode = new TreeNode(newTreeEntity);
-                DefaultTreeModel model = (DefaultTreeModel) instance.getTreeModel();
-                model.insertNodeInto(treeNode, currentTreeNode, currentTreeNode.getChildCount());
+                currentTreeNode.add(treeNode);
             }
-        } catch (KToolException ex) {
-            DialogUtil.showErrorDialog(Main.kToolsRootJFrame, ex.getMessage());
-            throw new RuntimeException(ex);
-        }
 
+        } catch (KToolException e) {
+            DialogUtil.showErrorDialog(Main.kToolsRootJFrame, e.getMessage());
+            throw new RuntimeException(e);
+        }
+        instance.getDefaultTreeModel().nodeStructureChanged(currentTreeNode);
         instance.expandTreeNode(selectionPath);
     }
 }
-
