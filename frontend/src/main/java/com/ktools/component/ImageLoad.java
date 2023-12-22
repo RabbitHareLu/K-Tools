@@ -38,6 +38,8 @@ public class ImageLoad {
     private ImageIcon refreshIcon = null;
     private ImageIcon schemaIcon = null;
     private ImageIcon tableIcon = null;
+    private ImageIcon lookIcon = null;
+    private ImageIcon columnIcon = null;
 
     private ImageLoad() {
         logoIcon = buildIcon(this.getClass().getResource("/images/logo/kt.svg"));
@@ -60,6 +62,8 @@ public class ImageLoad {
         refreshIcon = buildIcon(this.getClass().getResource("/images/tree/refresh.svg"));
         schemaIcon = buildIcon(this.getClass().getResource("/images/tree/schema.svg"));
         tableIcon = buildIcon(this.getClass().getResource("/images/tree/table.svg"));
+        lookIcon = buildIcon(this.getClass().getResource("/images/tree/look.svg"));
+        columnIcon = buildIcon(this.getClass().getResource("/images/tree/column.svg"));
     }
 
     public static ImageLoad getInstance() {

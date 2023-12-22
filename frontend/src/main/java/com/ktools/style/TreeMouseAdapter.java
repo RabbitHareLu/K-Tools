@@ -3,6 +3,7 @@ package com.ktools.style;
 import com.ktools.common.model.TreeNodeType;
 import com.ktools.component.AllJPopupMenu;
 import com.ktools.component.TreeNode;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;
@@ -16,11 +17,19 @@ import java.util.Objects;
  * @version 1.0
  * @date 2023年12月17日 13:49
  */
+@Slf4j
 public class TreeMouseAdapter extends MouseAdapter {
 
     @Override
     public void mouseClicked(MouseEvent e) {
         JTree jTree = (JTree) e.getSource();
+
+        // 判断鼠标左键双击
+        if (e.getClickCount() == 2) {
+            log.info("鼠标左键双击");
+
+
+        }
 
         // 判断是否为鼠标左键点击
         if (SwingUtilities.isLeftMouseButton(e)) {
@@ -61,6 +70,8 @@ public class TreeMouseAdapter extends MouseAdapter {
                         AllJPopupMenu.getInstance().getFolderPopupMenu().show(jTree, x, y);
                     } else if (Objects.equals(currentTreeNode.getTreeEntity().getNodeType(), TreeNodeType.SCHEMA)) {
                         AllJPopupMenu.getInstance().getSchemaPopupMenu().show(jTree, x, y);
+                    } else if (Objects.equals(currentTreeNode.getTreeEntity().getNodeType(), TreeNodeType.TABLE)) {
+                        AllJPopupMenu.getInstance().getTablePopupMenu().show(jTree, x, y);
                     } else {
                         AllJPopupMenu.getInstance().getJdbcPopupMenu().show(jTree, x, y);
                     }

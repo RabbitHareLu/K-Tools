@@ -59,6 +59,7 @@ public class TreeNodeRenderer extends DefaultTreeCellRenderer {
                 }
                 case TreeNodeType.SCHEMA -> this.setIcon(ImageLoad.getInstance().getSchemaIcon());
                 case TreeNodeType.TABLE -> this.setIcon(ImageLoad.getInstance().getTableIcon());
+                case TreeNodeType.COLUMN -> this.setIcon(ImageLoad.getInstance().getColumnIcon());
                 default -> log.info("default");
             }
         }

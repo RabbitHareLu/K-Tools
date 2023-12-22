@@ -17,12 +17,14 @@ public class AllJPopupMenu {
     private JPopupMenu folderPopupMenu;
     private JPopupMenu jdbcPopupMenu;
     private JPopupMenu schemaPopupMenu;
+    private JPopupMenu tablePopupMenu;
 
     private AllJPopupMenu() {
         initRootPopupMenu();
         initFolderPopupMenu();
         initJDBCPopupMenu();
         initSchemaPopupMenu();
+        initTablePopupMenu();
     }
 
     public static AllJPopupMenu getInstance() {
@@ -79,6 +81,18 @@ public class AllJPopupMenu {
         refreshItem.setIcon(ImageLoad.getInstance().getRefreshIcon());
         refreshItem.addActionListener(new SchemaNodeRefreshAction());
         schemaPopupMenu.add(refreshItem);
+    }
+
+    private void initTablePopupMenu() {
+        tablePopupMenu = new JPopupMenu();
+        JMenuItem lookItem = new JMenuItem("查看数据");
+        lookItem.setIcon(ImageLoad.getInstance().getLookIcon());
+        tablePopupMenu.add(lookItem);
+
+        JMenuItem refreshItem = new JMenuItem("刷新");
+        refreshItem.setIcon(ImageLoad.getInstance().getRefreshIcon());
+        refreshItem.addActionListener(new TableNodeRefreshAction());
+        tablePopupMenu.add(refreshItem);
     }
 
 }
