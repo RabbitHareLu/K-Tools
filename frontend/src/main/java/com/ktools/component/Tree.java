@@ -145,4 +145,9 @@ public class Tree {
             buildTreeNodePath(list, parentPath);
         }
     }
+
+    public void deleteTreeChildNode(TreeNode currentTreeNode) {
+        currentTreeNode.removeAllChildren();
+        getDefaultTreeModel().nodeStructureChanged(currentTreeNode);
+    }
 }

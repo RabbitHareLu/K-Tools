@@ -62,6 +62,8 @@ public class TreeJDBCNodeAction implements ActionListener {
         TreePath selectionPath = jdbcConnectionFrame.getTreePath();
         TreeNode currentTreeNode = (TreeNode) selectionPath.getLastPathComponent();
 
+        Tree instance = Tree.getInstance();
+
         if (Objects.isNull(jdbcConnectionFrame.getTreeEntity())) {
             // 如果TreeEntity为空表示为新增，否则为修改
             TreeEntity treeEntity = new TreeEntity();
@@ -72,8 +74,8 @@ public class TreeJDBCNodeAction implements ActionListener {
             treeEntity.setNodeComment(comment);
 
             List<String> nodePathList = new ArrayList<>();
-            buildTreeNodePath(nodePathList, selectionPath);
-            treeEntity.setNodePath(getNodePathString(nodePathList));
+            instance.buildTreeNodePath(nodePathList, selectionPath);
+            treeEntity.setNodePath(instance.getNodePathString(nodePathList));
             treeEntity.setNodeInfo(advanceValueMap);
 
             JFrame jFrame = (JFrame) SwingUtilities.getWindowAncestor((JButton) e.getSource());
@@ -153,25 +155,6 @@ public class TreeJDBCNodeAction implements ActionListener {
                 }
 
             }
-        }
-    }
-
-    private String getNodePathString(List<String> nodePathList) {
-        StringBuilder nodePathString = new StringBuilder();
-        for (int i = nodePathList.size() - 1; i >= 0; i--) {
-            nodePathString.append(nodePathList.get(i)).append("/");
-        }
-        return nodePathString.delete(nodePathString.length() - 1, nodePathString.length()).toString();
-    }
-
-    private void buildTreeNodePath(List<String> list, TreePath selectionPath) {
-        TreeNode currentTreeNode = (TreeNode) selectionPath.getLastPathComponent();
-        Integer id = currentTreeNode.getTreeEntity().getId();
-        list.add(String.valueOf(id));
-
-        TreePath parentPath = selectionPath.getParentPath();
-        if (Objects.nonNull(parentPath)) {
-            buildTreeNodePath(list, parentPath);
         }
     }
 

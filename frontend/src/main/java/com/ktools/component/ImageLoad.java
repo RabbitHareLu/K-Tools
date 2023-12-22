@@ -35,6 +35,8 @@ public class ImageLoad {
     private ImageIcon connectIcon = null;
     private ImageIcon disConnectIcon = null;
     private ImageIcon renameIcon = null;
+    private ImageIcon refreshIcon = null;
+    private ImageIcon schemaIcon = null;
 
     private ImageLoad() {
         logoIcon = buildIcon(this.getClass().getResource("/images/logo/kt.svg"));
@@ -54,6 +56,7 @@ public class ImageLoad {
         connectIcon = buildIcon(this.getClass().getResource("/images/tree/connect.svg"));
         disConnectIcon = buildIcon(this.getClass().getResource("/images/tree/disconnect.svg"));
         renameIcon = buildIcon(this.getClass().getResource("/images/tree/rename.svg"));
+        schemaIcon = buildIcon(this.getClass().getResource("/images/tree/schema.svg"));
     }
 
     public static ImageLoad getInstance() {

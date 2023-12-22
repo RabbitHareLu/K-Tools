@@ -12,4 +12,5 @@ public class TreeNodeType {
     public static final String SQL_CONSOLE = "SQL_CONSOLE";
     public static final String TABLE = "TABLE";
     public static final String COLUMN = "COLUMN";
+    public static final String SCHEMA = "SCHEMA";
 }
