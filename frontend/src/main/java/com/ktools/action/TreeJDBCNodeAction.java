@@ -18,7 +18,6 @@ import lombok.Data;
 import javax.swing.*;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -58,40 +57,57 @@ public class TreeJDBCNodeAction implements ActionListener {
         checkNameNotNull();
         checkVariableValid();
 
-        TreePath selectionPath = jTree.getSelectionPath();
-
-        // 如果selectionPath为null, 说明未选择任何节点, 因此直接默认在根节点的目录下创建
-        if (Objects.isNull(selectionPath)) {
-            selectionPath = new TreePath(jTree.getModel().getRoot());
-        }
-
+        TreePath selectionPath = jdbcConnectionFrame.getTreePath();
         TreeNode currentTreeNode = (TreeNode) selectionPath.getLastPathComponent();
 
-        TreeEntity treeEntity = new TreeEntity();
-        treeEntity.setId(KToolsContext.getInstance().getIdGenerator().getId(UidKey.TREE));
-        treeEntity.setParentNodeId(currentTreeNode.getTreeEntity().getId());
-        treeEntity.setNodeName(name);
-        treeEntity.setNodeType(kDataSourceMetadata.getName());
-        treeEntity.setNodeComment(comment);
+        if (Objects.isNull(jdbcConnectionFrame.getTreeEntity())) {
+            // 如果TreeEntity为空表示为新增，否则为修改
+            TreeEntity treeEntity = new TreeEntity();
+            treeEntity.setId(KToolsContext.getInstance().getIdGenerator().getId(UidKey.TREE));
+            treeEntity.setParentNodeId(currentTreeNode.getTreeEntity().getId());
+            treeEntity.setNodeName(name);
+            treeEntity.setNodeType(kDataSourceMetadata.getName());
+            treeEntity.setNodeComment(comment);
 
-        List<String> nodePathList = new ArrayList<>();
-        buildTreeNodePath(nodePathList, selectionPath);
-        treeEntity.setNodePath(getNodePathString(nodePathList));
-        treeEntity.setNodeInfo(advanceValueMap);
+            List<String> nodePathList = new ArrayList<>();
+            buildTreeNodePath(nodePathList, selectionPath);
+            treeEntity.setNodePath(getNodePathString(nodePathList));
+            treeEntity.setNodeInfo(advanceValueMap);
 
-        JFrame jFrame = (JFrame) SwingUtilities.getWindowAncestor((JButton) e.getSource());
-        try {
-            KToolsContext.getInstance().getApi(SystemApi.class).addNode(treeEntity);
-        } catch (KToolException ex) {
-            DialogUtil.showErrorDialog(jFrame, ex.getMessage());
-            throw new RuntimeException(ex);
+            JFrame jFrame = (JFrame) SwingUtilities.getWindowAncestor((JButton) e.getSource());
+            try {
+                KToolsContext.getInstance().getApi(SystemApi.class).addNode(treeEntity);
+            } catch (KToolException ex) {
+                DialogUtil.showErrorDialog(jFrame, ex.getMessage());
+                throw new RuntimeException(ex);
+            }
+
+            TreeNode treeNode = new TreeNode(treeEntity);
+            DefaultTreeModel model = (DefaultTreeModel) jTree.getModel();
+            model.insertNodeInto(treeNode, currentTreeNode, currentTreeNode.getChildCount());
+            jdbcConnectionFrame.dispose();
+        } else {
+            TreeEntity treeEntity = jdbcConnectionFrame.getTreeEntity();
+            treeEntity.setNodeName(name);
+            treeEntity.setNodeType(kDataSourceMetadata.getName());
+            treeEntity.setNodeComment(comment);
+            treeEntity.setNodeInfo(advanceValueMap);
+
+            JFrame jFrame = (JFrame) SwingUtilities.getWindowAncestor((JButton) e.getSource());
+            try {
+                KToolsContext.getInstance().getApi(SystemApi.class).updateNode(treeEntity);
+            } catch (KToolException ex) {
+                DialogUtil.showErrorDialog(jFrame, ex.getMessage());
+                throw new RuntimeException(ex);
+            }
+
+            currentTreeNode.setTreeEntity(treeEntity);
+            Tree.getInstance().getDefaultTreeModel().reload();
+
+            jdbcConnectionFrame.dispose();
         }
 
-        TreeNode treeNode = new TreeNode(treeEntity);
-        DefaultTreeModel model = (DefaultTreeModel) jTree.getModel();
-        model.insertNodeInto(treeNode, currentTreeNode, currentTreeNode.getChildCount());
-        expandTreeNode(selectionPath);
-        jdbcConnectionFrame.dispose();
+
     }
 
     private void initVariable() {
@@ -155,11 +171,4 @@ public class TreeJDBCNodeAction implements ActionListener {
         }
     }
 
-    private void expandTreeNode(TreePath selectionPath) {
-        if (Objects.nonNull(selectionPath)) {
-            if (!jTree.isExpanded(selectionPath)) {
-                jTree.expandPath(selectionPath);
-            }
-        }
-    }
 }

@@ -1,10 +1,12 @@
 package com.ktools.panel;
 
 import com.ktools.common.utils.BoxUtil;
+import com.ktools.mybatis.entity.TreeEntity;
 import lombok.Data;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Map;
 
 /**
  * @author lsl
@@ -28,6 +30,24 @@ public class RegularPanel extends JPanel {
         passwordField = initPasswordBox(box, "密码: ");
         BoxUtil.addVerticalStrut(box, 30);
         urlField = initSubBox(box, "URL: ");
+
+        add(box, BorderLayout.NORTH);
+    }
+
+    public RegularPanel(TreeEntity treeEntity) {
+        Map<String, String> nodeInfo = treeEntity.getNodeInfo();
+        setLayout(new BorderLayout());
+        Box box = Box.createVerticalBox();
+        BoxUtil.addVerticalStrut(box, 30);
+
+        usernameField = initSubBox(box, "用户名: ");
+        usernameField.setText(nodeInfo.get("username"));
+        BoxUtil.addVerticalStrut(box, 30);
+        passwordField = initPasswordBox(box, "密码: ");
+        passwordField.setText(nodeInfo.get("password"));
+        BoxUtil.addVerticalStrut(box, 30);
+        urlField = initSubBox(box, "URL: ");
+        urlField.setText(nodeInfo.get("jdbcUrl"));
 
         add(box, BorderLayout.NORTH);
     }

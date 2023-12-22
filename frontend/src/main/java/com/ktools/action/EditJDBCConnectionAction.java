@@ -1,7 +1,6 @@
 package com.ktools.action;
 
 import com.ktools.frame.JDBCConnectionFrame;
-import com.ktools.mybatis.entity.TreeEntity;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,19 +18,13 @@ public class EditJDBCConnectionAction implements ActionListener {
 
     JDBCConnectionFrame jdbcConnectionFrame = null;
 
-    private TreeEntity treeEntity;
-
     public EditJDBCConnectionAction() {
-    }
-
-    public EditJDBCConnectionAction(TreeEntity treeEntity) {
-        this.treeEntity = treeEntity;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (JDBCConnectionFrame.openFlag) {
-            jdbcConnectionFrame = new JDBCConnectionFrame(treeEntity);
+            jdbcConnectionFrame = new JDBCConnectionFrame();
         } else {
             log.info("已有新建Impala连接窗口!");
             jdbcConnectionFrame.toFront();

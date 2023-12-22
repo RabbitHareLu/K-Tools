@@ -29,4 +29,12 @@ public class TreeNode extends DefaultMutableTreeNode {
         this.treeEntity = new TreeEntity(id, parentNodeId, nodeName, nodeType, nodeComment, "0", null, null);
     }
 
+    public TreeEntity getTreeEntity() {
+        return treeEntity;
+    }
+
+    public void setTreeEntity(TreeEntity treeEntity) {
+        setUserObject(treeEntity.getNodeName());
+        this.treeEntity = treeEntity;
+    }
 }

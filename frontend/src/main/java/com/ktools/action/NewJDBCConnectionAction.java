@@ -21,9 +21,6 @@ public class NewJDBCConnectionAction implements ActionListener {
 
     private KDataSourceMetadata kDataSourceMetadata;
 
-    public NewJDBCConnectionAction() {
-    }
-
     public NewJDBCConnectionAction(KDataSourceMetadata kDataSourceMetadata) {
         this.kDataSourceMetadata = kDataSourceMetadata;
     }

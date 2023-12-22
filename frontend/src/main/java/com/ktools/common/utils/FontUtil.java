@@ -28,6 +28,14 @@ public class FontUtil {
         FlatLaf.updateUI();
     }
 
+    public static void putUIFont() {
+        Properties properties = KToolsContext.getInstance().getProperties();
+        String fontName = String.valueOf(properties.get("font.name"));
+        int fontSize = Integer.parseInt(String.valueOf(properties.get("font.size")));
+        String fontStyle = String.valueOf(properties.get("font.style"));
+        UIManager.put("defaultFont", new Font(fontName, FontUtil.getFontStyle(fontStyle), fontSize));
+    }
+
     public static int getFontStyle(String fontStyle) {
         if (Objects.equals(fontStyle, "粗体")) {
             return Font.BOLD;

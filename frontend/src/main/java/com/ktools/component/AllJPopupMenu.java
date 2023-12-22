@@ -1,6 +1,7 @@
 package com.ktools.component;
 
 import com.ktools.action.DeleteTreeNodeAction;
+import com.ktools.action.EditJDBCConnectionAction;
 import com.ktools.action.NewFolderAction;
 import lombok.Data;
 
@@ -53,6 +54,7 @@ public class AllJPopupMenu {
         jdbcPopupMenu = new JPopupMenu();
         JMenuItem editItem = new JMenuItem("编辑");
         editItem.setIcon(ImageLoad.getInstance().getEditIcon());
+        editItem.addActionListener(new EditJDBCConnectionAction());
         jdbcPopupMenu.add(editItem);
         JMenuItem connectItem = new JMenuItem("连接");
         connectItem.setIcon(ImageLoad.getInstance().getConnectIcon());

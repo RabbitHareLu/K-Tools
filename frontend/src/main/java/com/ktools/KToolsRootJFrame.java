@@ -1,6 +1,5 @@
 package com.ktools;
 
-import com.ktools.common.utils.FontUtil;
 import com.ktools.component.ImageLoad;
 import com.ktools.component.Menu;
 import com.ktools.component.Tree;
@@ -25,6 +24,7 @@ public class KToolsRootJFrame extends JFrame {
     JSplitPane rootJSplitPane;
     JTree jTree;
 
+
     public KToolsRootJFrame() {
         setIconImage(ImageLoad.getInstance().getLogoIcon().getImage());
         setSize(WIDTH, HEIGHT);
@@ -34,8 +34,8 @@ public class KToolsRootJFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         init();
-
         setVisible(true);
+        rootJSplitPane.setDividerLocation(0.2);
     }
 
     private void init() {
@@ -44,31 +44,16 @@ public class KToolsRootJFrame extends JFrame {
 
         rootJSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
         rootJSplitPane.setDividerSize(3);
-
         add(rootJSplitPane, BorderLayout.CENTER);
 
-        new SwingWorker<>() {
-            @Override
-            protected Object doInBackground() throws Exception {
-                jTree = Tree.getInstance().getJTree();
-                return null;
-            }
+        jTree = Tree.getInstance().getJTree();
+        JScrollPane jTreeScrollPane = new JScrollPane(jTree);
+        jTreeScrollPane.setMinimumSize(new Dimension(200, 0));
+        rootJSplitPane.setLeftComponent(jTreeScrollPane);
 
-            @Override
-            protected void done() {
-                JScrollPane jTreeScrollPane = new JScrollPane(jTree);
-                jTreeScrollPane.setMinimumSize(new Dimension(200, 0));
-                rootJSplitPane.setLeftComponent(jTreeScrollPane);
-
-                JScrollPane jTextAreaScrollPane = new JScrollPane(new JTextArea());
-                jTextAreaScrollPane.setMinimumSize(new Dimension(200, 0));
-
-                rootJSplitPane.setRightComponent(jTextAreaScrollPane);
-                rootJSplitPane.setDividerLocation(0.2);
-
-                FontUtil.updateFont();
-            }
-        }.execute();
+        JScrollPane jTextAreaScrollPane = new JScrollPane(new JTextArea());
+        jTextAreaScrollPane.setMinimumSize(new Dimension(200, 0));
+        rootJSplitPane.setRightComponent(jTextAreaScrollPane);
     }
 
 }

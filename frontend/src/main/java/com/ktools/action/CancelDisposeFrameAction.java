@@ -21,6 +21,7 @@ public class CancelDisposeFrameAction implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        JFrame jFrame = (JFrame) SwingUtilities.getWindowAncestor((JButton) e.getSource());
         jFrame.dispose();
     }
 }

@@ -6,6 +6,7 @@ import com.ktools.common.utils.CollectionUtil;
 import com.ktools.component.KTTableModel;
 import com.ktools.manager.datasource.model.KDataSourceConfig;
 import com.ktools.manager.datasource.model.KDataSourceMetadata;
+import com.ktools.mybatis.entity.TreeEntity;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -32,20 +33,47 @@ public class AdvancedPanel extends JPanel {
     private Map<String, String> advanceValueMap = new LinkedHashMap<>();
     private Map<String, String> keyNameMap;
     private KDataSourceMetadata kDataSourceMetadata;
+    private TreeEntity treeEntity;
     private JTable jTable;
 
     public AdvancedPanel() {
-        setLayout(new BorderLayout());
+    }
 
+    public AdvancedPanel(TreeEntity treeEntity, KDataSourceMetadata kDataSourceMetadata) {
+        this.treeEntity = treeEntity;
+        this.kDataSourceMetadata = kDataSourceMetadata;
+        setLayout(new BorderLayout());
+        initEdit();
     }
 
     public AdvancedPanel(KDataSourceMetadata kDataSourceMetadata) {
         this.kDataSourceMetadata = kDataSourceMetadata;
         setLayout(new BorderLayout());
-        init();
+        initNew();
     }
 
-    private void init() {
+    private void initEdit() {
+        initTableUI();
+        List<KDataSourceConfig> config = kDataSourceMetadata.getConfig();
+        Map<String, String> nodeInfo = treeEntity.getNodeInfo();
+        if (CollectionUtil.isNotEmpty(config)) {
+            keyNameMap = config.stream().collect(Collectors.toMap(KDataSourceConfig::getName, KDataSourceConfig::getKey));
+            KTTableModel model = (KTTableModel) jTable.getModel();
+            for (KDataSourceConfig kDataSourceConfig : config) {
+                if (Objects.equals(kDataSourceConfig.getKey(), "jdbcUrl") ||
+                        Objects.equals(kDataSourceConfig.getKey(), "username") ||
+                        Objects.equals(kDataSourceConfig.getKey(), "password")) {
+                    continue;
+                }
+                String[] rowData = new String[2];
+                rowData[0] = kDataSourceConfig.getName();
+                rowData[1] = nodeInfo.get(kDataSourceConfig.getKey());
+                model.addRow(rowData);
+            }
+        }
+    }
+
+    private void initNew() {
         initTableUI();
         List<KDataSourceConfig> config = kDataSourceMetadata.getConfig();
 

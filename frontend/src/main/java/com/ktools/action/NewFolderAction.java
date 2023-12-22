@@ -20,7 +20,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author lsl
@@ -30,18 +29,11 @@ import java.util.Objects;
 @Slf4j
 public class NewFolderAction implements ActionListener {
 
-    JTree jTree = Tree.getInstance().getJTree();
-
     @Override
     public void actionPerformed(ActionEvent e) {
-        TreePath selectionPath = jTree.getSelectionPath();
-
-        // 如果selectionPath为null, 说明未选择任何节点, 因此直接默认在根节点的目录下创建
-        if (Objects.isNull(selectionPath)) {
-            selectionPath = new TreePath(jTree.getModel().getRoot());
-        }
-
-        TreeNode currentTreeNode = (TreeNode) selectionPath.getLastPathComponent();
+        Tree instance = Tree.getInstance();
+        TreePath selectionPath = instance.getCurrentTreePath();
+        TreeNode currentTreeNode = instance.getCurrentTreeNode(selectionPath);
 
         String result = JOptionPane.showInputDialog(
                 Main.kToolsRootJFrame,
@@ -62,8 +54,8 @@ public class NewFolderAction implements ActionListener {
             treeEntity.setChild(null);
 
             List<String> nodePathList = new ArrayList<>();
-            buildTreeNodePath(nodePathList, selectionPath);
-            treeEntity.setNodePath(getNodePathString(nodePathList));
+            instance.buildTreeNodePath(nodePathList, selectionPath);
+            treeEntity.setNodePath(instance.getNodePathString(nodePathList));
 
             try {
                 KToolsContext.getInstance().getApi(SystemApi.class).addNode(treeEntity);
@@ -73,36 +65,9 @@ public class NewFolderAction implements ActionListener {
             }
 
             TreeNode treeNode = new TreeNode(treeEntity);
-            DefaultTreeModel model = (DefaultTreeModel) jTree.getModel();
+            DefaultTreeModel model = (DefaultTreeModel) instance.getTreeModel();
             model.insertNodeInto(treeNode, currentTreeNode, currentTreeNode.getChildCount());
-            expandTreeNode(selectionPath);
-        }
-    }
-
-    private void expandTreeNode(TreePath selectionPath) {
-        if (Objects.nonNull(selectionPath)) {
-            if (!jTree.isExpanded(selectionPath)) {
-                jTree.expandPath(selectionPath);
-            }
-        }
-    }
-
-    private String getNodePathString(List<String> nodePathList) {
-        StringBuilder nodePathString = new StringBuilder();
-        for (int i = nodePathList.size() - 1; i >= 0; i--) {
-            nodePathString.append(nodePathList.get(i)).append("/");
-        }
-        return nodePathString.delete(nodePathString.length() - 1, nodePathString.length()).toString();
-    }
-
-    private void buildTreeNodePath(List<String> list, TreePath selectionPath) {
-        TreeNode currentTreeNode = (TreeNode) selectionPath.getLastPathComponent();
-        Integer id = currentTreeNode.getTreeEntity().getId();
-        list.add(String.valueOf(id));
-
-        TreePath parentPath = selectionPath.getParentPath();
-        if (Objects.nonNull(parentPath)) {
-            buildTreeNodePath(list, parentPath);
+            instance.expandTreeNode(selectionPath);
         }
     }
 }
