@@ -70,6 +70,12 @@ public class SystemService extends BaseService implements SystemApi {
         // 删除当前节点
         this.getMapper(TreeMapper.class).delete(treeEntity);
         // 删除全部子节点
+        deleteChildNode(treeEntity);
+    }
+
+    @Override
+    public void deleteChildNode(TreeEntity treeEntity) {
+        // 删除全部子节点
         String path = treeEntity.getNodePath().concat("/").concat(String.valueOf(treeEntity.getId()));
         QueryWrapper queryWrapper = QueryWrapper.create().where(TreeEntity::getNodePath).likeLeft(path);
         this.getMapper(TreeMapper.class).deleteByQuery(queryWrapper);

@@ -18,6 +18,8 @@ public interface SystemApi {
 
     void deleteNode(TreeEntity treeEntity);
 
+    void deleteChildNode(TreeEntity treeEntity);
+
     void saveOrUpdateProp(String key, String value);
 
 }
