@@ -2,12 +2,11 @@ import com.ktools.KToolsContext;
 import com.ktools.exception.KToolException;
 import com.ktools.manager.datasource.KDataSourceFactory;
 import com.ktools.manager.datasource.KDataSourceHandler;
-import com.ktools.manager.datasource.jdbc.model.TableMetadata;
-import com.ktools.manager.datasource.jdbc.query.CommonPage;
 import com.ktools.manager.datasource.jdbc.query.QueryCondition;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.row.Row;
+import com.mybatisflex.core.row.RowUtil;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -36,14 +35,14 @@ public class Test {
             queryCondition.setPageNum(1L);
             queryCondition.setPageSize(10L);
 //            queryCondition.setWhereCondition(" bond_id = '111808224 '");
-            CommonPage<Map<String, Object>> commonPage = dataSourceHandler.selectData("default", "ads_bond_info", queryCondition);
-            System.out.println(commonPage);
+            Page<Row> rowPage = dataSourceHandler.selectData("default", "ads_bond_info", queryCondition);
+            RowUtil.printPretty(rowPage.getRecords());
             dataSourceHandler.disConn();
         } catch (KToolException e) {
             throw new RuntimeException(e);
+        } finally {
+            instance.showdown();
         }
-
-        instance.showdown();
     }
 
 }

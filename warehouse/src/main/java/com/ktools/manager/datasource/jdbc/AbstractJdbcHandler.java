@@ -10,10 +10,12 @@ import com.ktools.exception.KToolException;
 import com.ktools.manager.datasource.KDataSourceHandler;
 import com.ktools.manager.datasource.jdbc.model.TableColumn;
 import com.ktools.manager.datasource.jdbc.model.TableMetadata;
-import com.ktools.manager.datasource.jdbc.query.CommonPage;
-import com.ktools.manager.datasource.jdbc.query.PageQuery;
 import com.ktools.manager.datasource.jdbc.query.QueryCondition;
 import com.ktools.mybatis.MybatisContext;
+import com.mybatisflex.core.datasource.DataSourceKey;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.row.DbChain;
+import com.mybatisflex.core.row.Row;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
@@ -136,31 +138,18 @@ public abstract class AbstractJdbcHandler implements KDataSourceHandler {
     }
 
     @Override
-    public CommonPage<Map<String, Object>> selectData(String schema, String tableName, QueryCondition queryCondition) throws KToolException {
+    public Page<Row> selectData(String schema, String tableName, QueryCondition queryCondition) throws KToolException {
         // 查询表元数据
         TableMetadata tableMetadata = selectTableMetadata(schema, tableName);
-        // 构建查询sql
-        String querySql = buildQuerySql(tableMetadata, queryCondition.getWhereCondition());
-        // 构建分页查询sql
-        String pageSql = buildPageSql(querySql, queryCondition);
-        // 执行sql
-        return pageQuery(pageSql, queryCondition);
-    }
-
-    protected String buildQuerySql(TableMetadata tableMetadata, String whereCondition) {
-        StringBuilder sql = new StringBuilder("select ");
-        StringJoiner selectField = new StringJoiner(",");
-        tableMetadata.getColumns().keySet().forEach(key -> selectField.add(processKeywords(key)));
-        sql.append(" ").append(selectField).append(" ");
-        sql.append(" from ")
-                .append(processKeywords(tableMetadata.getSchema()))
-                .append(".")
-                .append(processKeywords(tableMetadata.getTableName()));
-        sql.append(" ");
-        if (StringUtil.isNotBlank(whereCondition)) {
-            sql.append(" where ").append(whereCondition);
-        }
-        return sql.toString();
+        String[] fields = tableMetadata.getColumns().keySet().toArray(new String[0]);
+        return DataSourceKey.use(jdbcConfig.getKey(), () -> {
+            DbChain dbChain = DbChain.table(tableMetadata.getSchema(), tableMetadata.getTableName()).select(fields);
+            if (StringUtil.isNotBlank(queryCondition.getWhereCondition())) {
+                dbChain = dbChain.where(queryCondition.getWhereCondition());
+            }
+            dbChain = dbChain.orderBy(fields[0]);
+            return dbChain.page(new Page<>(queryCondition.getPageNum(), queryCondition.getPageSize()));
+        });
     }
 
     protected DataSource getDataSource() throws KToolException {
@@ -168,104 +157,8 @@ public abstract class AbstractJdbcHandler implements KDataSourceHandler {
         return mybatisContext.getDataSource(jdbcConfig.getKey());
     }
 
-    protected CommonPage<Map<String, Object>> pageQuery(String sql, PageQuery pageQuery, Object... params) throws KToolException {
-        CommonPage<Map<String, Object>> commonPage = new CommonPage<>();
-        commonPage.setPageNum(pageQuery.getPageNum());
-        commonPage.setPageSize(pageQuery.getPageSize());
-        if (pageQuery.getTotalPage() == null || pageQuery.getTotal() == null) {
-            long count = selectCount(sql, params);
-            commonPage.setTotal(count);
-            long totalPage = count % pageQuery.getPageSize() == 0 ? count / pageQuery.getPageSize() : (count / pageQuery.getPageSize()) + 1;
-            commonPage.setTotalPage(totalPage);
-        } else {
-            commonPage.setTotal(pageQuery.getTotal());
-            commonPage.setTotalPage(pageQuery.getTotalPage());
-        }
-
-        try (Connection connection = getDataSource().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)
-        ) {
-            // 填充参数
-            if (params != null) {
-                for (int i = 0; i < params.length; i++) {
-                    preparedStatement.setObject(i + 1, params[i]);
-                }
-            }
-            // 执行sql
-            ResultSet query = preparedStatement.executeQuery();
-            // 获取返回结果
-            commonPage.setRecords(StreamUtil.buildStream(query).toList());
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return commonPage;
-    }
-
-    protected long selectCount(String sql, Object... params) throws KToolException {
-        String countSql = "select count(*) as total from (" + sql + ") T";
-        try (Connection connection = getDataSource().getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(countSql)
-        ) {
-            // 填充参数
-            if (params != null) {
-                for (int i = 0; i < params.length; i++) {
-                    preparedStatement.setObject(i + 1, params[i]);
-                }
-            }
-            // 执行sql
-            ResultSet resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return resultSet.getLong("total");
-            }
-            return 0;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-//    protected List<Map<String, Object>> executeSql(String sql, Object... params) throws KToolException {
-//        // 解析sql操作类型
-//        OperationType operationType = parseSql(sql);
-//
-//        try (Connection connection = getDataSource().getConnection();
-//             PreparedStatement preparedStatement = connection.prepareStatement(sql)
-//        ) {
-//            // 填充参数
-//            if (params != null) {
-//                for (int i = 0; i < params.length; i++) {
-//                    preparedStatement.setObject(i + 1, params[i]);
-//                }
-//            }
-//            // 根据不同的操作类型执行sql，并封装执行结果
-//            switch (operationType) {
-//                case QUERY -> {
-//                    // 执行sql
-//                    ResultSet query = preparedStatement.executeQuery();
-//                    // 获取返回结果
-//                    return StreamUtil.buildStream(query).toList();
-//                }
-//                case UPDATE,DELETE -> {
-//                    int result = preparedStatement.executeUpdate();
-//                    return Collections.singletonList(Map.of(JdbcConstant.SQL_EXEC_RESULT, result));
-//                }
-//                default -> {
-//                    boolean result = preparedStatement.execute();
-//                    return Collections.singletonList(Map.of(JdbcConstant.SQL_EXEC_RESULT, result));
-//                }
-//            }
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
-
     protected abstract String getDriverClass();
 
-    protected abstract String processKeywords(String keyword);
-
     protected abstract SQLType getSqlTypeByJdbcType(String typeName);
-
-    protected abstract OperationType parseSql(String sql);
-
-    protected abstract String buildPageSql(String querySql, PageQuery pageQuery);
 
 }

@@ -8,12 +8,18 @@ import com.ktools.mybatis.mapper.TreeMapper;
 import com.mybatisflex.core.FlexGlobalConfig;
 import com.mybatisflex.core.MybatisFlexBootstrap;
 import com.mybatisflex.core.datasource.FlexDataSource;
+import com.mybatisflex.core.dialect.DbType;
+import com.mybatisflex.core.dialect.DialectFactory;
+import com.mybatisflex.core.dialect.KeywordWrap;
+import com.mybatisflex.core.dialect.LimitOffsetProcessor;
+import com.mybatisflex.core.dialect.impl.CommonsDialectImpl;
+import com.zaxxer.hikari.HikariDataSource;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 
 /**
  *
@@ -32,6 +38,9 @@ public class MybatisContext {
                 .addMapper(PropMapper.class)
                 .addMapper(TreeMapper.class)
                 .start();
+
+        // 修改impala方言
+        DialectFactory.registerDialect(DbType.IMPALA, new CommonsDialectImpl(KeywordWrap.BACK_QUOTE, LimitOffsetProcessor.POSTGRESQL));
     }
 
     public <T> T getMapper(Class<T> tClass) {
@@ -52,6 +61,8 @@ public class MybatisContext {
 
     public void removeDataSource(String key) {
         FlexDataSource flexDataSource = FlexGlobalConfig.getDefaultConfig().getDataSource();
+        HikariDataSource dataSource = (HikariDataSource) flexDataSource.getDataSourceMap().get(key);
+        dataSource.close();
         flexDataSource.removeDatasource(key);
     }
 
@@ -70,7 +81,11 @@ public class MybatisContext {
 
     public void showdown() {
         FlexDataSource flexDataSource = FlexGlobalConfig.getDefaultConfig().getDataSource();
-        Set<String> keySet = flexDataSource.getDataSourceMap().keySet();
-        keySet.forEach(flexDataSource::removeDatasource);
+        ArrayList<String> keys = new ArrayList<>(flexDataSource.getDataSourceMap().keySet());
+        keys.forEach(key -> {
+            HikariDataSource dataSource = (HikariDataSource) flexDataSource.getDataSourceMap().get(key);
+            dataSource.close();
+            flexDataSource.removeDatasource(key);
+        });
     }
 }

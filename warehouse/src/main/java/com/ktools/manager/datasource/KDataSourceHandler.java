@@ -1,12 +1,12 @@
 package com.ktools.manager.datasource;
 
 import com.ktools.exception.KToolException;
-import com.ktools.manager.datasource.jdbc.query.CommonPage;
-import com.ktools.manager.datasource.jdbc.query.QueryCondition;
 import com.ktools.manager.datasource.jdbc.model.TableMetadata;
+import com.ktools.manager.datasource.jdbc.query.QueryCondition;
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.row.Row;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * 数据源接口
@@ -50,6 +50,6 @@ public interface KDataSourceHandler {
     /**
      * 查询数据
      */
-    CommonPage<Map<String, Object>> selectData(String schema, String tableName, QueryCondition queryCondition) throws KToolException;
+    Page<Row> selectData(String schema, String tableName, QueryCondition queryCondition) throws KToolException;
 
 }
