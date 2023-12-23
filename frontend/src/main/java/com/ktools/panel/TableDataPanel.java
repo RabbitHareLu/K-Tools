@@ -8,7 +8,6 @@ import com.ktools.common.utils.DialogUtil;
 import com.ktools.component.TableDataTableModel;
 import com.ktools.component.Tree;
 import com.ktools.component.TreeNode;
-import com.ktools.exception.KToolException;
 import com.ktools.manager.datasource.jdbc.model.TableColumn;
 import com.ktools.manager.datasource.jdbc.model.TableMetadata;
 import com.ktools.manager.datasource.jdbc.query.QueryCondition;

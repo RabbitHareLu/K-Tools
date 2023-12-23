@@ -11,4 +11,7 @@ VALUES (2, 'font.style', '普通');
 INSERT INTO PROP (`ID`, `KEY`, `VALUE`)
 VALUES (3, 'K_TOOLS.ID.K_TREE', '1');
 INSERT INTO PROP (`ID`, `KEY`, `VALUE`)
-VALUES (4, 'K_TOOLS.ID.K_PROP', '5');
+VALUES (4, 'K_TOOLS.ID.K_PROP', '6');
+
+INSERT INTO PROP (`ID`, `KEY`, `VALUE`)
+VALUES (5, 'default.page.size', '200');
