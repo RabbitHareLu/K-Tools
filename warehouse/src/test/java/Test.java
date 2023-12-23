@@ -35,7 +35,8 @@ public class Test {
             queryCondition.setPageNum(1L);
             queryCondition.setPageSize(10L);
 //            queryCondition.setWhereCondition(" bond_id = '111808224 '");
-            Page<Row> rowPage = dataSourceHandler.selectData("default", "ads_bond_info", queryCondition);
+//            Page<Row> rowPage = dataSourceHandler.selectData("default", "ads_bond_info", queryCondition);
+            Page<Row> rowPage = dataSourceHandler.selectData("fidp_fda", "available_quality_bond", queryCondition);
             RowUtil.printPretty(rowPage.getRecords());
             dataSourceHandler.disConn();
         } catch (KToolException e) {

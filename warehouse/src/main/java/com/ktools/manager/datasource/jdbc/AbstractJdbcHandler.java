@@ -80,8 +80,9 @@ public abstract class AbstractJdbcHandler implements KDataSourceHandler {
 
     @Override
     public List<String> selectAllSchema() throws KToolException {
-        try (Connection connection = getDataSource().getConnection()) {
-            ResultSet schemas = connection.getMetaData().getSchemas();
+        try (Connection connection = getDataSource().getConnection();
+             ResultSet schemas = connection.getMetaData().getSchemas()
+        ) {
             return StreamUtil.buildStream(schemas)
                     .map(map -> String.valueOf(map.get("TABLE_SCHEM")))
                     .toList();
@@ -92,8 +93,9 @@ public abstract class AbstractJdbcHandler implements KDataSourceHandler {
 
     @Override
     public List<String> selectAllTable(String schema) throws KToolException {
-        try (Connection connection = getDataSource().getConnection()) {
-            ResultSet tables = connection.getMetaData().getTables(null, schema, "%", new String[]{"TABLE"});
+        try (Connection connection = getDataSource().getConnection();
+             ResultSet tables = connection.getMetaData().getTables(null, schema, "%", new String[]{"TABLE"})
+        ) {
             return StreamUtil.buildStream(tables)
                     .map(map -> String.valueOf(map.get("TABLE_NAME")))
                     .toList();
@@ -108,14 +110,15 @@ public abstract class AbstractJdbcHandler implements KDataSourceHandler {
         metadata.setSchema(schema);
         metadata.setTableName(tableName);
 
-        try (Connection connection = getDataSource().getConnection()) {
+        try (Connection connection = getDataSource().getConnection();
+             ResultSet primaryKeys = connection.getMetaData().getPrimaryKeys(null, schema, tableName);
+             ResultSet columns = connection.getMetaData().getColumns(null, schema, tableName, "%")
+        ) {
             // 获取主键信息的结果集
-            ResultSet primaryKeys = connection.getMetaData().getPrimaryKeys(null, schema, tableName);
             List<String> primaryKeyList = StreamUtil.buildStream(primaryKeys)
                     .map(map -> String.valueOf(map.get("COLUMN_NAME")))
                     .toList();
-            // 查询
-            ResultSet columns = connection.getMetaData().getColumns(null, schema, tableName, "%");
+            // 处理字段
             Map<String, TableColumn> columnMap = StreamUtil.buildStream(columns).map(column -> {
                 TableColumn columnTemp = new TableColumn();
                 columnTemp.setName(String.valueOf(column.get("COLUMN_NAME")));
