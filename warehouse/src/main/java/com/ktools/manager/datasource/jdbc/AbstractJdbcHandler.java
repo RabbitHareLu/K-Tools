@@ -14,6 +14,7 @@ import com.ktools.manager.datasource.jdbc.query.QueryCondition;
 import com.ktools.mybatis.MybatisContext;
 import com.mybatisflex.core.datasource.DataSourceKey;
 import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryColumn;
 import com.mybatisflex.core.row.DbChain;
 import com.mybatisflex.core.row.Row;
 import lombok.extern.slf4j.Slf4j;
@@ -141,13 +142,13 @@ public abstract class AbstractJdbcHandler implements KDataSourceHandler {
     public Page<Row> selectData(String schema, String tableName, QueryCondition queryCondition) throws KToolException {
         // 查询表元数据
         TableMetadata tableMetadata = selectTableMetadata(schema, tableName);
-        String[] fields = tableMetadata.getColumns().keySet().toArray(new String[0]);
+        List<QueryColumn> fields = tableMetadata.getColumns().keySet().stream().map(QueryColumn::new).toList();
         return DataSourceKey.use(jdbcConfig.getKey(), () -> {
             DbChain dbChain = DbChain.table(tableMetadata.getSchema(), tableMetadata.getTableName()).select(fields);
             if (StringUtil.isNotBlank(queryCondition.getWhereCondition())) {
                 dbChain = dbChain.where(queryCondition.getWhereCondition());
             }
-            dbChain = dbChain.orderBy(fields[0]);
+            dbChain = dbChain.orderBy(fields.getFirst(), true);
             return dbChain.page(new Page<>(queryCondition.getPageNum(), queryCondition.getPageSize()));
         });
     }
