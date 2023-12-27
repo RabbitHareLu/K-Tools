@@ -18,7 +18,8 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <lombok-version>1.18.30</lombok-version>
+        <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
+        <lombok.version>1.18.30</lombok.version>
         <snakeyaml.version>2.2</snakeyaml.version>
         <flatlaf.version>3.2.5</flatlaf.version>
         <slf4j.version>2.0.9</slf4j.version>
@@ -28,7 +29,7 @@
         <impalajdbc41.version>2.6.30.1036</impalajdbc41.version>
         <hikaricp.version>5.1.0</hikaricp.version>
         <h2.version>2.2.224</h2.version>
-        <logback.version>1.4.7</logback.version>
+        <logback.version>1.4.14</logback.version>
         <aviator.version>5.4.1</aviator.version>
         <flyway.version>10.1.0</flyway.version>
         <rsyntaxtextarea.version>3.3.4</rsyntaxtextarea.version>
@@ -123,7 +124,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${lombok-version}</version>
+            <version>${lombok.version}</version>
         </dependency>
 
         <dependency>
@@ -144,4 +145,24 @@
             </exclusions>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

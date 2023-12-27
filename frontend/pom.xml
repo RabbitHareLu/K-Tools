@@ -43,6 +43,18 @@
         <dependency>
             <groupId>com.formdev</groupId>
             <artifactId>flatlaf-extras</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jsvg</artifactId>
+                    <groupId>com.github.weisj</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <artifactId>jsvg</artifactId>
+            <groupId>com.github.weisj</groupId>
+            <version>1.3.0</version>
         </dependency>
 
         <dependency>
@@ -62,7 +74,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.ktools.Main</mainClass>
+                            <mainClass>com.ktools.frontend.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

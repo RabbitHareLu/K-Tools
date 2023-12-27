@@ -1,10 +1,10 @@
 package com.ktools.datasource.impala.handler;
 
-import com.ktools.common.utils.ConfigParamUtil;
+import com.ktools.warehouse.common.utils.ConfigParamUtil;
 import com.ktools.datasource.impala.config.ImpalaConfig;
 import com.ktools.datasource.impala.type.ImpalaType;
-import com.ktools.exception.KToolException;
-import com.ktools.manager.datasource.jdbc.AbstractJdbcHandler;
+import com.ktools.warehouse.exception.KToolException;
+import com.ktools.warehouse.manager.datasource.jdbc.AbstractJdbcHandler;
 
 import java.sql.SQLType;
 import java.util.Properties;

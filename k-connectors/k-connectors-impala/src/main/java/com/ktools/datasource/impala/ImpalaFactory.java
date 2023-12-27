@@ -1,12 +1,12 @@
 package com.ktools.datasource.impala;
 
-import com.ktools.common.utils.ConfigParamUtil;
+import com.ktools.warehouse.common.utils.ConfigParamUtil;
 import com.ktools.datasource.impala.config.ImpalaConfig;
 import com.ktools.datasource.impala.handler.ImpalaHandler;
-import com.ktools.exception.KToolException;
-import com.ktools.manager.datasource.KDataSourceFactory;
-import com.ktools.manager.datasource.KDataSourceHandler;
-import com.ktools.manager.datasource.model.KDataSourceMetadata;
+import com.ktools.warehouse.exception.KToolException;
+import com.ktools.warehouse.manager.datasource.KDataSourceFactory;
+import com.ktools.warehouse.manager.datasource.KDataSourceHandler;
+import com.ktools.warehouse.manager.datasource.model.KDataSourceMetadata;
 
 import java.util.Properties;
 
