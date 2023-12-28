@@ -44,5 +44,16 @@
             <artifactId>mybatis-flex-core</artifactId>
             <version>1.7.5</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.kudu</groupId>
+            <artifactId>kudu-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>de.siegmar</groupId>
+            <artifactId>fastcsv</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

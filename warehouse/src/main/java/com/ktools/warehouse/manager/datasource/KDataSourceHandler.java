@@ -3,6 +3,7 @@ package com.ktools.warehouse.manager.datasource;
 import com.ktools.warehouse.exception.KToolException;
 import com.ktools.warehouse.manager.datasource.jdbc.model.TableMetadata;
 import com.ktools.warehouse.manager.datasource.jdbc.query.QueryCondition;
+import com.ktools.warehouse.task.DataTaskHandler;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.row.Row;
 
@@ -13,7 +14,7 @@ import java.util.List;
  *
  * @author WCG
  */
-public interface KDataSourceHandler {
+public interface KDataSourceHandler extends DataTaskHandler {
 
     /**
      * 测试连接

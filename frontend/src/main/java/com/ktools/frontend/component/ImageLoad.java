@@ -38,6 +38,8 @@ public class ImageLoad {
     private ImageIcon lookIcon = null;
     private ImageIcon columnIcon = null;
     private ImageIcon tableRefreshIcon = null;
+    private ImageIcon previousPageIcon = null;
+    private ImageIcon nextPageIcon = null;
 
     private ImageLoad() {
         logoIcon = buildIcon("images/logo/kt.svg");
@@ -63,6 +65,8 @@ public class ImageLoad {
         lookIcon = buildIcon("images/tree/look.svg");
         columnIcon = buildIcon("images/tree/column.svg");
         tableRefreshIcon = buildIcon("images/tree/tableRefresh.svg");
+        previousPageIcon = buildIcon("images/tree/previous-page.svg");
+        nextPageIcon = buildIcon("images/tree/next-page.svg");
     }
 
     public static ImageLoad getInstance() {

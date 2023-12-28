@@ -54,7 +54,7 @@ public class TreeMouseAdapter extends MouseAdapter {
                 }
                 int i = closableTabsTabbedPane.indexOfTab(treeEntity.getNodeName());
                 if (i < 0) {
-                    closableTabsTabbedPane.add(treeEntity.getNodeName(), new TableDataPanel(selectionPath));
+                    closableTabsTabbedPane.add(treeEntity.getNodeName(), new TableDataPanel(selectionPath, treeEntity.getNodeName()));
                 }
                 closableTabsTabbedPane.setSelectedIndex(closableTabsTabbedPane.indexOfTab(treeEntity.getNodeName()));
 
