@@ -1,7 +1,6 @@
 package com.ktools.warehouse.manager.datasource.jdbc.query;
 
 import com.mybatisflex.core.paginate.Page;
-import com.mybatisflex.core.row.Row;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -34,7 +33,7 @@ public class PageQuery implements Serializable {
      */
     private Long total;
 
-    public <T> Page<T> getPage(Class<T> tClass) {
+    public <T> Page<T> getPage(Class<T> ignore) {
         Page<T> page = new Page<>();
         if (pageNum != null) {
             page.setPageNumber(pageNum);
