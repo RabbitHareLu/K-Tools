@@ -203,7 +203,7 @@ public abstract class AbstractJdbcHandler implements KDataSourceHandler {
         TableMetadata tableMetadata = selectTableMetadata(sinkConfig.getSinkSchema(), sinkConfig.getSinkTableName());
         List<String> primaryKey = tableMetadata.getPrimaryKey();
 
-        List<BaseRow> baseRows = new ArrayList<>();
+        List<Row> baseRows = new ArrayList<>();
         stream.filter(baseRow -> {
             // 检查主键数据完整性
             boolean whole = true;
@@ -214,21 +214,7 @@ public abstract class AbstractJdbcHandler implements KDataSourceHandler {
                 }
             }
             return whole;
-        }).forEach(row -> {
-            // 开始落库
-            baseRows.add(row);
-            // 判断缓存大小
-            if (baseRows.size() >= 1000) {
-                saveData(tableMetadata, new ArrayList<>(baseRows));
-                baseRows.clear();
-            }
-        });
-        saveData(tableMetadata, new ArrayList<>(baseRows));
-        baseRows.clear();
-    }
-
-    private void saveData(TableMetadata tableMetadata, List<BaseRow> baseRows) {
-        List<Row> rowList = baseRows.stream().map(baseRow -> {
+        }).map(baseRow -> {
             // 转换为mybatis认识的row
             Row row = new Row();
             tableMetadata.getColumns().values().forEach(tableColumn -> {
@@ -237,10 +223,23 @@ public abstract class AbstractJdbcHandler implements KDataSourceHandler {
                 row.set(tableColumn.getName(), value);
             });
             return row;
-        }).toList();
-        DataSourceKey.use(jdbcConfig.getKey(), () -> {
-            Db.insertBatchWithFirstRowColumns(tableMetadata.getSchema(), tableMetadata.getTableName(), rowList);
+        }).forEach(row -> {
+            // 开始落库
+            baseRows.add(row);
+            // 判断缓存大小
+            if (baseRows.size() >= 1000) {
+                // 批量存库
+                DataSourceKey.use(jdbcConfig.getKey(), () -> {
+                    Db.insertBatchWithFirstRowColumns(tableMetadata.getSchema(), tableMetadata.getTableName(), baseRows);
+                });
+                baseRows.clear();
+            }
         });
+        // 批量存库
+        DataSourceKey.use(jdbcConfig.getKey(), () -> {
+            Db.insertBatchWithFirstRowColumns(tableMetadata.getSchema(), tableMetadata.getTableName(), baseRows);
+        });
+        baseRows.clear();
     }
 
     protected DataSource getDataSource() throws KToolException {
