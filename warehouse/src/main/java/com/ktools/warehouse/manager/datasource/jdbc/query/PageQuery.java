@@ -1,5 +1,7 @@
 package com.ktools.warehouse.manager.datasource.jdbc.query;
 
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.row.Row;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -31,5 +33,19 @@ public class PageQuery implements Serializable {
      * 数据总数
      */
     private Long total;
+
+    public <T> Page<T> getPage(Class<T> tClass) {
+        Page<T> page = new Page<>();
+        if (pageNum != null) {
+            page.setPageNumber(pageNum);
+        }
+        if (pageSize != null) {
+            page.setPageSize(pageSize);
+        }
+        if (total != null) {
+            page.setTotalRow(total);
+        }
+        return page;
+    }
 
 }
