@@ -1,5 +1,6 @@
 package com.ktools.frontend.panel;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import com.ktools.frontend.common.utils.BoxUtil;
 import com.ktools.warehouse.mybatis.entity.TreeEntity;
 import lombok.Data;
@@ -45,6 +46,7 @@ public class RegularPanel extends JPanel {
         BoxUtil.addVerticalStrut(box, 30);
         passwordField = initPasswordBox(box, "密码: ");
         passwordField.setText(nodeInfo.get("password"));
+        passwordField.putClientProperty( FlatClientProperties.STYLE, "showRevealButton: true" );
         BoxUtil.addVerticalStrut(box, 30);
         urlField = initSubBox(box, "URL: ");
         urlField.setText(nodeInfo.get("jdbcUrl"));
