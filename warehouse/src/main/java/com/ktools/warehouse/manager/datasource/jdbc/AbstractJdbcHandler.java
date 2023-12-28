@@ -160,7 +160,7 @@ public abstract class AbstractJdbcHandler implements KDataSourceHandler {
                 dbChain = dbChain.where(queryCondition.getWhereCondition());
             }
             dbChain = dbChain.orderBy(fields.getFirst(), true);
-            return dbChain.page(new Page<>(queryCondition.getPageNum(), queryCondition.getPageSize()));
+            return dbChain.page(new Page<>(queryCondition.getPageNum(), queryCondition.getPageSize(), queryCondition.getTotal()));
         });
     }
 
