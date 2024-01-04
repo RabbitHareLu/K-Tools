@@ -6,6 +6,7 @@ import com.ktools.warehouse.common.utils.ConfigParamUtil;
 import com.ktools.warehouse.common.utils.StringUtil;
 import com.ktools.warehouse.exception.KToolException;
 import com.ktools.warehouse.manager.datasource.jdbc.AbstractJdbcHandler;
+import com.ktools.warehouse.task.element.BaseColumn;
 import com.ktools.warehouse.task.element.BaseRow;
 import com.ktools.warehouse.task.element.DataType;
 import com.ktools.warehouse.task.model.JobSinkConfig;
@@ -16,6 +17,7 @@ import org.apache.kudu.client.*;
 import java.sql.SQLType;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
@@ -68,7 +70,7 @@ public class ImpalaHandler extends AbstractJdbcHandler {
             // 没有配置kudu地址，走jdbc
             super.sink(sinkConfig, stream);
         } else {
-            int batchSize = 10000;
+            final int batchSize = 10000;
             // 配置了kudu地址，走kudu client
             try (KuduClient kuduClient = new KuduClient.KuduClientBuilder(impalaConfig.getKuduMaster()).build()) {
                 KuduSession kuduSession = kuduClient.newSession();
@@ -89,10 +91,13 @@ public class ImpalaHandler extends AbstractJdbcHandler {
                 stream.forEach(baseRow -> {
                     Upsert upsert = table.newUpsert();
                     PartialRow row = upsert.getRow();
-                    fieldMap.forEach((k, type) -> row.addObject(k, type.convertData(baseRow.getField(k).getData())));
+                    fieldMap.forEach((k, type) -> {
+                        BaseColumn field = baseRow.getField(k);
+                        Optional.ofNullable(field).ifPresent(baseColumn -> row.addObject(k, type.convertData(baseColumn.getData())));
+                    });
                     try {
                         kuduSession.apply(upsert);
-                        if (size.incrementAndGet() >= 10000) {
+                        if (size.incrementAndGet() >= batchSize) {
                             kuduSession.flush();
                             size.set(0);
                         }

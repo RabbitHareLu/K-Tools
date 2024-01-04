@@ -219,8 +219,11 @@ public abstract class AbstractJdbcHandler implements KDataSourceHandler {
             Row row = new Row();
             tableMetadata.getColumns().values().forEach(tableColumn -> {
                 BaseColumn field = baseRow.getField(tableColumn.getName());
-                Object value = typeConversion(tableColumn.getDataType()).convertData(field.getData());
-                row.set(tableColumn.getName(), value);
+                Optional.ofNullable(field)
+                        .ifPresent(baseColumn -> {
+                            Object value = typeConversion(tableColumn.getDataType()).convertData(baseColumn.getData());
+                            row.set(tableColumn.getName(), value);
+                        });
             });
             return row;
         }).forEach(row -> {
@@ -230,14 +233,14 @@ public abstract class AbstractJdbcHandler implements KDataSourceHandler {
             if (baseRows.size() >= 1000) {
                 // 批量存库
                 DataSourceKey.use(jdbcConfig.getKey(), () -> {
-                    Db.insertBatchWithFirstRowColumns(tableMetadata.getSchema(), tableMetadata.getTableName(), baseRows);
+                    Db.insertBatchWithFirstRowColumns(tableMetadata.getSchema(), tableMetadata.getTableName(), new ArrayList<>(baseRows));
                 });
                 baseRows.clear();
             }
         });
         // 批量存库
         DataSourceKey.use(jdbcConfig.getKey(), () -> {
-            Db.insertBatchWithFirstRowColumns(tableMetadata.getSchema(), tableMetadata.getTableName(), baseRows);
+            Db.insertBatchWithFirstRowColumns(tableMetadata.getSchema(), tableMetadata.getTableName(), new ArrayList<>(baseRows));
         });
         baseRows.clear();
     }

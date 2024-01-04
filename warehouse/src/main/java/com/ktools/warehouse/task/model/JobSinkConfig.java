@@ -13,6 +13,11 @@ import java.io.Serializable;
 public class JobSinkConfig implements Serializable {
 
     /**
+     * 目标类型
+     */
+    private String sinkType;
+
+    /**
      * 目标节点id
      */
     private String sinkId;
@@ -26,6 +31,11 @@ public class JobSinkConfig implements Serializable {
      * 目标表
      */
     private String sinkTableName;
+
+    /**
+     * 文件类型
+     */
+    private String sinkFileType;
 
     /**
      * 文件目标路径

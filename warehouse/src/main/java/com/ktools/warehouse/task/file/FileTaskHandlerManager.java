@@ -16,7 +16,7 @@ public class FileTaskHandlerManager {
     private final static Map<String, Class<? extends FileTaskHandler>> FILE_HANDLER_CACHE = new HashMap<>();
 
     static {
-        FILE_HANDLER_CACHE.put(CsvFileHandler.FILE_TYPE, CsvFileHandler.class);
+        FILE_HANDLER_CACHE.put(CsvFileHandler.FILE_TYPE.toUpperCase(), CsvFileHandler.class);
     }
 
     public static Set<String> getAllFileType() {
@@ -35,4 +35,12 @@ public class FileTaskHandlerManager {
         throw new KToolException("暂不支持该文件类型！");
     }
 
+    public static String parseFileType(String filePath) throws KToolException {
+        for (String fileType : FILE_HANDLER_CACHE.keySet()) {
+            if (filePath.toUpperCase().endsWith(".".concat(fileType))) {
+                return fileType;
+            }
+        }
+        throw new KToolException("暂不支持该文件类型！");
+    }
 }

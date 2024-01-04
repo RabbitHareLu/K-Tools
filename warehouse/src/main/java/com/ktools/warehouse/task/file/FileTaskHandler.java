@@ -48,7 +48,7 @@ public abstract class FileTaskHandler implements DataTaskHandler {
                 Files.createDirectories(dir);
             }
             // 构建文件名
-            String fileName = sinkConfig.getSinkSchema() + "_" + sinkConfig.getSinkTableName() + "_" + System.currentTimeMillis();
+            String fileName = sinkConfig.getSinkSchema() + "_" + sinkConfig.getSinkTableName() + "_" + System.currentTimeMillis() + "." + sinkConfig.getSinkFileType().toLowerCase();
             File file = new File(dir.toFile(), fileName);
             if (file.createNewFile()) {
                 writeFile(file.toPath(), sinkConfig.getSeparator(), stream);

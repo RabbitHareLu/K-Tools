@@ -22,7 +22,7 @@ import java.util.stream.Stream;
  */
 public class CsvFileHandler extends FileTaskHandler {
 
-    public static final String FILE_TYPE = "csv";
+    public static final String FILE_TYPE = "CSV";
 
     /**
      * 读取csv文件
@@ -52,7 +52,7 @@ public class CsvFileHandler extends FileTaskHandler {
 
     @Override
     protected void writeFile(Path path, char separator, Stream<BaseRow> stream) throws KToolException {
-        try (CsvWriter csvWriter = CsvWriter.builder().build(path)) {
+        try (CsvWriter csvWriter = CsvWriter.builder().fieldSeparator(separator).build(path)) {
             AtomicBoolean header = new AtomicBoolean(true);
             stream.forEach(baseRow -> {
                 if (header.compareAndSet(true, false)) {
