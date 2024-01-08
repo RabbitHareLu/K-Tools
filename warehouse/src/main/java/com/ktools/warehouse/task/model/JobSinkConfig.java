@@ -18,6 +18,12 @@ public class JobSinkConfig implements Serializable {
     private String sinkType;
 
     /**
+     * 并行度
+     */
+    private Integer parallelism;
+
+    // 数据源配置
+    /**
      * 目标节点id
      */
     private String sinkId;
@@ -32,6 +38,7 @@ public class JobSinkConfig implements Serializable {
      */
     private String sinkTableName;
 
+    // 文件类配置
     /**
      * 文件类型
      */

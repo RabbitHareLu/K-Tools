@@ -28,18 +28,17 @@ public class DataTask implements Callable<TaskResult> {
     private final Job job;
 
     @Override
-    public TaskResult call() throws Exception {
+    public TaskResult call() {
         long startTime = System.currentTimeMillis();
 
         // 任务执行结果
         TaskResult taskResult = new TaskResult();
-        taskResult.setMessage("数据接入任务执行成功！");
-        taskResult.setState(TaskResultState.SUCCESS);
 
         try {
             // 执行任务
             Long count = doTask();
             // 封装执行结果
+            taskResult.setMessage("数据接入任务执行成功！");
             taskResult.setState(TaskResultState.SUCCESS);
             taskResult.setCount(count);
         } catch (Exception e) {
@@ -89,7 +88,7 @@ public class DataTask implements Callable<TaskResult> {
 
     private String handleException(Exception e) {
         // 构建错误信息
-        StringBuilder logContent = new StringBuilder("数据接入任务执行失败！任务名:" + job.getJobName() + ", 异常信息:" + e.getMessage());
+        StringBuilder logContent = new StringBuilder("数据任务执行失败！任务名:" + job.getJobName() + ", 异常信息:" + e.getMessage());
         Throwable cause = e.getCause();
         while (cause != null) {
             logContent.append(" cause: ").append(cause.getMessage());

@@ -54,12 +54,12 @@ public class KDataSourceManager {
         throw new KToolException("不支持的元数据类型");
     }
 
-    public KDataSourceHandler getHandler(String key) {
-        return this.handlerMap.get(key);
+    public KDataSourceHandler getHandler(String key) throws KToolException {
+        return Optional.ofNullable(this.handlerMap.get(key)).orElseThrow(() -> new KToolException("未找到数据源！"));
     }
 
     public void addHandler(String key, KDataSourceHandler handler) {
-        this.handlerMap.put(key, handler);
+        Optional.ofNullable(handler).ifPresent(h -> this.handlerMap.put(key, h));
     }
 
     public void removeHandler(String key) {

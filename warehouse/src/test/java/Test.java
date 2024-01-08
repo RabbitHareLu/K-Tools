@@ -3,22 +3,19 @@ import com.ktools.warehouse.exception.KToolException;
 import com.ktools.warehouse.manager.datasource.KDataSourceFactory;
 import com.ktools.warehouse.manager.datasource.KDataSourceHandler;
 import com.ktools.warehouse.manager.datasource.KDataSourceManager;
-import com.ktools.warehouse.manager.datasource.jdbc.query.QueryCondition;
 import com.ktools.warehouse.task.TaskContext;
+import com.ktools.warehouse.task.job.TaskResult;
 import com.ktools.warehouse.task.model.Job;
 import com.ktools.warehouse.task.model.JobSinkConfig;
 import com.ktools.warehouse.task.model.JobSourceConfig;
-import com.mybatisflex.core.paginate.Page;
-import com.mybatisflex.core.row.Row;
-import com.mybatisflex.core.row.RowUtil;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
-/**
- * @author lsl
- * @version 1.0
- * @date 2023年11月30日 12:49
- */
+
+@Slf4j
 public class Test {
 
     public static void main(String[] args) {
@@ -40,8 +37,12 @@ public class Test {
 
             Job job = getJob();
 
-            TaskContext.submit(job);
-        } catch (KToolException e) {
+            Future<TaskResult> future = TaskContext.submit(job);
+
+            TaskResult taskResult = future.get();
+            log.info("数据量：" + taskResult.getCount());
+            log.info("执行时间：" + taskResult.getTaskExecTime() + "ms");
+        } catch (KToolException | ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
             instance.showdown();
@@ -67,7 +68,6 @@ public class Test {
         job.setSourceConfig(jobSourceConfig);
 
 //        JobSinkConfig jobSinkConfig = new JobSinkConfig();
-//        jobSinkConfig.setSinkId("ces");
 //        jobSinkConfig.setSinkType("file");
 //        jobSinkConfig.setSinkFileType("CSV");
 //        jobSinkConfig.setSeparator(',');
@@ -78,9 +78,6 @@ public class Test {
         JobSinkConfig jobSinkConfig = new JobSinkConfig();
         jobSinkConfig.setSinkId("impala-test");
         jobSinkConfig.setSinkType("IMPALA");
-//        jobSinkConfig.setSinkFileType("CSV");
-//        jobSinkConfig.setSeparator(',');
-//        jobSinkConfig.setFileSinkPath("E:\\Java");
         jobSinkConfig.setSinkSchema("test");
         jobSinkConfig.setSinkTableName("test_to");
         job.setSinkConfig(jobSinkConfig);

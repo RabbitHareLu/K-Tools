@@ -44,7 +44,7 @@ public interface DataSourceApi {
      *
      * @param id 当前节点id
      */
-    void disConn(String id);
+    void disConn(String id) throws KToolException;
 
     /**
      * 查询所有schema

@@ -64,7 +64,7 @@ public class DataSourceService extends BaseService implements DataSourceApi {
     }
 
     @Override
-    public void disConn(String id) {
+    public void disConn(String id) throws KToolException {
         // 获取数据源处理器
         KDataSourceManager dataSourceManager = this.kToolsContext.getDataSourceManager();
         if (dataSourceManager.existHandler(id)) {
